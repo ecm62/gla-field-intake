@@ -404,7 +404,7 @@
       padding: 0;
     }
 
-    /* 細緻圓弧 + 純上下垂直翻轉動態磚（修正對齊位移） */
+    /* 細緻圓弧 + 純上下垂直翻轉動態磚 */
     .tile-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -537,11 +537,11 @@
       font-weight: 600;
     }
 
-    /* 查詢結果精緻表格（方便截圖與核對） */
+    /* 正規查詢表格樣式 */
     .lookup-table-wrap {
       margin-top: 10px;
       overflow-x: auto;
-      border-radius: 12px;
+      border-radius: 11px;
       border: 1px solid #cbd5e1;
       background: #ffffff;
     }
@@ -549,23 +549,28 @@
     .lookup-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 12.5px;
       color: #1f2937;
     }
 
-    .lookup-table th, .lookup-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #e5e7eb;
-      text-align: left;
-      vertical-align: top;
-      line-height: 1.35;
-    }
-
-    .lookup-table th {
+    .lookup-table thead th {
       background: #fef9c3;
       font-weight: 600;
       color: #111827;
-      width: 34%;
+      padding: 7px 9px;
+      border-bottom: 1px solid #cbd5e1;
+      border-right: 1px solid #e5e7eb;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .lookup-table tbody td {
+      padding: 7px 9px;
+      border-bottom: 1px solid #e5e7eb;
+      border-right: 1px solid #f1f5f9;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.35;
     }
 
     .cart-list-box {
@@ -714,7 +719,7 @@
     <div class="tri-big tri-right"></div>
   </div>
 
-  <!-- 頂部：小房子回首頁 + 語系 BM/EN/中 + 音效 + 重新載入 + 離開/重新輸入密碼 -->
+  <!-- 頂部：小房子回首頁 + 語系 BM/EN/中 + 音效開關 + 重新載入 + 離開 -->
   <div class="top-bar">
     <div class="pill-group">
       <button type="button" class="home-house-btn" id="btnHomeHouse" onclick="goHomeHouse()" title="Home">🏠</button>
@@ -772,7 +777,7 @@
     <div id="errLogin" class="notice-box hidden" style="background:#fef2f2; border-color:#fca5a5; color:#991b1b;"></div>
   </section>
 
-  <!-- 離開畫面（支援直接重新進入或重新輸入密碼切換 PS/GP） -->
+  <!-- 離開畫面 -->
   <section id="exitCard" class="exit-card hidden">
     <div style="font-size:17px; font-weight:600; margin-bottom:6px;" id="exitTitle"></div>
     <div style="font-size:13px; color:#4b5563; margin-bottom:12px;" id="exitDesc"></div>
@@ -818,12 +823,12 @@
         admin: 'qwert'
       },
       KEYS: {
-        LANG: 'gla_sys_lang_v13',
-        PASS: 'gla_sys_pass_v13',
-        WORKER: 'gla_worker_name_v13',
-        QUEUE: 'gla_sys_queue_v13',
-        ROOM_BATCHES: 'gla_room_batches_v13',
-        SOUND: 'gla_sound_on_v13'
+        LANG: 'gla_sys_lang_v14',
+        PASS: 'gla_sys_pass_v14',
+        WORKER: 'gla_worker_name_v14',
+        QUEUE: 'gla_sys_queue_v14',
+        ROOM_BATCHES: 'gla_room_batches_v14',
+        SOUND: 'gla_sound_on_v14'
       },
       LAT: 1.167,
       LON: 110.566,
@@ -857,6 +862,7 @@
         extraHeading: 'Carian & Analisis',
         queryEarPlaceholder: 'Carian kabur No. Telinga (cth: L1123 atau 1123)',
         searchBtn: 'Cari',
+        colEarTag: 'No. Telinga',
         batchGateTitle: 'Sahkan Bilik & Kumpulan 3 Minggu',
         batchRemind: 'Perhatian: Bilik berbeza mempunyai sumber data berasingan.',
         gduAutoWeekNote: 'Menggunakan minggu semasa secara automatik',
@@ -1039,6 +1045,7 @@
         extraHeading: 'Lookup & Analysis',
         queryEarPlaceholder: 'Fuzzy Ear Tag search (e.g. L1123 or 1123)',
         searchBtn: 'Search',
+        colEarTag: 'Ear Tag',
         batchGateTitle: 'Confirm Room & 3-Week Batch',
         batchRemind: 'Note: Switching rooms switches data source.',
         gduAutoWeekNote: 'Logged under current week automatically',
@@ -1221,6 +1228,7 @@
         extraHeading: '查詢與分析',
         queryEarPlaceholder: '輸入耳號模糊查詢（例如 L1123 或只打 1123）',
         searchBtn: '查詢',
+        colEarTag: '耳號',
         batchGateTitle: '請先確認房號與三週次批次',
         batchRemind: '提醒：切換不同間房屬於不同資料來源，請核對目前房號與批次',
         gduAutoWeekNote: '以當週週次為基準自動記錄',
@@ -1428,6 +1436,7 @@
       lang: 'ms',
       soundOn: true,
       audioCtx: null,
+      tapStep: 0,
       workerName: '',
       profile: null,
       enteredAt: new Date().toISOString(),
@@ -1462,6 +1471,7 @@
       } catch (e) {}
     }
 
+    // 方塊敲擊／微變鈴聲 + 傳送音效
     function playTone(type) {
       if (!state.soundOn) return;
       unlockAudioContext();
@@ -1474,10 +1484,23 @@
         osc.connect(gain);
         gain.connect(ctx.destination);
 
-        if (type === 'success') {
+        if (type === 'tap') {
+          // 每次點方塊微變清脆敲擊鈴聲
+          const notes = [523.25, 554.37, 587.33, 622.25, 659.25];
+          const f = notes[state.tapStep % notes.length];
+          state.tapStep++;
           osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now);
+          osc.frequency.exponentialRampToValueAtTime(f * 1.04, now + 0.08);
+          gain.gain.setValueAtTime(0.16, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (type === 'send') {
+          // 傳送完成雙音鈴聲
+          osc.type = 'triangle';
           osc.frequency.setValueAtTime(587.33, now);
-          osc.frequency.setValueAtTime(880.0, now + 0.12);
+          osc.frequency.setValueAtTime(880.0, now + 0.11);
           gain.gain.setValueAtTime(0.22, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
           osc.start(now);
@@ -1485,17 +1508,17 @@
         } else if (type === 'step') {
           osc.type = 'sine';
           osc.frequency.setValueAtTime(660.0, now);
-          gain.gain.setValueAtTime(0.16, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
           osc.start(now);
-          osc.stop(now + 0.15);
+          osc.stop(now + 0.14);
         } else {
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(220.0, now);
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          gain.gain.setValueAtTime(0.16, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
           osc.start(now);
-          osc.stop(now + 0.29);
+          osc.stop(now + 0.26);
         }
       } catch (e) {}
     }
@@ -1507,7 +1530,7 @@
       state.soundOn = !state.soundOn;
       localStorage.setItem(CONFIG.KEYS.SOUND, state.soundOn ? '1' : '0');
       applyTexts();
-      if (state.soundOn) playTone('step');
+      if (state.soundOn) playTone('tap');
     }
 
     function reloadApp() {
@@ -1613,6 +1636,7 @@
     }
 
     function toggleSpan() {
+      playTone('tap');
       state.halfSpan = state.halfSpan === 6 ? 3 : 6;
       applyTexts();
       updateClockAndForecastCurve();
@@ -1684,7 +1708,7 @@
       state.profile = prof;
       localStorage.setItem(CONFIG.KEYS.PASS, prof.code);
       logTraj('login:' + prof.group);
-      playTone('success');
+      playTone('send');
       sendTelemetryBeacon('LOGIN', prof.group);
       openWorkspace();
     }
@@ -1715,7 +1739,7 @@
         { id: 'ExitSale', lbl: 'Exit/Sale' }
       ];
       strip.innerHTML = quickDepts.map(q =>
-        `<button type="button" class="soft-pill ${state.view.dept === q.id ? 'active' : ''}" onclick="jumpGpDept('${q.id}')">${q.lbl}</button>`
+        `<button type="button" class="soft-pill ${state.view.dept === q.id ? 'active' : ''}" onclick="playTone('tap'); jumpGpDept('${q.id}')">${q.lbl}</button>`
       ).join('');
     }
 
@@ -1732,7 +1756,7 @@
       }
       strip.classList.remove('hidden');
       strip.innerHTML = rooms.map(r =>
-        `<button type="button" class="soft-pill ${state.view.room === r ? 'active' : ''}" onclick="jumpPsRoom('${r}')">${r}</button>`
+        `<button type="button" class="soft-pill ${state.view.room === r ? 'active' : ''}" onclick="playTone('tap'); jumpPsRoom('${r}')">${r}</button>`
       ).join('');
     }
 
@@ -1766,6 +1790,7 @@
       return [];
     }
 
+    // 統一以本地／古晉時間顯示（絕不出現新加坡時間）
     function updateClockAndForecastCurve() {
       const t = DICT[state.lang];
       const now = new Date();
@@ -1845,6 +1870,7 @@
     }
 
     function goPrev() {
+      playTone('tap');
       if (!state.history.length) return;
       state.redoStack.push(JSON.parse(JSON.stringify(state.view)));
       state.view = state.history.pop();
@@ -1853,6 +1879,7 @@
     }
 
     function goNext() {
+      playTone('tap');
       if (!state.redoStack.length) return;
       state.history.push(JSON.parse(JSON.stringify(state.view)));
       state.view = state.redoStack.pop();
@@ -1880,6 +1907,7 @@
     }
 
     function reopenBatchGate() {
+      playTone('tap');
       if (!state.view.dept || state.view.dept === 'GDU' || ['CullMort', 'ExitSale'].includes(state.view.dept)) return;
       pushHist();
       state.view.stage = 'batch_gate';
@@ -1919,30 +1947,30 @@
         batchChip.classList.add('hidden');
       }
 
-      // 所有登入等級皆以輸入為主、查詢為輔，不寫出任何密碼或等級名稱
       botTitle.classList.remove('hidden');
       botGrid.appendChild(makeMetroFlipTile(
         t.extraHeading,
-        [t.queryEarPlaceholder, 'Parity · Index · Detail', 'Tap to Search'],
+        [t.queryEarPlaceholder, 'Ear Tag · Parity · Index', 'Tap to Search'],
         'QUERY',
         'm-query',
         () => {
+          playTone('tap');
           sendTelemetryBeacon('OPEN_QUERY_TILE', 'Seed_Yellow_Lookup');
           renderQueryBox();
         }
       ));
       botGrid.appendChild(makeMetroFlipTile(
         t.deptFarr,
-        [state.profile.group, 'Farrowing & Index', 'Batch Summary'],
-        'LOG',
+        [state.profile.group, 'Summary Table', 'Batch Log'],
+        'TABLE',
         'm-farr',
         () => {
+          playTone('tap');
           sendTelemetryBeacon('OPEN_ANALYSIS_TILE', 'Farrowing_Analysis');
           renderAnalysisBox();
         }
       ));
 
-      // Stage 1: 左右對稱部門排列 + 兩個一般方塊
       if (state.view.stage === 'depts') {
         const depts = [
           { id: 'Boar House', title: t.deptBoar, sub: [t.deptBoarSub, 'Libido 0-5 Score', 'Semen & Mortality'], badge: 'BH', cls: 'm-boar' },
@@ -1956,6 +1984,7 @@
         ];
         depts.forEach(d => {
           topGrid.appendChild(makeMetroFlipTile(d.title, d.sub, d.badge, d.cls, () => {
+            playTone('tap');
             pushHist();
             state.queuedRecords = [];
             state.view.dept = d.id;
@@ -2007,6 +2036,7 @@
         const cls = deptCls(state.view.dept);
         [{ code: 'A', label: t.sideA }, { code: 'B', label: t.sideB }].forEach(w => {
           topGrid.appendChild(makeMetroFlipTile(w.label, [state.view.dept, 'Wing ' + w.code, 'Select Room'], w.code, cls, () => {
+            playTone('tap');
             pushHist();
             state.view.wing = w.code;
             logTraj('wing:' + w.code);
@@ -2029,6 +2059,7 @@
         const rooms = getRoomsForDept(state.view.dept, state.view.wing);
         rooms.forEach(r => {
           topGrid.appendChild(makeMetroFlipTile(r, [state.view.dept, 'Room ' + r, 'Tap to Open'], r, cls, () => {
+            playTone('tap');
             pushHist();
             state.queuedRecords = [];
             state.view.room = r;
@@ -2086,29 +2117,29 @@
           <div class="batch-box">
             <label>${t.w1Label}</label>
             <div class="stepper-row">
-              <button type="button" class="step-btn" onclick="stepW(1,-1)">-</button>
+              <button type="button" class="step-btn" onclick="playTone('tap'); stepW(1,-1)">-</button>
               <input type="number" id="bw1" class="batch-inp" min="1" max="52" value="${def1}" onchange="syncW2W3()" />
-              <button type="button" class="step-btn" onclick="stepW(1,1)">+</button>
+              <button type="button" class="step-btn" onclick="playTone('tap'); stepW(1,1)">+</button>
             </div>
           </div>
           <div class="batch-box">
             <label>${t.w2Label}</label>
             <div class="stepper-row">
-              <button type="button" class="step-btn" onclick="stepW(2,-1)">-</button>
+              <button type="button" class="step-btn" onclick="playTone('tap'); stepW(2,-1)">-</button>
               <input type="number" id="bw2" class="batch-inp" min="1" max="52" value="${def2}" />
-              <button type="button" class="step-btn" onclick="stepW(2,1)">+</button>
+              <button type="button" class="step-btn" onclick="playTone('tap'); stepW(2,1)">+</button>
             </div>
           </div>
           <div class="batch-box">
             <label>${t.w3Label}</label>
             <div class="stepper-row">
-              <button type="button" class="step-btn" onclick="stepW(3,-1)">-</button>
+              <button type="button" class="step-btn" onclick="playTone('tap'); stepW(3,-1)">-</button>
               <input type="number" id="bw3" class="batch-inp" min="1" max="52" value="${def3}" />
-              <button type="button" class="step-btn" onclick="stepW(3,1)">+</button>
+              <button type="button" class="step-btn" onclick="playTone('tap'); stepW(3,1)">+</button>
             </div>
           </div>
         </div>
-        <button type="button" class="primary-btn" onclick="confirmBatch()">${t.confirmBatchBtn}</button>
+        <button type="button" class="primary-btn" onclick="playTone('tap'); confirmBatch()">${t.confirmBatchBtn}</button>
       `;
     }
 
@@ -2154,6 +2185,7 @@
       const cls = deptCls(dept);
 
       grid.appendChild(makeMetroFlipTile(t.tileFW, [t.tileFWSub, '07:00 AM / 17:00 PM', 'Feed 300-308 · 50kg'], 'H2O', cls, () => {
+        playTone('tap');
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'daily_fw';
@@ -2163,6 +2195,7 @@
 
       if (dept === 'Farrowing') {
         grid.appendChild(makeMetroFlipTile(t.tileSowIn, [t.tileSowInSub, 'Room Sow Count', 'Batch Log'], 'IN', cls, () => {
+          playTone('tap');
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_sow_in';
@@ -2170,6 +2203,7 @@
           renderView();
         }));
         grid.appendChild(makeMetroFlipTile(t.tileFarrRec, [t.tileFarrRecSub, 'Total / Alive / Still', 'Birth Litter Wt'], 'BORN', cls, () => {
+          playTone('tap');
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_birth';
@@ -2177,6 +2211,7 @@
           renderView();
         }));
         grid.appendChild(makeMetroFlipTile(t.tileWeanHead, [t.tileWeanHeadSub, 'Weaned Counts', 'Deferred To Next'], 'WEAN', cls, () => {
+          playTone('tap');
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_wean_head';
@@ -2184,6 +2219,7 @@
           renderView();
         }));
         grid.appendChild(makeMetroFlipTile(t.tileWeanWt, [t.tileWeanWtSub, 'Wean Litter Wt', 'Batch Weight'], 'WT', cls, () => {
+          playTone('tap');
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_wean_wt';
@@ -2191,6 +2227,7 @@
           renderView();
         }));
         grid.appendChild(makeMetroFlipTile(t.tileMal, [t.tileMalSub, 'Sow + Farrow Date', 'Auto Photo Resize'], 'MAL', cls, () => {
+          playTone('tap');
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'malformation';
@@ -2199,6 +2236,7 @@
         }));
       } else if (dept === 'Gestation') {
         grid.appendChild(makeMetroFlipTile(t.tileProd, [t.tileProdSub, 'Heat & Mating', 'Time Stamp Kept'], 'AI', cls, () => {
+          playTone('tap');
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'gestation';
@@ -2207,6 +2245,7 @@
         }));
       } else if (dept === 'Boar House') {
         grid.appendChild(makeMetroFlipTile(t.tileProd, [t.tileProdSub, 'Libido Score 0-5', 'Volume & Motility'], 'SEMEN', cls, () => {
+          playTone('tap');
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'boar_semen';
@@ -2215,6 +2254,7 @@
         }));
       } else if (dept === 'GDU') {
         grid.appendChild(makeMetroFlipTile(t.tileProd, [t.tileProdSub, 'Teats & Blind Teats', 'Legs & Body Length'], 'SELECT', cls, () => {
+          playTone('tap');
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'conformation';
@@ -2224,6 +2264,7 @@
       }
 
       grid.appendChild(makeMetroFlipTile(t.tileTreat, [t.tileTreatSub, 'Ear Tag or Litter', 'Medication Slot'], 'RX', cls, () => {
+        playTone('tap');
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'treatment';
@@ -2231,6 +2272,7 @@
         renderView();
       }));
       grid.appendChild(makeMetroFlipTile(t.tileMort, [t.tileMortSub, 'Head-to-Toe Signs', 'Vet Alert Notice'], 'MORT', cls, () => {
+        playTone('tap');
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'mortality';
@@ -2308,7 +2350,7 @@
       scenes.forEach(sc => scheduleOne(sc));
     }
 
-    // 查詢方塊：耳號模糊比對 + 精緻表格呈現（方便截圖）+ 三語翻譯
+    // 查詢方塊：依序呈現耳號等相關數據之正規表格
     function renderQueryBox() {
       const t = DICT[state.lang];
       const p = document.getElementById('extraPanel');
@@ -2317,13 +2359,14 @@
         <div class="sec-title">${t.extraHeading}</div>
         <div class="field-hint">${t.queryEarPlaceholder}</div>
         <input type="text" id="qEarInp" class="input-box" placeholder="L1123 / 1123" onkeydown="if(event.key==='Enter') execQuery();" />
-        <button type="button" class="primary-btn" onclick="execQuery()">${t.searchBtn}</button>
+        <button type="button" class="primary-btn" onclick="playTone('tap'); execQuery()">${t.searchBtn}</button>
         <div id="qTableResult"></div>
         <div id="qOutBox" class="notice-box hidden"></div>
       `;
     }
 
     async function execQuery() {
+      const t = DICT[state.lang];
       const ear = document.getElementById('qEarInp').value.trim();
       const tblWrap = document.getElementById('qTableResult');
       const outBox = document.getElementById('qOutBox');
@@ -2346,25 +2389,42 @@
         }
         outBox.classList.add('hidden');
 
-        tblWrap.innerHTML = cards.map(c => {
-          const earTitle = translateQueryText(c.earTag);
-          const rowsHtml = (c.fields || []).map(f =>
-            `<tr><th>${translateQueryText(f.header)}</th><td>${translateQueryText(f.value)}</td></tr>`
-          ).join('');
-          return `
-            <div class="lookup-table-wrap">
-              <table class="lookup-table">
-                <thead><tr><th colspan="2" style="background:#dbeafe; font-size:14px;">${earTitle}</th></tr></thead>
-                <tbody>${rowsHtml}</tbody>
-              </table>
-            </div>
-          `;
+        // 收集所有黃色欄位標題，建立依序排列的正規表格
+        const colHeaders = [];
+        cards.forEach(c => {
+          (c.fields || []).forEach(f => {
+            const hLabel = translateQueryText(f.header);
+            if (!colHeaders.includes(hLabel)) colHeaders.push(hLabel);
+          });
+        });
+
+        const thCells = [`<th>${t.colEarTag}</th>`, ...colHeaders.map(h => `<th>${h}</th>`)].join('');
+        const bodyRows = cards.map(c => {
+          const mapVal = {};
+          (c.fields || []).forEach(f => {
+            mapVal[translateQueryText(f.header)] = translateQueryText(f.value);
+          });
+          const tdCells = [
+            `<td><strong>${translateQueryText(c.earTag)}</strong></td>`,
+            ...colHeaders.map(h => `<td>${mapVal[h] || '-'}</td>`)
+          ].join('');
+          return `<tr>${tdCells}</tr>`;
         }).join('');
+
+        tblWrap.innerHTML = `
+          <div class="lookup-table-wrap">
+            <table class="lookup-table">
+              <thead><tr>${thCells}</tr></thead>
+              <tbody>${bodyRows}</tbody>
+            </table>
+          </div>
+        `;
       } catch (e) {
         outBox.textContent = String(e);
       }
     }
 
+    // 分析報表改為正規表格呈現
     async function renderAnalysisBox() {
       const p = document.getElementById('extraPanel');
       p.classList.remove('hidden');
@@ -2373,7 +2433,28 @@
         const url = `${CONFIG.GAS_URL}?action=report&token=${encodeURIComponent(CONFIG.API_TOKEN)}&pass=${encodeURIComponent(state.profile.code)}&worker_name=${encodeURIComponent(state.workerName)}`;
         const r = await fetch(url);
         const j = await r.json();
-        p.innerHTML = `<div class="notice-box">${j.ok ? JSON.stringify(j.data, null, 2) : (j.error || 'OK')}</div>`;
+        if (!j || !j.ok || !j.data) {
+          p.innerHTML = `<div class="notice-box">${j?.error || '-'}</div>`;
+          return;
+        }
+        const headers = j.data.headers || [];
+        const rows = j.data.rows || [];
+        if (!rows.length) {
+          p.innerHTML = `<div class="notice-box">-</div>`;
+          return;
+        }
+        const ths = headers.map(h => `<th>${translateQueryText(h)}</th>`).join('');
+        const trs = rows.map(row =>
+          `<tr>${row.map(v => `<td>${translateQueryText(v)}</td>`).join('')}</tr>`
+        ).join('');
+        p.innerHTML = `
+          <div class="lookup-table-wrap">
+            <table class="lookup-table">
+              <thead><tr>${ths}</tr></thead>
+              <tbody>${trs}</tbody>
+            </table>
+          </div>
+        `;
       } catch (e) {
         p.innerHTML = `<div class="notice-box">${String(e)}</div>`;
       }
@@ -2392,6 +2473,7 @@
     }
 
     function toggleChip(btn) {
+      playTone('tap');
       const g = btn.dataset.g;
       const v = btn.dataset.v;
       const m = btn.dataset.m === '1';
@@ -2668,7 +2750,7 @@
       if (!hasAnyInputData(item.data)) return;
 
       state.queuedRecords.push(item);
-      playTone('step');
+      playTone('tap');
       logTraj('add_next:' + state.queuedRecords.length);
 
       document.querySelectorAll('#formPanel [id^="f_"]').forEach(el => {
@@ -2685,6 +2767,7 @@
     }
 
     function removeQueuedItem(idx) {
+      playTone('tap');
       state.queuedRecords.splice(idx, 1);
       refreshCartUI();
     }
@@ -2810,7 +2893,7 @@
         const j = await res.json();
         if (j && j.ok) {
           setStageUI(stEl, 'st-done', t.step3Done + (j.rowId || 'OK') + ` (${allToSend.length})`);
-          playTone('success');
+          playTone('send');
           state.queuedRecords = [];
           refreshCartUI();
           renderSymmetricalDiaryReport(allToSend);
@@ -2998,7 +3081,7 @@
       link.download = info.fileName;
       link.href = canvas.toDataURL('image/png');
       link.click();
-      playTone('success');
+      playTone('send');
     }
 
     function getQueue() {
