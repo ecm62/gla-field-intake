@@ -3,31 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#e8eef6" />
+  <meta name="theme-color" content="#090d16" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Field Daily Log</title>
+  <title>GLA Metro Hub</title>
   <style>
     :root {
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --tile-gp: #ede7f6;
-      --tile-gp-b: #b39ddb;
-      --tile-ps: #e8f5e9;
-      --tile-ps-b: #81c784;
-      --tile-gest: #e0f2f1;
-      --tile-gest-b: #80cbc4;
-      --tile-farr: #ffebee;
-      --tile-farr-b: #ef9a9a;
-      --tile-nurs: #fffde7;
-      --tile-nurs-b: #fff176;
-      --tile-pork: #eceff1;
-      --tile-pork-b: #b0bec5;
-      --tile-boar: #cfd8dc;
-      --tile-boar-b: #90a4ae;
-      --tile-gdu: #f3e5f5;
-      --tile-gdu-b: #ce93d8;
-      --tile-exit: #fff3e0;
-      --tile-exit-b: #ffcc80;
+      --bg-metro: #090d16;
+      --bg-panel: #111827;
+      --border-metro: rgba(255, 255, 255, 0.16);
+      --fg-white: #ffffff;
+      --fg-soft: #e2e8f0;
+
+      /* 微軟 Metro 高對比色票 */
+      --m-cobalt: #0050ef;
+      --m-crimson: #a20025;
+      --m-emerald: #008a00;
+      --m-amber: #b45309;
+      --m-violet: #6a00ff;
+      --m-steel: #334155;
+      --m-teal: #00aba9;
+      --m-magenta: #a80077;
+      --m-orange: #c2410c;
     }
 
     * {
@@ -44,52 +40,52 @@
     }
 
     body {
-      padding: 8px 24px 70px 24px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
-      background: linear-gradient(180deg, #e8eef6 0%, #f7f9fc 100%);
-      color: var(--text-primary);
-      font-size: 15px;
+      padding: 8px 24px 72px 24px;
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Noto Sans TC", sans-serif;
+      background-color: var(--bg-metro);
+      color: var(--fg-white);
+      font-size: 16px;
       min-height: 100vh;
     }
 
-    /* 側邊細長條 + 放大 2.5 倍左右三角形 */
+    /* 左右側邊細長條 + 放大 2.5 倍三角形 */
     .edge-rail {
       position: fixed;
       top: 0;
-      bottom: 54px;
+      bottom: 56px;
       width: 22px;
       z-index: 60;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(15, 23, 42, 0.04);
+      background: rgba(255, 255, 255, 0.04);
       cursor: pointer;
     }
-    .edge-rail:active { background: rgba(2, 132, 199, 0.18); }
+    .edge-rail:active { background: rgba(0, 171, 169, 0.28); }
     .edge-rail.left { left: 0; }
     .edge-rail.right { right: 0; }
 
     .tri-big {
       width: 0;
       height: 0;
-      opacity: 0.38;
+      opacity: 0.45;
     }
-    .edge-rail:active .tri-big { opacity: 0.88; }
+    .edge-rail:active .tri-big { opacity: 0.95; }
     .tri-left {
       border-top: 22px solid transparent;
       border-bottom: 22px solid transparent;
-      border-right: 16px solid #1e293b;
+      border-right: 16px solid #ffffff;
     }
     .tri-right {
       border-top: 22px solid transparent;
       border-bottom: 22px solid transparent;
-      border-left: 16px solid #1e293b;
+      border-left: 16px solid #ffffff;
     }
 
-    /* 頂部操作列 */
+    /* 頂部列 */
     .top-bar {
       width: 100%;
-      max-width: 540px;
+      max-width: 560px;
       margin: 0 auto 8px auto;
       display: flex;
       flex-wrap: wrap;
@@ -105,48 +101,47 @@
       flex-wrap: wrap;
     }
 
-    .pill-btn {
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-      color: #1e293b;
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 13px;
+    .metro-pill {
+      border: 1px solid var(--border-metro);
+      background: #1e293b;
+      color: #ffffff;
+      border-radius: 3px;
+      padding: 6px 11px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
     }
-    .pill-btn.active {
-      background: #0284c7;
-      color: #ffffff;
-      border-color: #0284c7;
+    .metro-pill.active {
+      background: var(--m-cobalt);
+      border-color: #60a5fa;
     }
 
     .home-house-btn {
-      border: 1.5px solid #0284c7;
-      background: #e0f2fe;
-      color: #0369a1;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 15px;
+      border: 1.5px solid #38bdf8;
+      background: var(--m-cobalt);
+      color: #ffffff;
+      border-radius: 3px;
+      padding: 5px 11px;
+      font-size: 16px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    .worker-inp {
-      border: 1px solid #94a3b8;
-      background: #ffffff;
-      color: #0f172a;
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 13px;
-      font-weight: 700;
-      width: 112px;
+    .exit-screen-btn {
+      border: 1px solid #f87171;
+      background: var(--m-crimson);
+      color: #ffffff;
+      border-radius: 3px;
+      padding: 6px 11px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    /* 分離式天氣與時間預報小框 */
+    /* 分離式時間、地點、現有溫度與中心預報曲線小框 */
     .split-widget-wrap {
       width: 100%;
-      max-width: 540px;
+      max-width: 560px;
       margin: 0 auto 10px auto;
       display: flex;
       flex-direction: column;
@@ -159,46 +154,45 @@
       gap: 7px;
     }
 
-    .sub-box {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 9px 12px;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    .metro-subbox {
+      background: var(--bg-panel);
+      border-radius: 3px;
+      padding: 10px 12px;
+      border: 1px solid var(--border-metro);
     }
 
     .clock-val {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 800;
-      color: #0f172a;
-      line-height: 1.15;
+      color: #ffffff;
+      line-height: 1.1;
     }
 
     .date-sub {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--text-secondary);
-      margin-top: 2px;
+      color: #cbd5e1;
+      margin-top: 3px;
     }
 
     .loc-val {
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 800;
-      color: #1e293b;
+      color: #ffffff;
       line-height: 1.25;
     }
 
     .temp-val {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 800;
-      color: #0369a1;
+      color: #38bdf8;
     }
 
     .rain-txt {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
-      color: #334155;
-      margin-top: 2px;
+      color: #e2e8f0;
+      margin-top: 3px;
     }
 
     .curve-header {
@@ -207,67 +201,69 @@
       align-items: center;
       font-size: 12px;
       font-weight: 700;
-      color: #475569;
-      margin-bottom: 3px;
+      color: #e2e8f0;
+      margin-bottom: 4px;
     }
 
     .span-btn {
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
-      border-radius: 8px;
+      border: 1px solid #64748b;
+      background: #1e293b;
+      color: #ffffff;
+      border-radius: 2px;
       padding: 2px 6px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
     }
 
-    /* 登入框 */
-    .auth-card {
+    /* 登入框 / 離開框 */
+    .auth-card, .exit-card {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       margin: 18px auto;
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 18px;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
-      border: 1px solid #e2e8f0;
+      background: var(--bg-panel);
+      border-radius: 3px;
+      padding: 20px;
+      border: 1px solid var(--border-metro);
     }
+
+    .exit-card { text-align: center; }
 
     .field-label {
       display: block;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
-      margin-bottom: 5px;
-      color: #1e293b;
+      margin-bottom: 6px;
+      color: #ffffff;
     }
 
     .field-hint {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
-      color: #0369a1;
-      margin-bottom: 5px;
-      line-height: 1.3;
+      color: #93c5fd;
+      margin-bottom: 6px;
+      line-height: 1.35;
     }
 
     .input-box {
       width: 100%;
-      padding: 10px 12px;
-      font-size: 15px;
-      border-radius: 12px;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
-      color: #0f172a;
+      padding: 11px 12px;
+      font-size: 16px;
+      border-radius: 3px;
+      border: 1px solid #64748b;
+      background: #0f172a;
+      color: #ffffff;
     }
 
     .primary-btn {
       width: 100%;
-      margin-top: 10px;
-      padding: 11px;
-      font-size: 15px;
+      margin-top: 12px;
+      padding: 12px;
+      font-size: 16px;
       font-weight: 800;
       border: none;
-      border-radius: 14px;
-      background: #0284c7;
+      border-radius: 3px;
+      background: var(--m-cobalt);
       color: #ffffff;
       cursor: pointer;
     }
@@ -275,66 +271,56 @@
     .secondary-btn {
       width: 100%;
       margin-top: 10px;
-      padding: 10px;
-      font-size: 14px;
+      padding: 11px;
+      font-size: 15px;
       font-weight: 800;
-      border: 1.5px solid #0284c7;
-      border-radius: 14px;
-      background: #f0f9ff;
-      color: #0369a1;
+      border: 1.5px solid #38bdf8;
+      border-radius: 3px;
+      background: #0f172a;
+      color: #7dd3fc;
       cursor: pointer;
     }
 
     .main-wrap {
       width: 100%;
-      max-width: 540px;
+      max-width: 560px;
       margin: 0 auto;
     }
 
-    /* GP 跨部門快捷切換列 */
-    .gp-quick-strip {
+    .gp-quick-strip, .room-quick-strip {
       display: flex;
       gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-      margin-bottom: 6px;
-    }
-
-    /* PS 房號快速切換列 */
-    .room-quick-strip {
-      display: flex;
-      gap: 5px;
       overflow-x: auto;
       padding-bottom: 6px;
       margin-bottom: 6px;
     }
 
     .context-bar {
-      background: #ffffff;
-      border: 1px solid #bae6fd;
-      border-radius: 14px;
-      padding: 8px 11px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-metro);
+      border-radius: 3px;
+      padding: 9px 12px;
       margin-bottom: 8px;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 6px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
+      color: #ffffff;
     }
 
     .batch-chip {
-      background: #e0f2fe;
-      color: #0369a1;
+      background: var(--m-teal);
+      color: #ffffff;
       padding: 3px 9px;
-      border-radius: 999px;
+      border-radius: 2px;
       font-size: 12px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    /* 三週次批次三個小框 */
     .batch-trio {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -343,18 +329,18 @@
     }
 
     .batch-box {
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 12px;
+      background: #0f172a;
+      border: 1px solid #475569;
+      border-radius: 3px;
       padding: 6px 4px;
       text-align: center;
     }
 
     .batch-box label {
       display: block;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
-      color: #475569;
+      color: #cbd5e1;
       margin-bottom: 4px;
     }
 
@@ -362,77 +348,97 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 4px;
     }
 
     .step-btn {
-      width: 24px;
-      height: 30px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      background: #fff;
-      font-size: 15px;
+      width: 26px;
+      height: 32px;
+      border-radius: 2px;
+      border: 1px solid #64748b;
+      background: #1e293b;
+      color: #ffffff;
+      font-size: 16px;
       font-weight: 800;
       padding: 0;
       cursor: pointer;
     }
 
     .batch-inp {
-      width: 42px;
-      height: 30px;
+      width: 44px;
+      height: 32px;
       text-align: center;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 800;
       border: 1px solid #94a3b8;
-      border-radius: 8px;
-      background: #fff;
+      border-radius: 2px;
+      background: #090d16;
+      color: #ffffff;
       padding: 0;
     }
 
-    /* 動態磚網格 */
+    /* 真正 3D 雙面翻轉 Windows Phone Metro 動態磚 */
     .tile-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
     }
 
-    @keyframes softFlip {
-      0% { transform: perspective(600px) rotateX(0deg); }
-      45% { transform: perspective(600px) rotateX(12deg); }
-      100% { transform: perspective(600px) rotateX(0deg); }
+    .metro-flip-scene {
+      perspective: 900px;
+      min-height: 96px;
+      cursor: pointer;
     }
 
-    .live-tile {
-      border-radius: 18px;
-      padding: 11px 11px;
-      min-height: 82px;
-      cursor: pointer;
+    .metro-flip-scene:active .metro-flip-card {
+      transform: scale(0.96);
+    }
+
+    .metro-flip-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 96px;
+      transform-style: preserve-3d;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .metro-flip-scene.is-flipped .metro-flip-card {
+      transform: rotateX(180deg);
+    }
+
+    .metro-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 3px;
+      padding: 12px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border: 1.5px solid transparent;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-      transition: transform 0.12s ease;
-      user-select: none;
+      border: 1px solid rgba(255, 255, 255, 0.22);
     }
 
-    .live-tile:active { transform: scale(0.96); }
-    .live-tile.flipping { animation: softFlip 0.65s ease; }
-    .live-tile.wide { grid-column: span 2; }
+    .metro-back {
+      transform: rotateX(180deg);
+      background: #1e293b !important;
+      border-color: #38bdf8;
+    }
 
     .tile-title {
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 800;
       line-height: 1.2;
-      color: #0f172a;
+      color: #ffffff;
       word-break: break-word;
     }
 
     .tile-sub {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
-      color: #334155;
-      margin-top: 4px;
+      color: #f1f5f9;
+      margin-top: 5px;
       line-height: 1.25;
     }
 
@@ -441,40 +447,40 @@
       font-size: 11px;
       font-weight: 800;
       padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.78);
-      color: #1e293b;
+      border-radius: 2px;
+      background: rgba(0, 0, 0, 0.35);
+      color: #ffffff;
       margin-top: 6px;
     }
 
-    .t-gp { background: var(--tile-gp); border-color: var(--tile-gp-b); }
-    .t-ps { background: var(--tile-ps); border-color: var(--tile-ps-b); }
-    .t-gest { background: var(--tile-gest); border-color: var(--tile-gest-b); }
-    .t-farr { background: var(--tile-farr); border-color: var(--tile-farr-b); }
-    .t-nurs { background: var(--tile-nurs); border-color: var(--tile-nurs-b); }
-    .t-pork { background: var(--tile-pork); border-color: var(--tile-pork-b); }
-    .t-boar { background: var(--tile-boar); border-color: var(--tile-boar-b); }
-    .t-gdu { background: var(--tile-gdu); border-color: var(--tile-gdu-b); }
-    .t-exit { background: var(--tile-exit); border-color: var(--tile-exit-b); }
+    .m-boar { background: var(--m-steel); }
+    .m-gdu { background: var(--m-violet); }
+    .m-gest { background: var(--m-emerald); }
+    .m-farr { background: var(--m-crimson); }
+    .m-nurs { background: var(--m-amber); }
+    .m-pork { background: #475569; }
+    .m-exit { background: var(--m-orange); }
+    .m-query { background: var(--m-cobalt); }
+    .m-teal { background: var(--m-teal); }
+    .m-mag { background: var(--m-magenta); }
 
     .section-gap { height: 18px; }
     .sec-title {
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 800;
       margin: 4px 0 7px 2px;
-      color: #1e293b;
+      color: #ffffff;
     }
 
     .panel-card {
-      background: #ffffff;
-      border-radius: 18px;
+      background: var(--bg-panel);
+      border-radius: 3px;
       padding: 14px;
       margin-top: 10px;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+      border: 1px solid var(--border-metro);
     }
 
-    .field-block { margin-bottom: 11px; }
+    .field-block { margin-bottom: 12px; }
 
     .chip-row {
       display: flex;
@@ -484,44 +490,42 @@
 
     .chip-btn {
       padding: 8px 11px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
-      border-radius: 11px;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
-      color: #1e293b;
+      border-radius: 3px;
+      border: 1px solid #64748b;
+      background: #0f172a;
+      color: #ffffff;
       cursor: pointer;
     }
 
     .chip-btn.selected {
-      background: #0284c7;
-      color: #ffffff;
-      border-color: #0284c7;
+      background: var(--m-cobalt);
+      border-color: #93c5fd;
     }
 
-    /* 待送出購物車清單 */
     .cart-list-box {
       margin-top: 10px;
       padding: 10px;
-      border-radius: 14px;
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      background: #0f172a;
+      border: 1px solid #475569;
     }
     .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 6px 0;
-      border-bottom: 1px dashed #cbd5e1;
-      font-size: 13px;
+      border-bottom: 1px dashed #334155;
+      font-size: 14px;
       font-weight: 700;
     }
     .cart-item:last-child { border-bottom: none; }
     .del-mini-btn {
-      border: 1px solid #fca5a5;
-      background: #fee2e2;
-      color: #991b1b;
-      border-radius: 8px;
+      border: 1px solid #f87171;
+      background: var(--m-crimson);
+      color: #ffffff;
+      border-radius: 2px;
       padding: 3px 8px;
       font-size: 12px;
       font-weight: 800;
@@ -532,8 +536,9 @@
     .diary-report-card {
       margin-top: 12px;
       background: #ffffff;
-      border: 2px solid #0f172a;
-      border-radius: 16px;
+      color: #0f172a;
+      border: 3px solid #0f172a;
+      border-radius: 3px;
       padding: 12px;
     }
     .diary-top-dt {
@@ -551,11 +556,11 @@
       gap: 6px;
     }
     .diary-cell {
-      border-radius: 10px;
+      border-radius: 2px;
       padding: 7px 8px;
       border: 1px solid #cbd5e1;
-      background: #f1f5f9;
-      color: #64748b;
+      background: #e2e8f0;
+      color: #475569;
       font-size: 11px;
       line-height: 1.3;
     }
@@ -583,24 +588,26 @@
     .stage-tracker {
       margin-top: 10px;
       padding: 10px 12px;
-      border-radius: 14px;
-      background: #f8fafc;
-      border: 1.5px solid #cbd5e1;
-      font-size: 14px;
+      border-radius: 3px;
+      background: #0f172a;
+      border: 1.5px solid #64748b;
+      font-size: 15px;
       font-weight: 800;
     }
-    .stage-tracker.st-prep { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
-    .stage-tracker.st-sending { background: #fef9c3; border-color: #facc15; color: #854d0e; }
-    .stage-tracker.st-done { background: #dcfce7; border-color: #4ade80; color: #166534; }
-    .stage-tracker.st-queued { background: #ffedd5; border-color: #fb923c; color: #9a3412; }
-    .stage-tracker.st-err { background: #fee2e2; border-color: #f87171; color: #991b1b; }
+    .stage-tracker.st-prep { background: #1e3a8a; border-color: #60a5fa; color: #ffffff; }
+    .stage-tracker.st-sending { background: #78350f; border-color: #fbbf24; color: #fef08a; }
+    .stage-tracker.st-done { background: #14532d; border-color: #4ade80; color: #dcfce7; }
+    .stage-tracker.st-queued { background: #7c2d12; border-color: #fb923c; color: #ffedd5; }
+    .stage-tracker.st-err { background: #7f1d1d; border-color: #f87171; color: #fee2e2; }
 
     .notice-box {
       margin-top: 8px;
       padding: 10px 12px;
-      border-radius: 12px;
-      background: #f1f5f9;
-      font-size: 13px;
+      border-radius: 3px;
+      background: #0f172a;
+      border: 1px solid #475569;
+      color: #f8fafc;
+      font-size: 14px;
       font-weight: 600;
       white-space: pre-wrap;
     }
@@ -610,9 +617,9 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 52px;
-      background: rgba(255, 255, 255, 0.96);
-      border-top: 1px solid #cbd5e1;
+      height: 54px;
+      background: #111827;
+      border-top: 1px solid var(--border-metro);
       display: flex;
       align-items: center;
       justify-content: space-around;
@@ -623,12 +630,12 @@
 
     .nav-btn {
       flex: 1;
-      height: 36px;
-      border-radius: 12px;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
-      color: #0f172a;
-      font-size: 14px;
+      height: 38px;
+      border-radius: 3px;
+      border: 1px solid #64748b;
+      background: #1e293b;
+      color: #ffffff;
+      font-size: 15px;
       font-weight: 800;
       cursor: pointer;
     }
@@ -644,63 +651,74 @@
     <div class="tri-big tri-right"></div>
   </div>
 
-  <!-- 頂部：小房子回首頁 + 填報員姓名 + 語系 BM/EN/中 + 音效 + 重新載入 -->
+  <!-- 頂部：小房子回首頁 + 語系 BM/EN/中 + 音效 + 重新載入 + 離開畫面 -->
   <div class="top-bar">
     <div class="pill-group">
       <button type="button" class="home-house-btn" id="btnHomeHouse" onclick="goHomeHouse()" title="Home">🏠</button>
-      <input type="text" id="workerNameInput" class="worker-inp" onchange="saveWorkerName(this.value)" />
-      <button type="button" class="pill-btn" data-lang="ms" onclick="setLang('ms')">BM</button>
-      <button type="button" class="pill-btn" data-lang="en" onclick="setLang('en')">EN</button>
-      <button type="button" class="pill-btn" data-lang="zh-TW" onclick="setLang('zh-TW')">中</button>
+      <button type="button" class="metro-pill" data-lang="ms" onclick="setLang('ms')">BM</button>
+      <button type="button" class="metro-pill" data-lang="en" onclick="setLang('en')">EN</button>
+      <button type="button" class="metro-pill" data-lang="zh-TW" onclick="setLang('zh-TW')">中</button>
     </div>
     <div class="pill-group">
-      <button type="button" class="pill-btn active" id="btnSoundToggle" onclick="toggleSound()"></button>
-      <button type="button" class="pill-btn" id="btnReload" onclick="reloadApp()"></button>
-      <span id="queuePill" class="pill-btn hidden" style="background:#f59e0b; color:#fff; border-color:#f59e0b;" onclick="syncOfflineQueue()">0</span>
+      <button type="button" class="metro-pill active" id="btnSoundToggle" onclick="toggleSound()"></button>
+      <button type="button" class="metro-pill" id="btnReload" onclick="reloadApp()"></button>
+      <button type="button" class="exit-screen-btn" id="btnExitScreen" onclick="openExitScreen()"></button>
+      <span id="queuePill" class="metro-pill hidden" style="background:#b45309; border-color:#fbbf24;" onclick="syncOfflineQueue()">0</span>
     </div>
   </div>
 
-  <!-- 分離式時鐘、地點、現有溫度與未來預報曲線框 -->
+  <!-- 分離式時間、地點、現有溫度與中心預報曲線小框 -->
   <section class="split-widget-wrap">
     <div class="mini-row-2">
-      <div class="sub-box">
+      <div class="metro-subbox">
         <div class="clock-val" id="clockNow">--:--:--</div>
         <div class="date-sub" id="dateSub">--</div>
       </div>
-      <div class="sub-box">
+      <div class="metro-subbox">
         <div class="loc-val" id="locSub">--</div>
         <div class="date-sub" id="groupStatusSub">-</div>
       </div>
     </div>
 
     <div class="mini-row-2">
-      <div class="sub-box">
+      <div class="metro-subbox">
         <div class="temp-val" id="tempNowVal">--°C</div>
         <div class="rain-txt" id="rainNowTxt">--</div>
       </div>
-      <div class="sub-box">
+      <div class="metro-subbox">
         <div class="curve-header">
           <span id="curveTitle"></span>
-          <button type="button" class="span-btn" id="btnSpanToggle" onclick="toggleSpan()">±3H / ±6H</button>
+          <button type="button" class="span-btn" id="btnSpanToggle" onclick="toggleSpan()">±3H/±6H</button>
         </div>
         <svg id="forecastCurveSvg" viewBox="0 0 240 52" width="100%" height="52"></svg>
       </div>
     </div>
   </section>
 
-  <!-- 密碼驗證框（零暗示） -->
+  <!-- 登入前畫面：先輸入姓名 + 密碼（零暗示） -->
   <section id="loginCard" class="auth-card">
-    <label class="field-label" id="lblPass" for="inpPass"></label>
-    <input type="password" id="inpPass" class="input-box" autocomplete="off" onkeydown="if(event.key==='Enter') submitLogin();" />
+    <div class="field-block">
+      <label class="field-label" id="lblWorkerName" for="loginWorkerInput"></label>
+      <input type="text" id="loginWorkerInput" class="input-box" autocomplete="off" />
+    </div>
+    <div class="field-block">
+      <label class="field-label" id="lblPass" for="inpPass"></label>
+      <input type="password" id="inpPass" class="input-box" autocomplete="off" onkeydown="if(event.key==='Enter') submitLogin();" />
+    </div>
     <button type="button" class="primary-btn" id="btnLogin" onclick="submitLogin()"></button>
-    <div id="errLogin" class="notice-box hidden" style="background:#fee2e2; color:#991b1b;"></div>
+    <div id="errLogin" class="notice-box hidden" style="background:#7f1d1d; border-color:#f87171;"></div>
+  </section>
+
+  <!-- 離開畫面 -->
+  <section id="exitCard" class="exit-card hidden">
+    <div style="font-size:21px; font-weight:900; margin-bottom:8px;" id="exitTitle"></div>
+    <div style="font-size:14px; color:#cbd5e1; margin-bottom:14px;" id="exitDesc"></div>
+    <button type="button" class="primary-btn" id="btnReenterFromExit" onclick="reenterFromExit()"></button>
   </section>
 
   <!-- 主工作區 -->
   <main id="workspaceMain" class="main-wrap hidden">
-    <!-- GP 跨部門快捷切換列 -->
     <div id="gpQuickStrip" class="gp-quick-strip hidden"></div>
-    <!-- PS 同部門房號快速跳轉列（如 Nursery 1 跳 Nursery 2） -->
     <div id="roomQuickStrip" class="room-quick-strip hidden"></div>
 
     <div class="context-bar">
@@ -736,12 +754,12 @@
         admin: 'qwert'
       },
       KEYS: {
-        LANG: 'gla_sys_lang_v8',
-        PASS: 'gla_sys_pass_v8',
-        WORKER: 'gla_worker_name_v8',
-        QUEUE: 'gla_sys_queue_v8',
-        ROOM_BATCHES: 'gla_room_batches_v8',
-        SOUND: 'gla_sound_on_v8'
+        LANG: 'gla_sys_lang_v10',
+        PASS: 'gla_sys_pass_v10',
+        WORKER: 'gla_worker_name_v10',
+        QUEUE: 'gla_sys_queue_v10',
+        ROOM_BATCHES: 'gla_room_batches_v10',
+        SOUND: 'gla_sound_on_v10'
       },
       LAT: 1.167,
       LON: 110.566,
@@ -751,12 +769,17 @@
 
     const DICT = {
       'ms': {
+        workerLabel: 'Nama Anda',
+        workerPlaceholder: 'Masukkan nama anda',
         passLabel: 'Kod Akses',
         enterBtn: 'Masuk',
         reloadBtn: 'Muat Semula',
+        exitBtn: 'Keluar',
+        exitTitle: 'Sesi Telah Ditamatkan',
+        exitDesc: 'Anda telah keluar dari skrin kerja. Tekan butang di bawah untuk masuk semula.',
+        reenterBtn: 'Masuk Semula',
         soundOn: 'Bunyi: ON',
         soundOff: 'Bunyi: OFF',
-        workerPlaceholder: 'Nama Anda',
         badPass: 'Kod akses tidak sah',
         prevBtn: 'Kembali',
         nextBtn: 'Seterusnya',
@@ -766,7 +789,9 @@
         nowLabel: 'Kini',
         rainLikely: 'Dijangka Hujan',
         rainLow: 'Peluang Hujan Rendah',
-        extraHeading: 'Analisis & Carian',
+        extraHeading: 'Analisis & Carian (GLA9999+)',
+        queryEarPlaceholder: 'Carian kabur No. Telinga (cth: L1123 atau 1123)',
+        searchBtn: 'Cari',
         batchGateTitle: 'Sahkan Bilik & Kumpulan 3 Minggu',
         batchRemind: 'Perhatian: Bilik berbeza mempunyai sumber data berasingan. Sila semak kumpulan.',
         gduAutoWeekNote: 'Tanpa kumpulan tetap: menggunakan minggu semasa secara automatik',
@@ -787,8 +812,10 @@
         deptNursSub: 'Meter Air · Makanan · Rawatan/Mati',
         deptPork: 'Bilik Pembesaran',
         deptPorkSub: 'Meter Air · Makanan · Rawatan/Mati',
-        deptExit: 'Keluar / Jualan / Takai / Mati',
-        deptExitSub: 'Rekod keluar & semakan baki bilik',
+        deptCullMort: 'Takai & Kematian',
+        deptCullMortSub: 'Rekod takai & kematian',
+        deptExitSale: 'Keluar & Jualan',
+        deptExitSaleSub: 'Rekod keluar & jualan',
         sideA: 'Bahagian A (Kiri)',
         sideB: 'Bahagian B (Kanan)',
         tileFW: 'Meter Air & Makanan',
@@ -814,12 +841,12 @@
         queuedListTitle: 'Senarai Sedia Dihantar',
         delBtn: 'Padam',
         errCommaDot: 'Wajib gunakan koma (,) atau titik (.) untuk memisahkan beberapa No. Telinga! Tidak dibenarkan guna ruang kosong sahaja.',
-        errNoName: 'Sila masukkan nama anda di bahagian atas terlebih dahulu.',
+        errNoName: 'Sila masukkan nama anda sebelum masuk.',
         lblDate: 'Tarikh',
-        lblEarTag: 'No. Telinga',
-        lblMultiEarHint: 'Wajib guna koma (,) atau titik (.) untuk pisahkan No. Telinga (cth: 1021, 1022)',
-        lblSowTag: 'No. Telinga Induk',
-        lblBoarTag: 'No. Telinga Pejantan',
+        lblEarTag: 'No. Telinga Lengkap (cth: L1123, Y1301)',
+        lblMultiEarHint: 'Gunakan format penuh (cth: L1123) dan pisahkan berbilang dengan koma (,) atau titik (.)',
+        lblSowTag: 'No. Telinga Induk (cth: L1123)',
+        lblBoarTag: 'No. Telinga Pejantan (cth: D1402)',
         lblSex: 'Jantina',
         optFemale: 'Betina',
         optMale: 'Jantan',
@@ -923,12 +950,17 @@
         downloadPngBtn: 'Muat Turun Gambar Laporan (PNG)'
       },
       'en': {
+        workerLabel: 'Your Name',
+        workerPlaceholder: 'Enter your name',
         passLabel: 'Access Code',
         enterBtn: 'Enter',
         reloadBtn: 'Reload',
+        exitBtn: 'Exit',
+        exitTitle: 'Session Exited',
+        exitDesc: 'You have exited the working screen. Tap below to enter again.',
+        reenterBtn: 'Re-enter',
         soundOn: 'Sound: ON',
         soundOff: 'Sound: OFF',
-        workerPlaceholder: 'Your Name',
         badPass: 'Invalid access code',
         prevBtn: 'Prev',
         nextBtn: 'Next',
@@ -938,7 +970,9 @@
         nowLabel: 'Now',
         rainLikely: 'Rain Expected',
         rainLow: 'Low Rain Chance',
-        extraHeading: 'Analytics & Lookup',
+        extraHeading: 'Analytics & Lookup (GLA9999+)',
+        queryEarPlaceholder: 'Fuzzy Ear Tag search (e.g. L1123 or 1123)',
+        searchBtn: 'Search',
         batchGateTitle: 'Confirm Room & 3-Week Batch',
         batchRemind: 'Note: Switching rooms switches data source. Verify batch before continuing.',
         gduAutoWeekNote: 'No fixed batch: automatically logged under current ISO week',
@@ -959,8 +993,10 @@
         deptNursSub: 'Water · Feed · Treat/Mort',
         deptPork: 'Porker',
         deptPorkSub: 'Water · Feed · Treat/Mort',
-        deptExit: 'Exit / Sales / Cull / Mortality',
-        deptExitSub: 'Outbound log & room reconciliation',
+        deptCullMort: 'Cull & Mortality',
+        deptCullMortSub: 'Cull & mortality records',
+        deptExitSale: 'Exit & Sales',
+        deptExitSaleSub: 'Exit & sales records',
         sideA: 'Side A (Left)',
         sideB: 'Side B (Right)',
         tileFW: 'Water Meter & Feed',
@@ -986,12 +1022,12 @@
         queuedListTitle: 'Ready-to-Submit List',
         delBtn: 'Remove',
         errCommaDot: 'Multiple Ear Tags MUST be separated by a comma (,) or period (.)! Spaces alone are blocked.',
-        errNoName: 'Please enter your name at the top first.',
+        errNoName: 'Please enter your name before entering.',
         lblDate: 'Date',
-        lblEarTag: 'Ear Tag',
-        lblMultiEarHint: 'Must use comma (,) or period (.) to separate multiple Ear Tags (e.g. 1021, 1022)',
-        lblSowTag: 'Sow Ear Tag',
-        lblBoarTag: 'Boar Ear Tag',
+        lblEarTag: 'Full Ear Tag (e.g. L1123, Y1301)',
+        lblMultiEarHint: 'Use full tag (e.g. L1123) and separate multiple tags with comma (,) or period (.)',
+        lblSowTag: 'Sow Ear Tag (e.g. L1123)',
+        lblBoarTag: 'Boar Ear Tag (e.g. D1402)',
         lblSex: 'Sex',
         optFemale: 'Female',
         optMale: 'Male',
@@ -1095,12 +1131,17 @@
         downloadPngBtn: 'Download Diary Report Image (PNG)'
       },
       'zh-TW': {
+        workerLabel: '您的姓名',
+        workerPlaceholder: '請輸入您的姓名',
         passLabel: '請輸入密碼',
         enterBtn: '確認進入',
         reloadBtn: '重新載入',
+        exitBtn: '離開',
+        exitTitle: '已離開系統畫面',
+        exitDesc: '本次工作階段已結束，若要繼續操作請點選下方重新進入。',
+        reenterBtn: '重新進入',
         soundOn: '音效：開',
         soundOff: '音效：關',
-        workerPlaceholder: '請輸入您的姓名',
         badPass: '密碼無效',
         prevBtn: '上一頁',
         nextBtn: '下一頁',
@@ -1110,7 +1151,9 @@
         nowLabel: '現在',
         rainLikely: '今日有降雨機率',
         rainLow: '今日降雨機率偏低',
-        extraHeading: '分析與查詢專區',
+        extraHeading: '分析與查詢專區（GLA9999 以上）',
+        queryEarPlaceholder: '輸入耳號模糊查詢（例如 L1123 或只打 1123）',
+        searchBtn: '查詢',
         batchGateTitle: '請先確認房號與三週次批次',
         batchRemind: '提醒：切換不同間房屬於不同資料來源，請核對目前房號與批次',
         gduAutoWeekNote: '無固定批次者自動記錄當週週次為批次依據',
@@ -1131,8 +1174,10 @@
         deptNursSub: '上下午水錶 · 飼料包數 · 治療死亡',
         deptPork: '肉豬舍',
         deptPorkSub: '上下午水錶 · 飼料包數 · 治療死亡',
-        deptExit: '離場 / 銷售 / 淘汰 / 死亡',
-        deptExitSub: '出豬來源棟舍與耳號核對',
+        deptCullMort: '淘汰與死亡',
+        deptCullMortSub: '淘汰與死亡紀錄',
+        deptExitSale: '離場與銷售',
+        deptExitSaleSub: '離場與銷售紀錄',
         sideA: 'A 區（左側）',
         sideB: 'B 區（右側）',
         tileFW: '獨立水錶與飼料用料',
@@ -1158,12 +1203,12 @@
         queuedListTitle: '待送出清單（可連續新增多筆）',
         delBtn: '刪除',
         errCommaDot: '輸入多隻耳號時，強制規定必須使用逗號（,）或句點（.）分隔！不可只用空格。',
-        errNoName: '請先在上方輸入您的姓名再送出。',
+        errNoName: '請先在登入畫面輸入您的姓名。',
         lblDate: '日期',
-        lblEarTag: '耳號',
-        lblMultiEarHint: '多隻耳號強制以逗號（,）或句點（.）分隔（例如：1021, 1022）',
-        lblSowTag: '母豬耳號',
-        lblBoarTag: '公豬耳號',
+        lblEarTag: '完整耳號（例如 L1123、Y1301）',
+        lblMultiEarHint: '請填寫完整耳號（如 L1123），多隻請用逗號（,）或句點（.）分隔',
+        lblSowTag: '母豬完整耳號（例如 L1123）',
+        lblBoarTag: '公豬完整耳號（例如 D1402）',
         lblSex: '性別',
         optFemale: '母豬',
         optMale: '公豬',
@@ -1286,6 +1331,33 @@
       { code: 'unable_stand', ms: 'Tidak Boleh Berdiri', en: 'Unable to Stand', 'zh-TW': '無法站立' }
     ];
 
+    // 中文至 BM / EN 常用詞彙轉換表（供《育種總查詢庫(轉)》動態翻譯）
+    const CN_TO_OTHER = [
+      { cn: '母豬主檔', en: 'Sow Master', ms: 'Induk Utama' },
+      { cn: '配種', en: 'Mating', ms: 'Kahwin' },
+      { cn: '胎次', en: 'Parity', ms: 'Pariti' },
+      { cn: '均活仔', en: 'Avg NBA', ms: 'Purata Lahir Hidup' },
+      { cn: '均離乳', en: 'Avg Weaned', ms: 'Purata Cerai Susu' },
+      { cn: '育種指數', en: 'Index', ms: 'Indeks' },
+      { cn: '疝氣', en: 'Hernia', ms: 'Hernia' },
+      { cn: '離場', en: 'Exit', ms: 'Keluar' },
+      { cn: '原因:死亡', en: 'Reason: Mortality', ms: 'Sebab: Mati' },
+      { cn: '原因:淘汰', en: 'Reason: Cull', ms: 'Sebab: Takai' },
+      { cn: '用藥接口預留', en: 'Med Reserved', ms: 'Ubat Dikhaskan' },
+      { cn: '家族源', en: 'Family Line', ms: 'Keturunan' },
+      { cn: '母豬', en: 'Sow', ms: 'Induk' },
+      { cn: '公豬', en: 'Boar', ms: 'Pejantan' }
+    ];
+
+    function translateQueryText(rawText) {
+      let s = String(rawText || '');
+      if (state.lang === 'zh-TW') return s;
+      CN_TO_OTHER.forEach(rule => {
+        s = s.split(rule.cn).join(state.lang === 'en' ? rule.en : rule.ms);
+      });
+      return s;
+    }
+
     const state = {
       lang: 'ms',
       soundOn: true,
@@ -1371,24 +1443,46 @@
       if (state.soundOn) playTone('step');
     }
 
-    function saveWorkerName(val) {
-      state.workerName = String(val || '').trim();
-      localStorage.setItem(CONFIG.KEYS.WORKER, state.workerName);
-    }
-
     function reloadApp() {
       syncOfflineQueue();
       window.location.reload();
     }
 
+    function openExitScreen() {
+      playTone('step');
+      sendTelemetryBeacon('EXIT_SCREEN', [state.profile?.group, state.view.dept, state.view.room].filter(Boolean).join('/'));
+      document.getElementById('workspaceMain').classList.add('hidden');
+      document.getElementById('loginCard').classList.add('hidden');
+      document.getElementById('exitCard').classList.remove('hidden');
+    }
+
+    function reenterFromExit() {
+      playTone('step');
+      document.getElementById('exitCard').classList.add('hidden');
+      if (state.profile && state.workerName) {
+        state.view = { stage: 'depts', dept: '', wing: '', room: '', formType: '' };
+        openWorkspace();
+      } else {
+        document.getElementById('loginCard').classList.remove('hidden');
+      }
+    }
+
     function goHomeHouse() {
       playTone('step');
-      sendTelemetryBeacon('CLICK_HOME_HOUSE', [state.profile?.group, state.view.dept, state.view.room].filter(Boolean).join('/'));
+      sendTelemetryBeacon('GO_HOME', [state.profile?.group, state.view.dept, state.view.room].filter(Boolean).join('/'));
+      document.getElementById('exitCard').classList.add('hidden');
       state.view = { stage: 'depts', dept: '', wing: '', room: '', formType: '' };
       state.queuedRecords = [];
       state.history = [];
       state.redoStack = [];
-      if (state.profile) renderView();
+      if (!state.profile) {
+        document.getElementById('loginCard').classList.remove('hidden');
+        document.getElementById('workspaceMain').classList.add('hidden');
+        return;
+      }
+      document.getElementById('loginCard').classList.add('hidden');
+      document.getElementById('workspaceMain').classList.remove('hidden');
+      renderView();
     }
 
     function detectSystemLang() {
@@ -1409,19 +1503,26 @@
       state.lang = code;
       document.documentElement.lang = code;
       localStorage.setItem(CONFIG.KEYS.LANG, code);
-      document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
+      document.querySelectorAll('.metro-pill[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
       logTraj('lang:' + code);
       applyTexts();
       updateClockAndForecastCurve();
-      if (state.profile) renderView();
+      if (state.profile && !document.getElementById('workspaceMain').classList.contains('hidden')) {
+        renderView();
+      }
     }
 
     function applyTexts() {
       const t = DICT[state.lang];
+      document.getElementById('lblWorkerName').textContent = t.workerLabel;
+      document.getElementById('loginWorkerInput').placeholder = t.workerPlaceholder;
       document.getElementById('lblPass').textContent = t.passLabel;
       document.getElementById('btnLogin').textContent = t.enterBtn;
       document.getElementById('btnReload').textContent = t.reloadBtn;
-      document.getElementById('workerNameInput').placeholder = t.workerPlaceholder;
+      document.getElementById('btnExitScreen').textContent = t.exitBtn;
+      document.getElementById('exitTitle').textContent = t.exitTitle;
+      document.getElementById('exitDesc').textContent = t.exitDesc;
+      document.getElementById('btnReenterFromExit').textContent = t.reenterBtn;
       document.getElementById('btnSoundToggle').textContent = state.soundOn ? t.soundOn : t.soundOff;
       document.getElementById('btnSoundToggle').classList.toggle('active', state.soundOn);
       document.getElementById('btnNavPrev').textContent = '◀ ' + t.prevBtn;
@@ -1480,15 +1581,25 @@
 
     function submitLogin() {
       unlockAudioContext();
-      const prof = parsePass(document.getElementById('inpPass').value);
+      const t = DICT[state.lang];
+      const wName = document.getElementById('loginWorkerInput').value.trim();
       const err = document.getElementById('errLogin');
+      if (!wName) {
+        err.textContent = t.errNoName;
+        err.classList.remove('hidden');
+        playTone('error');
+        return;
+      }
+      const prof = parsePass(document.getElementById('inpPass').value);
       if (!prof) {
-        err.textContent = DICT[state.lang].badPass;
+        err.textContent = t.badPass;
         err.classList.remove('hidden');
         playTone('error');
         return;
       }
       err.classList.add('hidden');
+      state.workerName = wName;
+      localStorage.setItem(CONFIG.KEYS.WORKER, wName);
       state.profile = prof;
       localStorage.setItem(CONFIG.KEYS.PASS, prof.code);
       logTraj('login:' + prof.group);
@@ -1499,12 +1610,12 @@
 
     function openWorkspace() {
       document.getElementById('loginCard').classList.add('hidden');
+      document.getElementById('exitCard').classList.add('hidden');
       document.getElementById('workspaceMain').classList.remove('hidden');
       document.getElementById('locSub').textContent = `${DICT[state.lang].locationName} (${state.profile.group})`;
       renderView();
     }
 
-    // GP 跨部門快捷切換列
     function renderGpQuickStrip() {
       const strip = document.getElementById('gpQuickStrip');
       if (!state.profile || state.profile.group !== 'GP') {
@@ -1519,33 +1630,14 @@
         { id: 'Farrowing', lbl: 'Farrowing' },
         { id: 'Nursery', lbl: 'Nursery' },
         { id: 'Porker', lbl: 'Porker' },
-        { id: 'Exit', lbl: 'Exit' }
+        { id: 'CullMort', lbl: 'Cull/Mort' },
+        { id: 'ExitSale', lbl: 'Exit/Sale' }
       ];
       strip.innerHTML = quickDepts.map(q =>
-        `<button type="button" class="pill-btn ${state.view.dept === q.id ? 'active' : ''}" onclick="jumpGpDept('${q.id}')">${q.lbl}</button>`
+        `<button type="button" class="metro-pill ${state.view.dept === q.id ? 'active' : ''}" onclick="jumpGpDept('${q.id}')">${q.lbl}</button>`
       ).join('');
     }
 
-    function jumpGpDept(deptId) {
-      pushHist();
-      state.queuedRecords = [];
-      state.view.dept = deptId;
-      state.view.wing = '';
-      state.view.room = deptId;
-      logTraj('gp_jump:' + deptId);
-      sendTelemetryBeacon('GP_JUMP_DEPT', deptId);
-      if (deptId === 'GDU' || deptId === 'Exit') {
-        const curW = isoWeek(new Date());
-        state.currentBatch = { w1: String(curW), w2: String(wrap52(curW + 16)), w3: String(wrap52(curW + 19)) };
-        state.view.stage = 'room_tiles';
-      } else {
-        enterBatchGate();
-        return;
-      }
-      renderView();
-    }
-
-    // PS 同棟舍房號快速切換列（例如 Nursery A 內可直接點 N1 跳 N2）
     function renderRoomQuickStrip() {
       const strip = document.getElementById('roomQuickStrip');
       if (!state.profile || state.profile.group !== 'PS' || !['room_tiles', 'form', 'batch_gate'].includes(state.view.stage)) {
@@ -1559,7 +1651,7 @@
       }
       strip.classList.remove('hidden');
       strip.innerHTML = rooms.map(r =>
-        `<button type="button" class="pill-btn ${state.view.room === r ? 'active' : ''}" onclick="jumpPsRoom('${r}')">${r}</button>`
+        `<button type="button" class="metro-pill ${state.view.room === r ? 'active' : ''}" onclick="jumpPsRoom('${r}')">${r}</button>`
       ).join('');
     }
 
@@ -1636,19 +1728,19 @@
       svg.innerHTML = `
         <defs>
           <linearGradient id="fcGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.28"/>
-            <stop offset="100%" stop-color="#0284c7" stop-opacity="0.02"/>
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.38"/>
+            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.03"/>
           </linearGradient>
         </defs>
         <path d="${areaPath}" fill="url(#fcGrad)"></path>
-        <path d="${linePath}" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round"></path>
-        ${coords.map(c => `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="2.2" fill="#0369a1"></circle>`).join('')}
-        <line x1="${centerPt.x.toFixed(1)}" y1="4" x2="${centerPt.x.toFixed(1)}" y2="45" stroke="#ef4444" stroke-width="1.6" stroke-dasharray="2.5,2"></line>
+        <path d="${linePath}" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"></path>
+        ${coords.map(c => `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="2.2" fill="#7dd3fc"></circle>`).join('')}
+        <line x1="${centerPt.x.toFixed(1)}" y1="4" x2="${centerPt.x.toFixed(1)}" y2="45" stroke="#f87171" stroke-width="1.6" stroke-dasharray="2.5,2"></line>
         <circle cx="${centerPt.x.toFixed(1)}" cy="${centerPt.y.toFixed(1)}" r="4.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.4"></circle>
-        <text x="${centerPt.x.toFixed(1)}" y="10" text-anchor="middle" font-size="8.5" font-weight="800" fill="#dc2626">${t.nowLabel} ${curTemp}°</text>
-        <text x="12" y="51" font-size="8" fill="#64748b">${pad(coords[0].hour)}:00</text>
-        <text x="${centerPt.x.toFixed(1)}" y="51" text-anchor="middle" font-size="8" font-weight="700" fill="#dc2626">${pad(curH)}:00</text>
-        <text x="228" y="51" text-anchor="end" font-size="8" fill="#0369a1">${pad(coords[coords.length - 1].hour)}:00</text>
+        <text x="${centerPt.x.toFixed(1)}" y="10" text-anchor="middle" font-size="8.5" font-weight="800" fill="#fca5a5">${t.nowLabel} ${curTemp}°</text>
+        <text x="12" y="51" font-size="8" fill="#94a3b8">${pad(coords[0].hour)}:00</text>
+        <text x="${centerPt.x.toFixed(1)}" y="51" text-anchor="middle" font-size="8" font-weight="700" fill="#fca5a5">${pad(curH)}:00</text>
+        <text x="228" y="51" text-anchor="end" font-size="8" fill="#7dd3fc">${pad(coords[coords.length - 1].hour)}:00</text>
       `;
     }
 
@@ -1707,7 +1799,7 @@
     }
 
     function reopenBatchGate() {
-      if (!state.view.dept || state.view.dept === 'GDU' || state.view.dept === 'Exit') return;
+      if (!state.view.dept || state.view.dept === 'GDU' || ['CullMort', 'ExitSale'].includes(state.view.dept)) return;
       pushHist();
       state.view.stage = 'batch_gate';
       renderView();
@@ -1738,7 +1830,7 @@
         const curW = isoWeek(new Date());
         batchChip.textContent = `W${curW} · ${t.gduAutoWeekNote}`;
         batchChip.classList.remove('hidden');
-      } else if (state.view.room && state.view.dept !== 'Exit' && ['batch_gate', 'room_tiles', 'form'].includes(state.view.stage)) {
+      } else if (state.view.room && !['CullMort', 'ExitSale'].includes(state.view.dept) && ['batch_gate', 'room_tiles', 'form'].includes(state.view.stage)) {
         const bStr = [state.currentBatch.w1, state.currentBatch.w2, state.currentBatch.w3].filter(Boolean).join('/');
         batchChip.textContent = (bStr ? `${bStr} · ` : '') + t.tapToChangeBatch;
         batchChip.classList.remove('hidden');
@@ -1746,37 +1838,61 @@
         batchChip.classList.add('hidden');
       }
 
+      // 查詢與分析專區（gla9999 / 510067 / gp3333 / qwert）
       if (['query', 'report', 'admin'].includes(state.profile.level)) {
         botTitle.classList.remove('hidden');
-        botGrid.appendChild(makeTile(t.deptFarr, t.extraHeading, 'A1', 't-farr', false, () => {
-          sendTelemetryBeacon('OPEN_ANALYSIS_TILE', 'Farrowing_Analysis');
-          showExtra('Farrowing Analytics');
-        }));
-        botGrid.appendChild(makeTile(t.extraHeading, state.profile.group, 'Q1', 't-gp', false, () => {
-          sendTelemetryBeacon('OPEN_QUERY_TILE', 'Sow_Boar_Lookup');
-          renderQueryBox();
-        }));
+        botGrid.appendChild(makeMetroFlipTile(
+          t.extraHeading,
+          t.queryEarPlaceholder,
+          'L1123 / Y1301',
+          'QUERY',
+          'm-query',
+          () => {
+            sendTelemetryBeacon('OPEN_QUERY_TILE', 'Seed_Yellow_Lookup');
+            renderQueryBox();
+          }
+        ));
+        botGrid.appendChild(makeMetroFlipTile(
+          t.deptFarr,
+          state.profile.group,
+          'Farrowing / Index',
+          'A1',
+          'm-teal',
+          () => {
+            sendTelemetryBeacon('OPEN_ANALYSIS_TILE', 'Farrowing_Analysis');
+            renderAnalysisBox();
+          }
+        ));
         if (state.profile.level === 'admin') {
-          botGrid.appendChild(makeTile('Telemetry', 'Admin', 'SYS', 't-boar', true, () => {
-            loadAdminTelemetry();
-          }));
+          botGrid.appendChild(makeMetroFlipTile(
+            'Telemetry',
+            'QWERT',
+            state.trajectory.slice(-2).join(' | '),
+            'SYS',
+            'm-mag',
+            () => {
+              loadAdminTelemetry();
+            }
+          ));
         }
       } else {
         botTitle.classList.add('hidden');
       }
 
+      // Stage 1: 左右對稱部門排列 + 兩個一般 Metro 方塊
       if (state.view.stage === 'depts') {
         const depts = [
-          { id: 'Boar House', title: t.deptBoar, sub: t.deptBoarSub, cls: 't-boar', wide: false },
-          { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, cls: 't-gdu', wide: false },
-          { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, cls: 't-gest', wide: false },
-          { id: 'Farrowing', title: t.deptFarr, sub: t.deptFarrSub, cls: 't-farr', wide: false },
-          { id: 'Nursery', title: t.deptNurs, sub: t.deptNursSub, cls: 't-nurs', wide: false },
-          { id: 'Porker', title: t.deptPork, sub: t.deptPorkSub, cls: 't-pork', wide: false },
-          { id: 'Exit', title: t.deptExit, sub: t.deptExitSub, cls: 't-exit', wide: true }
+          { id: 'Boar House', title: t.deptBoar, sub: t.deptBoarSub, back: 'D1402 · 0-5 Libido', badge: 'BH', cls: 'm-boar' },
+          { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, back: 'L1123 · Y1301 · Teats', badge: 'GDU', cls: 'm-gdu' },
+          { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, back: 'Heat · Mating · Time', badge: 'GEST', cls: 'm-gest' },
+          { id: 'Farrowing', title: t.deptFarr, sub: t.deptFarrSub, back: 'F1-F6 · Farrow · Wean', badge: 'FARR', cls: 'm-farr' },
+          { id: 'Nursery', title: t.deptNurs, sub: t.deptNursSub, back: 'N1-N7 · 07:00/17:00', badge: 'NURS', cls: 'm-nurs' },
+          { id: 'Porker', title: t.deptPork, sub: t.deptPorkSub, back: '1A-8B · Water/Feed', badge: 'PORK', cls: 'm-pork' },
+          { id: 'CullMort', title: t.deptCullMort, sub: t.deptCullMortSub, back: 'Head-to-Toe Signs', badge: 'C/M', cls: 'm-exit' },
+          { id: 'ExitSale', title: t.deptExitSale, sub: t.deptExitSaleSub, back: 'Room / Ear Tag Audit', badge: 'EXIT', cls: 'm-teal' }
         ];
         depts.forEach(d => {
-          topGrid.appendChild(makeTile(d.title, d.sub, state.profile.group, d.cls, d.wide, () => {
+          topGrid.appendChild(makeMetroFlipTile(d.title, d.sub, d.back, d.badge, d.cls, () => {
             pushHist();
             state.queuedRecords = [];
             state.view.dept = d.id;
@@ -1785,8 +1901,15 @@
             logTraj('dept:' + d.id);
             sendTelemetryBeacon('ENTER_DEPT', d.id);
 
-            if (d.id === 'Exit') {
-              state.view.room = 'Exit';
+            if (d.id === 'CullMort') {
+              state.view.room = 'CullMort';
+              state.view.formType = 'mortality';
+              state.view.stage = 'form';
+              renderView();
+              return;
+            }
+            if (d.id === 'ExitSale') {
+              state.view.room = 'ExitSale';
               state.view.formType = 'exit_sales';
               state.view.stage = 'form';
               renderView();
@@ -1813,14 +1936,14 @@
             enterBatchGate();
           }));
         });
-        runTileFlip();
+        startMetro3DFlipLoop();
         return;
       }
 
       if (state.view.stage === 'wing') {
         const cls = deptCls(state.view.dept);
         [{ code: 'A', label: t.sideA }, { code: 'B', label: t.sideB }].forEach(w => {
-          topGrid.appendChild(makeTile(w.label, state.view.dept, w.code, cls, false, () => {
+          topGrid.appendChild(makeMetroFlipTile(w.label, state.view.dept, state.view.dept + ' ' + w.code, w.code, cls, () => {
             pushHist();
             state.view.wing = w.code;
             logTraj('wing:' + w.code);
@@ -1834,7 +1957,7 @@
             renderView();
           }));
         });
-        runTileFlip();
+        startMetro3DFlipLoop();
         return;
       }
 
@@ -1842,7 +1965,7 @@
         const cls = deptCls(state.view.dept);
         const rooms = getRoomsForDept(state.view.dept, state.view.wing);
         rooms.forEach(r => {
-          topGrid.appendChild(makeTile(r, state.view.dept, r, cls, false, () => {
+          topGrid.appendChild(makeMetroFlipTile(r, state.view.dept, r, r, cls, () => {
             pushHist();
             state.queuedRecords = [];
             state.view.room = r;
@@ -1858,7 +1981,7 @@
             }
           }));
         });
-        runTileFlip();
+        startMetro3DFlipLoop();
         return;
       }
 
@@ -1869,7 +1992,7 @@
 
       if (state.view.stage === 'room_tiles') {
         renderRoomTiles(topGrid);
-        runTileFlip();
+        startMetro3DFlipLoop();
         return;
       }
 
@@ -1967,7 +2090,7 @@
       const dept = state.view.dept;
       const cls = deptCls(dept);
 
-      grid.appendChild(makeTile(t.tileFW, t.tileFWSub, '07:00/17:00', cls, false, () => {
+      grid.appendChild(makeMetroFlipTile(t.tileFW, t.tileFWSub, '07:00 AM / 17:00 PM · 50kg', 'H2O', cls, () => {
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'daily_fw';
@@ -1976,35 +2099,35 @@
       }));
 
       if (dept === 'Farrowing') {
-        grid.appendChild(makeTile(t.tileSowIn, t.tileSowInSub, 'IN', cls, false, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileSowIn, t.tileSowInSub, 'Sow Transfer-In', 'IN', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_sow_in';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeTile(t.tileFarrRec, t.tileFarrRecSub, 'BORN', cls, false, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileFarrRec, t.tileFarrRecSub, 'TNB / NBA / Wt', 'BORN', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_birth';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeTile(t.tileWeanHead, t.tileWeanHeadSub, 'WEAN', cls, false, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileWeanHead, t.tileWeanHeadSub, 'Wean & Deferred', 'WEAN', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_wean_head';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeTile(t.tileWeanWt, t.tileWeanWtSub, 'WT', cls, false, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileWeanWt, t.tileWeanWtSub, 'Litter Weight', 'WT', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_wean_wt';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeTile(t.tileMal, t.tileMalSub, 'MAL', cls, false, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileMal, t.tileMalSub, 'Sow + Date + Photo', 'MAL', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'malformation';
@@ -2012,7 +2135,7 @@
           renderView();
         }));
       } else if (dept === 'Gestation') {
-        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'AI', cls, false, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileProd, t.tileProdSub, 'Heat & Breeding', 'AI', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'gestation';
@@ -2020,7 +2143,7 @@
           renderView();
         }));
       } else if (dept === 'Boar House') {
-        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'SEMEN', cls, false, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileProd, t.tileProdSub, 'Libido 0-5 & Semen', 'SEMEN', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'boar_semen';
@@ -2028,7 +2151,7 @@
           renderView();
         }));
       } else if (dept === 'GDU') {
-        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'SELECT', cls, false, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileProd, t.tileProdSub, 'Teats · Legs · Body', 'SELECT', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'conformation';
@@ -2037,14 +2160,14 @@
         }));
       }
 
-      grid.appendChild(makeTile(t.tileTreat, t.tileTreatSub, 'RX', cls, false, () => {
+      grid.appendChild(makeMetroFlipTile(t.tileTreat, t.tileTreatSub, 'Individual / Litter', 'RX', cls, () => {
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'treatment';
         state.view.stage = 'form';
         renderView();
       }));
-      grid.appendChild(makeTile(t.tileMort, t.tileMortSub, 'MORT', cls, false, () => {
+      grid.appendChild(makeMetroFlipTile(t.tileMort, t.tileMortSub, 'Head-to-Toe Signs', 'MORT', cls, () => {
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'mortality';
@@ -2055,82 +2178,128 @@
 
     function deptCls(d) {
       return {
-        'Boar House': 't-boar',
-        'GDU': 't-gdu',
-        'Gestation': 't-gest',
-        'Farrowing': 't-farr',
-        'Nursery': 't-nurs',
-        'Porker': 't-pork',
-        'Exit': 't-exit'
-      }[d] || 't-ps';
+        'Boar House': 'm-boar',
+        'GDU': 'm-gdu',
+        'Gestation': 'm-gest',
+        'Farrowing': 'm-farr',
+        'Nursery': 'm-nurs',
+        'Porker': 'm-pork',
+        'CullMort': 'm-exit',
+        'ExitSale': 'm-teal'
+      }[d] || 'm-query';
     }
 
-    function makeTile(title, sub, badge, cls, wide, onClick) {
-      const div = document.createElement('div');
-      div.className = 'live-tile ' + cls + (wide ? ' wide' : '');
-      div.innerHTML = `
-        <div>
-          <div class="tile-title">${title}</div>
-          <div class="tile-sub">${sub}</div>
+    // 真正雙面 3D 翻轉 Windows Phone Metro 動態磚
+    function makeMetroFlipTile(frontTitle, frontSub, backText, badge, cls, onClick) {
+      const scene = document.createElement('div');
+      scene.className = 'metro-flip-scene';
+      scene.innerHTML = `
+        <div class="metro-flip-card">
+          <div class="metro-face ${cls}">
+            <div>
+              <div class="tile-title">${frontTitle}</div>
+              <div class="tile-sub">${frontSub}</div>
+            </div>
+            <div class="tile-badge">${badge}</div>
+          </div>
+          <div class="metro-face metro-back">
+            <div>
+              <div class="tile-title">${frontTitle}</div>
+              <div class="tile-sub">${backText}</div>
+            </div>
+            <div class="tile-badge">LIVE · ${badge}</div>
+          </div>
         </div>
-        <div class="tile-badge">${badge}</div>
       `;
-      div.addEventListener('click', onClick);
-      return div;
+      scene.addEventListener('click', onClick);
+      return scene;
     }
 
-    function runTileFlip() {
-      const tiles = document.querySelectorAll('#topGrid .live-tile');
-      tiles.forEach((el, idx) => {
+    function startMetro3DFlipLoop() {
+      const scenes = document.querySelectorAll('.metro-flip-scene');
+      scenes.forEach((sc, idx) => {
         setTimeout(() => {
           setInterval(() => {
-            el.classList.add('flipping');
-            setTimeout(() => el.classList.remove('flipping'), 680);
-          }, 4200 + idx * 420);
-        }, idx * 260);
+            sc.classList.toggle('is-flipped');
+          }, 4200 + idx * 550);
+        }, idx * 450);
       });
     }
 
-    function showExtra(txt) {
-      const p = document.getElementById('extraPanel');
-      p.classList.remove('hidden');
-      p.innerHTML = `<div class="notice-box">${txt}</div>`;
-    }
-
+    // 查詢方塊：耳號模糊比對 + 僅呈現黃色標題欄位 + 以動態磚方塊呈現 + 三語翻譯
     function renderQueryBox() {
+      const t = DICT[state.lang];
       const p = document.getElementById('extraPanel');
       p.classList.remove('hidden');
       p.innerHTML = `
-        <div class="sec-title">Query Lookup</div>
-        <div class="chip-row" style="margin-bottom:8px;">
-          <button type="button" class="chip-btn selected" id="qCatSow" onclick="setQCat('sow_history')">Sow History</button>
-          <button type="button" class="chip-btn" id="qCatBoar" onclick="setQCat('boar_records')">Boar Records</button>
-        </div>
-        <input type="text" id="qEarInp" class="input-box" placeholder="Ear Tag" />
-        <button type="button" class="primary-btn" onclick="execQuery()">Search</button>
+        <div class="sec-title">${t.extraHeading}</div>
+        <div class="field-hint">${t.queryEarPlaceholder}</div>
+        <input type="text" id="qEarInp" class="input-box" placeholder="L1123 / 1123" onkeydown="if(event.key==='Enter') execQuery();" />
+        <button type="button" class="primary-btn" onclick="execQuery()">${t.searchBtn}</button>
+        <div id="qTilesResult" class="tile-grid" style="margin-top:10px;"></div>
         <div id="qOutBox" class="notice-box hidden"></div>
       `;
-      state.qCat = 'sow_history';
-    }
-
-    function setQCat(c) {
-      state.qCat = c;
-      document.getElementById('qCatSow').classList.toggle('selected', c === 'sow_history');
-      document.getElementById('qCatBoar').classList.toggle('selected', c === 'boar_records');
     }
 
     async function execQuery() {
       const ear = document.getElementById('qEarInp').value.trim();
-      const out = document.getElementById('qOutBox');
-      out.classList.remove('hidden');
-      out.textContent = '...';
+      const tilesBox = document.getElementById('qTilesResult');
+      const outBox = document.getElementById('qOutBox');
+      tilesBox.innerHTML = '';
+      outBox.classList.remove('hidden');
+      outBox.textContent = '...';
+
       try {
-        const url = `${CONFIG.GAS_URL}?action=query&token=${encodeURIComponent(CONFIG.API_TOKEN)}&pass=${encodeURIComponent(state.profile.code)}&category=${encodeURIComponent(state.qCat)}&ear_tag=${encodeURIComponent(ear)}&worker_name=${encodeURIComponent(state.workerName)}`;
+        const url = `${CONFIG.GAS_URL}?action=query&token=${encodeURIComponent(CONFIG.API_TOKEN)}&pass=${encodeURIComponent(state.profile.code)}&category=seed_yellow&ear_tag=${encodeURIComponent(ear)}&lang=${encodeURIComponent(state.lang)}&worker_name=${encodeURIComponent(state.workerName)}`;
         const r = await fetch(url);
         const j = await r.json();
-        out.textContent = j.ok ? JSON.stringify(j.data, null, 2) : (j.error || 'ERR');
+        if (!j || !j.ok) {
+          outBox.textContent = j?.error || 'ERR';
+          return;
+        }
+        const cards = (j.data && j.data.cards) || [];
+        if (cards.length === 0) {
+          outBox.textContent = '0';
+          return;
+        }
+        outBox.classList.add('hidden');
+        const palette = ['m-query', 'm-teal', 'm-gest', 'm-gdu', 'm-farr'];
+        cards.forEach((c, i) => {
+          const earTitle = translateQueryText(c.earTag);
+          const summaryLines = (c.fields || []).map(f =>
+            `${translateQueryText(f.header)}: ${translateQueryText(f.value)}`
+          );
+          const frontSub = summaryLines[0] || earTitle;
+          const backSub = summaryLines.slice(1).join(' | ') || frontSub;
+          tilesBox.appendChild(makeMetroFlipTile(
+            earTitle,
+            frontSub,
+            backSub,
+            'TAG',
+            palette[i % palette.length],
+            () => {
+              outBox.classList.remove('hidden');
+              outBox.textContent = `[${earTitle}]\n` + summaryLines.join('\n');
+            }
+          ));
+        });
+        startMetro3DFlipLoop();
       } catch (e) {
-        out.textContent = String(e);
+        outBox.textContent = String(e);
+      }
+    }
+
+    async function renderAnalysisBox() {
+      const p = document.getElementById('extraPanel');
+      p.classList.remove('hidden');
+      p.innerHTML = '<div class="notice-box">...</div>';
+      try {
+        const url = `${CONFIG.GAS_URL}?action=report&token=${encodeURIComponent(CONFIG.API_TOKEN)}&pass=${encodeURIComponent(state.profile.code)}&worker_name=${encodeURIComponent(state.workerName)}`;
+        const r = await fetch(url);
+        const j = await r.json();
+        p.innerHTML = `<div class="notice-box">${j.ok ? JSON.stringify(j.data, null, 2) : (j.error || 'OK')}</div>`;
+      } catch (e) {
+        p.innerHTML = `<div class="notice-box">${String(e)}</div>`;
       }
     }
 
@@ -2178,7 +2347,6 @@
       }
     }
 
-    // 強制多耳號必須用逗號 (,) 或句點 (.) 分隔，禁止只用空格分隔
     function validateMultiEarString(rawStr) {
       const s = String(rawStr || '').trim();
       if (!s) return true;
@@ -2224,7 +2392,7 @@
         `;
       } else if (ft === 'farr_birth') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" placeholder="L1123" /></div>
           <div class="field-block"><label class="field-label">${t.lblTNB}</label><input type="number" id="f_total_born" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblNBA}</label><input type="number" id="f_born_alive" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblStillborn}</label><input type="number" id="f_stillborn" class="input-box" /></div>
@@ -2236,8 +2404,8 @@
           <div class="field-block"><label class="field-label">${t.lblWeanDate}</label><input type="date" id="f_wean_date" class="input-box" value="${today}" /></div>
           <div class="field-block"><label class="field-label">${t.lblWeanPigCount}</label><input type="number" id="f_weaned_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblWeanSowCount}</label><input type="number" id="f_weaned_sow_count" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
-          <hr style="margin:12px 0; border:0; border-top:1px dashed #cbd5e1;" />
+          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" placeholder="L1123" /></div>
+          <hr style="margin:12px 0; border:0; border-top:1px dashed #475569;" />
           <div class="sec-title">${t.lblDeferredBox}</div>
           <div class="field-block"><label class="field-label">${t.lblDefSowCnt}</label><input type="number" id="f_deferred_sow_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblDefPigCnt}</label><input type="number" id="f_deferred_piglet_count" class="input-box" /></div>
@@ -2245,24 +2413,24 @@
           <div class="field-block">
             <label class="field-label">${t.lblDefSowTags}</label>
             <div class="field-hint">${t.lblMultiEarHint}</div>
-            <textarea id="f_deferred_sow_tags" rows="3" class="input-box"></textarea>
+            <textarea id="f_deferred_sow_tags" rows="3" class="input-box" placeholder="L1123, L1124"></textarea>
           </div>
         `;
       } else if (ft === 'farr_wean_wt') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" placeholder="L1123" /></div>
           <div class="field-block"><label class="field-label">${t.lblWeanDate}</label><input type="date" id="f_wean_date" class="input-box" value="${today}" /></div>
           <div class="field-block"><label class="field-label">${t.lblWeanPigCount}</label><input type="number" id="f_weaned_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblWeanWt}</label><input type="number" step="0.1" id="f_wean_litter_wt_kg" class="input-box" /></div>
         `;
       } else if (ft === 'malformation') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" placeholder="L1123" /></div>
           <div class="field-block"><label class="field-label">${t.lblFarrowDate}</label><input type="date" id="f_farrow_date" class="input-box" /></div>
           <div class="field-block">
             <label class="field-label">${t.lblEarTag}</label>
             <div class="field-hint">${t.lblMultiEarHint}</div>
-            <input type="text" id="f_ear_tags_list" class="input-box" />
+            <input type="text" id="f_ear_tags_list" class="input-box" placeholder="Y1301, Y1302" />
           </div>
           <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
           <div class="field-block"><label class="field-label">${t.lblMalSigns}</label>${chips('selected_items', symptomOpts, true)}</div>
@@ -2271,17 +2439,17 @@
         `;
       } else if (ft === 'gestation') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" placeholder="L1123" /></div>
           <div class="field-block"><label class="field-label">${t.lblSex}</label>${chips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBreed}</label>${chips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblHeatObs}</label>${chips('heat_observed', [{v:'yes',l:t.optYes},{v:'no',l:t.optNo}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblHeatDate}</label><input type="date" id="f_heat_date" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblBreedDate}</label><input type="date" id="f_breeding_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblServiceBoar}</label><input type="text" id="f_service_boar_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblServiceBoar}</label><input type="text" id="f_service_boar_tag" class="input-box" placeholder="D1402" /></div>
         `;
       } else if (ft === 'boar_semen') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblBoarTag}</label><input type="text" id="f_boar_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblBoarTag}</label><input type="text" id="f_boar_ear_tag" class="input-box" placeholder="D1402" /></div>
           <div class="field-block"><label class="field-label">${t.lblDate}</label><input type="date" id="f_collection_date" class="input-box" value="${today}" /></div>
           <div class="field-block">
             <label class="field-label">${t.lblLibido}</label>
@@ -2296,7 +2464,7 @@
         `;
       } else if (ft === 'conformation') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" placeholder="L1123 / Y1301" /></div>
           <div class="field-block"><label class="field-label">${t.lblSex}</label>${chips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBreed}</label>${chips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBirthDate}</label><input type="date" id="f_birth_date" class="input-box" /></div>
@@ -2333,7 +2501,7 @@
           <div class="field-block">
             <label class="field-label">${t.lblEarTag}</label>
             <div class="field-hint">${t.lblMultiEarHint}</div>
-            <input type="text" id="f_ear_tags_list" class="input-box" />
+            <input type="text" id="f_ear_tags_list" class="input-box" placeholder="L1123, L1124" />
           </div>
           <div class="field-block"><label class="field-label">${t.lblLitterLoc}</label><input type="text" id="f_litter_pen_location" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
@@ -2341,32 +2509,33 @@
           <div class="field-block"><label class="field-label">${t.lblTreatReason}</label><input type="text" id="f_treatment_reason" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblSymptoms}</label>${chips('symptoms_codes', symptomOpts, true)}</div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
-          <div class="field-hint" style="color:#b91c1c; font-weight:800;">${t.vetReminder}</div>
+          <div class="field-hint" style="color:#fca5a5; font-weight:800;">${t.vetReminder}</div>
         `;
       } else if (ft === 'mortality') {
         html += `
+          <div class="field-block"><label class="field-label">${t.lblExitReason}</label>${chips('exit_reason', [{v:'Cull',l:t.optCull},{v:'Mortality',l:t.optDeath}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblTargetScope}</label>${chips('target_scope', [{v:'individual',l:t.optIndivTags},{v:'litter_pen',l:t.optUnnotchedLitter}], false)}</div>
           <div class="field-block">
             <label class="field-label">${t.lblEarTag}</label>
             <div class="field-hint">${t.lblMultiEarHint}</div>
-            <input type="text" id="f_ear_tags_list" class="input-box" />
+            <input type="text" id="f_ear_tags_list" class="input-box" placeholder="L1123, L1124" />
           </div>
           <div class="field-block"><label class="field-label">${t.lblLitterLoc}</label><input type="text" id="f_litter_pen_location" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
           <div class="field-block"><label class="field-label">${t.lblSymptoms}</label>${chips('symptoms_codes', symptomOpts, true)}</div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
-          <div class="field-hint" style="color:#b91c1c; font-weight:800;">${t.vetReminder}</div>
+          <div class="field-hint" style="color:#fca5a5; font-weight:800;">${t.vetReminder}</div>
         `;
       } else if (ft === 'exit_sales') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblExitReason}</label>${chips('exit_reason', [{v:'Sale',l:t.optSale},{v:'Cull',l:t.optCull},{v:'Mortality',l:t.optDeath}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblExitReason}</label>${chips('exit_reason', [{v:'Exit',l:t.deptExitSale},{v:'Sale',l:t.optSale}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblPigCat}</label>${chips('pig_category', [{v:'Boar',l:t.optCatBoar},{v:'Sow',l:t.optCatSow},{v:'Piglet',l:t.optCatPiglet},{v:'Porker',l:t.optCatPorker}], false)}</div>
           <div class="field-block"><label class="field-label">Source Wing / Room</label><input type="text" id="f_source_room" class="input-box" placeholder="e.g. PA1A / F2 / GA" /></div>
           <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_head_count" class="input-box" /></div>
           <div class="field-block">
             <label class="field-label">${t.lblEarTag}</label>
             <div class="field-hint">${t.lblMultiEarHint}</div>
-            <textarea id="f_ear_tags_list" rows="2" class="input-box"></textarea>
+            <textarea id="f_ear_tags_list" rows="2" class="input-box" placeholder="L1123, L1124"></textarea>
           </div>
           <div class="field-block"><label class="field-label">${t.lblTotalWt}</label><input type="number" step="0.1" id="f_total_weight_kg" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
@@ -2511,7 +2680,6 @@
       const t = DICT[state.lang];
       if (!state.workerName) {
         alert(t.errNoName);
-        document.getElementById('workerNameInput').focus();
         playTone('error');
         return;
       }
@@ -2583,7 +2751,7 @@
           playTone('success');
           state.queuedRecords = [];
           refreshCartUI();
-          renderSymmetricalDiaryReport(allToSend, backendModule);
+          renderSymmetricalDiaryReport(allToSend);
         } else {
           throw new Error(j && j.error ? j.error : 'ERR');
         }
@@ -2595,13 +2763,12 @@
         refreshQueuePill();
         setStageUI(stEl, 'st-queued', t.step3Queued);
         playTone('step');
-        renderSymmetricalDiaryReport(allToSend, backendModule);
+        renderSymmetricalDiaryReport(allToSend);
       }
       btn.disabled = false;
     }
 
-    // 左右對稱建築日報總結卡片 + 下載 YYYYMMDD Room diary report.png
-    function renderSymmetricalDiaryReport(records, mod) {
+    function renderSymmetricalDiaryReport(records) {
       const t = DICT[state.lang];
       const diaryPanel = document.getElementById('diaryPanel');
       diaryPanel.classList.remove('hidden');
@@ -2665,12 +2832,12 @@
         activeKey,
         activeSummaryLines,
         symZones,
-        isExit: state.view.dept === 'Exit'
+        isExit: ['CullMort', 'ExitSale'].includes(state.view.dept)
       };
 
       const cellsHtml = symZones.map(z => {
         const isAct = z.key === activeKey;
-        const bg = isAct ? z.color : '#f1f5f9';
+        const bg = isAct ? z.color : '#e2e8f0';
         const bodyTxt = isAct ? activeSummaryLines.join('<br>') : '-';
         return `<div class="diary-cell ${isAct ? 'active-zone' : ''}" style="background:${bg};">
           <div class="diary-cell-title">${z.title}</div>
@@ -2678,15 +2845,15 @@
         </div>`;
       }).join('');
 
-      const exitActive = state.view.dept === 'Exit';
+      const exitActive = ['CullMort', 'ExitSale'].includes(state.view.dept);
       diaryPanel.innerHTML = `
         <div class="sec-title">${t.diaryHeader}</div>
         <div class="field-hint">${t.diaryRemind}</div>
         <div class="diary-report-card">
           <div class="diary-top-dt">${displayDt}</div>
           <div class="diary-sym-grid">${cellsHtml}</div>
-          <div class="diary-cell ${exitActive ? 'active-zone' : ''}" style="margin-top:6px; background:${exitActive ? '#fff3e0' : '#f1f5f9'};">
-            <div class="diary-cell-title">Exit / Sales / Cull / Mortality</div>
+          <div class="diary-cell ${exitActive ? 'active-zone' : ''}" style="margin-top:6px; background:${exitActive ? '#fff3e0' : '#e2e8f0'};">
+            <div class="diary-cell-title">Cull / Mortality & Exit / Sales</div>
             <div>${exitActive ? activeSummaryLines.join('<br>') : '-'}</div>
           </div>
           <div class="diary-footer-sign">
@@ -2725,7 +2892,7 @@
         const y = 88 + row * (rowH + gapY);
         const isAct = z.key === info.activeKey;
 
-        ctx.fillStyle = isAct ? z.color : '#f1f5f9';
+        ctx.fillStyle = isAct ? z.color : '#e2e8f0';
         ctx.fillRect(x, y, colW, rowH);
         ctx.strokeStyle = isAct ? '#0f172a' : '#cbd5e1';
         ctx.lineWidth = isAct ? 3 : 1.5;
@@ -2745,14 +2912,14 @@
       });
 
       const exY = 88 + 5 * (rowH + gapY);
-      ctx.fillStyle = info.isExit ? '#fff3e0' : '#f1f5f9';
+      ctx.fillStyle = info.isExit ? '#fff3e0' : '#e2e8f0';
       ctx.fillRect(26, exY, 668, 86);
       ctx.strokeStyle = info.isExit ? '#0f172a' : '#cbd5e1';
       ctx.strokeRect(26, exY, 668, 86);
       ctx.textAlign = 'left';
       ctx.fillStyle = info.isExit ? '#0f172a' : '#64748b';
       ctx.font = 'bold 18px sans-serif';
-      ctx.fillText('Exit / Sales / Cull / Mortality', 38, exY + 28);
+      ctx.fillText('Cull / Mortality & Exit / Sales', 38, exY + 28);
       if (info.isExit) {
         ctx.font = 'bold 15px sans-serif';
         ctx.fillText(info.activeSummaryLines.join(' | '), 38, exY + 56);
@@ -2814,11 +2981,11 @@
     (function init() {
       state.soundOn = localStorage.getItem(CONFIG.KEYS.SOUND) !== '0';
       state.workerName = localStorage.getItem(CONFIG.KEYS.WORKER) || '';
-      document.getElementById('workerNameInput').value = state.workerName;
+      document.getElementById('loginWorkerInput').value = state.workerName;
 
       state.lang = detectSystemLang();
       document.documentElement.lang = state.lang;
-      document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
+      document.querySelectorAll('.metro-pill[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
       applyTexts();
       updateClockAndForecastCurve();
       setInterval(updateClockAndForecastCurve, 1000);
@@ -2827,7 +2994,7 @@
       logTraj('init');
 
       const savedPass = localStorage.getItem(CONFIG.KEYS.PASS);
-      if (savedPass) {
+      if (savedPass && state.workerName) {
         const prof = parsePass(savedPass);
         if (prof) {
           state.profile = prof;
