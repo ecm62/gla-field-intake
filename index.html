@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#e8eef6" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>GLA Field Hub</title>
+  <title>Field Daily Log</title>
   <style>
-    /* === [START MODULE 3: MOBILE COMPACT TILES, BIG TRIANGLES & SPLIT CARDS] === */
     :root {
       --text-primary: #0f172a;
       --text-secondary: #475569;
-
       --tile-gp: #ede7f6;
       --tile-gp-b: #b39ddb;
       --tile-ps: #e8f5e9;
@@ -28,8 +26,8 @@
       --tile-boar-b: #90a4ae;
       --tile-gdu: #f3e5f5;
       --tile-gdu-b: #ce93d8;
-      --tile-maint: #fff3e0;
-      --tile-maint-b: #ffcc80;
+      --tile-exit: #fff3e0;
+      --tile-exit-b: #ffcc80;
     }
 
     * {
@@ -46,7 +44,7 @@
     }
 
     body {
-      padding: 8px 22px 68px 22px;
+      padding: 8px 24px 70px 24px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
       background: linear-gradient(180deg, #e8eef6 0%, #f7f9fc 100%);
       color: var(--text-primary);
@@ -54,11 +52,12 @@
       min-height: 100vh;
     }
 
+    /* 側邊細長條 + 放大 2.5 倍左右三角形 */
     .edge-rail {
       position: fixed;
       top: 0;
-      bottom: 56px;
-      width: 20px;
+      bottom: 54px;
+      width: 22px;
       z-index: 60;
       display: flex;
       align-items: center;
@@ -73,20 +72,21 @@
     .tri-big {
       width: 0;
       height: 0;
-      opacity: 0.36;
+      opacity: 0.38;
     }
-    .edge-rail:active .tri-big { opacity: 0.85; }
+    .edge-rail:active .tri-big { opacity: 0.88; }
     .tri-left {
-      border-top: 20px solid transparent;
-      border-bottom: 20px solid transparent;
-      border-right: 15px solid #1e293b;
+      border-top: 22px solid transparent;
+      border-bottom: 22px solid transparent;
+      border-right: 16px solid #1e293b;
     }
     .tri-right {
-      border-top: 20px solid transparent;
-      border-bottom: 20px solid transparent;
-      border-left: 15px solid #1e293b;
+      border-top: 22px solid transparent;
+      border-bottom: 22px solid transparent;
+      border-left: 16px solid #1e293b;
     }
 
+    /* 頂部操作列 */
     .top-bar {
       width: 100%;
       max-width: 540px;
@@ -121,6 +121,29 @@
       border-color: #0284c7;
     }
 
+    .home-house-btn {
+      border: 1.5px solid #0284c7;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .worker-inp {
+      border: 1px solid #94a3b8;
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      width: 112px;
+    }
+
+    /* 分離式天氣與時間預報小框 */
     .split-widget-wrap {
       width: 100%;
       max-width: 540px;
@@ -198,6 +221,7 @@
       cursor: pointer;
     }
 
+    /* 登入框 */
     .auth-card {
       width: 100%;
       max-width: 400px;
@@ -215,6 +239,14 @@
       font-weight: 700;
       margin-bottom: 5px;
       color: #1e293b;
+    }
+
+    .field-hint {
+      font-size: 12px;
+      font-weight: 600;
+      color: #0369a1;
+      margin-bottom: 5px;
+      line-height: 1.3;
     }
 
     .input-box {
@@ -240,10 +272,41 @@
       cursor: pointer;
     }
 
+    .secondary-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      border: 1.5px solid #0284c7;
+      border-radius: 14px;
+      background: #f0f9ff;
+      color: #0369a1;
+      cursor: pointer;
+    }
+
     .main-wrap {
       width: 100%;
       max-width: 540px;
       margin: 0 auto;
+    }
+
+    /* GP 跨部門快捷切換列 */
+    .gp-quick-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* PS 房號快速切換列 */
+    .room-quick-strip {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
     }
 
     .context-bar {
@@ -271,6 +334,7 @@
       cursor: pointer;
     }
 
+    /* 三週次批次三個小框 */
     .batch-trio {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -325,6 +389,7 @@
       padding: 0;
     }
 
+    /* 動態磚網格 */
     .tile-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -353,6 +418,7 @@
 
     .live-tile:active { transform: scale(0.96); }
     .live-tile.flipping { animation: softFlip 0.65s ease; }
+    .live-tile.wide { grid-column: span 2; }
 
     .tile-title {
       font-size: 15px;
@@ -389,7 +455,7 @@
     .t-pork { background: var(--tile-pork); border-color: var(--tile-pork-b); }
     .t-boar { background: var(--tile-boar); border-color: var(--tile-boar-b); }
     .t-gdu { background: var(--tile-gdu); border-color: var(--tile-gdu-b); }
-    .t-maint { background: var(--tile-maint); border-color: var(--tile-maint-b); }
+    .t-exit { background: var(--tile-exit); border-color: var(--tile-exit-b); }
 
     .section-gap { height: 18px; }
     .sec-title {
@@ -431,6 +497,87 @@
       background: #0284c7;
       color: #ffffff;
       border-color: #0284c7;
+    }
+
+    /* 待送出購物車清單 */
+    .cart-list-box {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px dashed #cbd5e1;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .cart-item:last-child { border-bottom: none; }
+    .del-mini-btn {
+      border: 1px solid #fca5a5;
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 8px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* 左右對稱日報總結卡片 */
+    .diary-report-card {
+      margin-top: 12px;
+      background: #ffffff;
+      border: 2px solid #0f172a;
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .diary-top-dt {
+      font-size: 20px;
+      font-weight: 900;
+      text-align: center;
+      color: #0f172a;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+    .diary-sym-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .diary-cell {
+      border-radius: 10px;
+      padding: 7px 8px;
+      border: 1px solid #cbd5e1;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 11px;
+      line-height: 1.3;
+    }
+    .diary-cell.active-zone {
+      border: 2px solid #0f172a;
+      color: #0f172a;
+      font-weight: 800;
+    }
+    .diary-cell-title {
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+    .diary-footer-sign {
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 2px solid #0f172a;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 900;
+      color: #0f172a;
     }
 
     .stage-tracker {
@@ -487,7 +634,6 @@
     }
 
     .hidden { display: none !important; }
-    /* === [END MODULE 3] === */
   </style>
 </head>
 <body>
@@ -498,9 +644,11 @@
     <div class="tri-big tri-right"></div>
   </div>
 
-  <!-- 頂部：BM -> EN -> 中 + 音效 + 重新載入（已移除切換密碼彈窗） -->
+  <!-- 頂部：小房子回首頁 + 填報員姓名 + 語系 BM/EN/中 + 音效 + 重新載入 -->
   <div class="top-bar">
     <div class="pill-group">
+      <button type="button" class="home-house-btn" id="btnHomeHouse" onclick="goHomeHouse()" title="Home">🏠</button>
+      <input type="text" id="workerNameInput" class="worker-inp" onchange="saveWorkerName(this.value)" />
       <button type="button" class="pill-btn" data-lang="ms" onclick="setLang('ms')">BM</button>
       <button type="button" class="pill-btn" data-lang="en" onclick="setLang('en')">EN</button>
       <button type="button" class="pill-btn" data-lang="zh-TW" onclick="setLang('zh-TW')">中</button>
@@ -512,6 +660,7 @@
     </div>
   </div>
 
+  <!-- 分離式時鐘、地點、現有溫度與未來預報曲線框 -->
   <section class="split-widget-wrap">
     <div class="mini-row-2">
       <div class="sub-box">
@@ -539,6 +688,7 @@
     </div>
   </section>
 
+  <!-- 密碼驗證框（零暗示） -->
   <section id="loginCard" class="auth-card">
     <label class="field-label" id="lblPass" for="inpPass"></label>
     <input type="password" id="inpPass" class="input-box" autocomplete="off" onkeydown="if(event.key==='Enter') submitLogin();" />
@@ -546,7 +696,13 @@
     <div id="errLogin" class="notice-box hidden" style="background:#fee2e2; color:#991b1b;"></div>
   </section>
 
+  <!-- 主工作區 -->
   <main id="workspaceMain" class="main-wrap hidden">
+    <!-- GP 跨部門快捷切換列 -->
+    <div id="gpQuickStrip" class="gp-quick-strip hidden"></div>
+    <!-- PS 同部門房號快速跳轉列（如 Nursery 1 跳 Nursery 2） -->
+    <div id="roomQuickStrip" class="room-quick-strip hidden"></div>
+
     <div class="context-bar">
       <span id="locBannerText">-</span>
       <span id="batchBannerBtn" class="batch-chip hidden" onclick="reopenBatchGate()"></span>
@@ -558,6 +714,7 @@
     <div id="bottomGrid" class="tile-grid"></div>
 
     <div id="formPanel" class="panel-card hidden"></div>
+    <div id="diaryPanel" class="panel-card hidden"></div>
     <div id="extraPanel" class="panel-card hidden"></div>
   </main>
 
@@ -567,7 +724,6 @@
   </nav>
 
   <script>
-    // === [START MODULE 4: RELOAD HANDLER, CENTER-NOW CURVE, SOUND ALERTS & STAGES] ===
     const CONFIG = {
       GAS_URL: 'https://script.google.com/macros/s/AKfycbyEod8PcLLZYsglmyef9s3AHkzD4gpitKXQDew1YS6fqhlofZp43_iA9uw1SwQzzXiqRg/exec',
       API_TOKEN: 'GLA_FIELD_INTAKE_TOKEN_2026',
@@ -580,11 +736,12 @@
         admin: 'qwert'
       },
       KEYS: {
-        LANG: 'gla_sys_lang_v6',
-        PASS: 'gla_sys_pass_v6',
-        QUEUE: 'gla_sys_queue_v6',
-        ROOM_BATCHES: 'gla_room_batches_v6',
-        SOUND: 'gla_sound_on_v6'
+        LANG: 'gla_sys_lang_v8',
+        PASS: 'gla_sys_pass_v8',
+        WORKER: 'gla_worker_name_v8',
+        QUEUE: 'gla_sys_queue_v8',
+        ROOM_BATCHES: 'gla_room_batches_v8',
+        SOUND: 'gla_sound_on_v8'
       },
       LAT: 1.167,
       LON: 110.566,
@@ -599,6 +756,7 @@
         reloadBtn: 'Muat Semula',
         soundOn: 'Bunyi: ON',
         soundOff: 'Bunyi: OFF',
+        workerPlaceholder: 'Nama Anda',
         badPass: 'Kod akses tidak sah',
         prevBtn: 'Kembali',
         nextBtn: 'Seterusnya',
@@ -609,47 +767,57 @@
         rainLikely: 'Dijangka Hujan',
         rainLow: 'Peluang Hujan Rendah',
         extraHeading: 'Analisis & Carian',
-        batchGateTitle: 'Sahkan Bilik & Kumpulan 3 Minggu Dahulu',
-        batchRemind: 'Semak bilik & kumpulan 3 minggu sebelum meneruskan',
+        batchGateTitle: 'Sahkan Bilik & Kumpulan 3 Minggu',
+        batchRemind: 'Perhatian: Bilik berbeza mempunyai sumber data berasingan. Sila semak kumpulan.',
+        gduAutoWeekNote: 'Tanpa kumpulan tetap: menggunakan minggu semasa secara automatik',
         w1Label: 'Minggu Kahwin',
         w2Label: 'Minggu Beranak',
         w3Label: 'Minggu Cerai Susu',
         confirmBatchBtn: 'Sahkan Bilik & Kumpulan',
         tapToChangeBatch: 'Tukar Kumpulan',
-        deptGest: 'Kandang Bunting',
-        deptGestSub: 'Berahi · Kahwin',
-        deptFarr: 'Bilik Beranak',
-        deptFarrSub: 'Masuk · Beranak · Cerai',
-        deptNurs: 'Bilik Asuhan',
-        deptNursSub: 'Air · Makanan · Rawatan/Mati',
-        deptPork: 'Bilik Pembesaran',
-        deptPorkSub: 'Air · Makanan · Rawatan/Mati',
-        deptBoar: 'Kandang Pejantan',
-        deptBoarSub: 'Koleksi Mani',
-        deptGdu: 'Kandang GDU',
+        deptBoar: 'Kandang Pejantan (Kiri 1)',
+        deptBoarSub: 'Koleksi Mani · Rawatan/Mati',
+        deptGdu: 'Kandang GDU (Kanan 1)',
         deptGduSub: 'Pemilihan · Air/Makanan',
-        sideA: 'Bahagian A',
-        sideB: 'Bahagian B',
+        deptGest: 'Kandang Bunting',
+        deptGestSub: 'Berahi · Kahwin · Air/Makanan',
+        deptFarr: 'Bilik Beranak',
+        deptFarrSub: 'Masuk · Beranak · Cerai Susu',
+        deptNurs: 'Bilik Asuhan',
+        deptNursSub: 'Meter Air · Makanan · Rawatan/Mati',
+        deptPork: 'Bilik Pembesaran',
+        deptPorkSub: 'Meter Air · Makanan · Rawatan/Mati',
+        deptExit: 'Keluar / Jualan / Takai / Mati',
+        deptExitSub: 'Rekod keluar & semakan baki bilik',
+        sideA: 'Bahagian A (Kiri)',
+        sideB: 'Bahagian B (Kanan)',
         tileFW: 'Meter Air & Makanan',
-        tileFWSub: 'Pagi/Petang · Beg (50kg)',
+        tileFWSub: '07:00 & 17:00 · Beg (50kg)',
         tileProd: 'Rekod Pengeluaran',
         tileProdSub: 'Borang Utama',
-        tileSowIn: 'Kemasukan Induk (Rabu)',
-        tileSowInSub: 'Bilangan induk masuk',
+        tileSowIn: 'Kemasukan Induk Minggu Ini',
+        tileSowInSub: 'Bilangan induk masuk bilik',
         tileFarrRec: 'Rekod Beranak',
         tileFarrRecSub: 'Induk · Lahir · Berat',
-        tileWeanHead: 'Cerai Susu: Bilangan (Khamis)',
-        tileWeanHeadSub: 'Anak & induk keluar',
+        tileWeanHead: 'Cerai Susu & Keluar Minggu Ini',
+        tileWeanHeadSub: 'Termasuk pengecualian tangguh cerai',
         tileWeanWt: 'Cerai Susu: Berat',
         tileWeanWtSub: 'Berat sekumpulan',
         tileMal: 'Kecacatan Hidup & Klinikal',
         tileMalSub: 'Induk + Tarikh + Bilangan + Foto',
         tileTreat: 'Rawatan',
-        tileTreatSub: 'No. Telinga · Ubat',
+        tileTreatSub: 'No. Telinga / Sarang · Ubat',
         tileMort: 'Kematian',
-        tileMortSub: 'No. Telinga · Kumpulan',
+        tileMortSub: 'No. Telinga · Gejala Kepala ke Kaki',
+        addNextBtn: '+ Tambah Rekod Seterusnya',
+        submitAllBtn: 'Hantar Semua Rekod',
+        queuedListTitle: 'Senarai Sedia Dihantar',
+        delBtn: 'Padam',
+        errCommaDot: 'Wajib gunakan koma (,) atau titik (.) untuk memisahkan beberapa No. Telinga! Tidak dibenarkan guna ruang kosong sahaja.',
+        errNoName: 'Sila masukkan nama anda di bahagian atas terlebih dahulu.',
         lblDate: 'Tarikh',
         lblEarTag: 'No. Telinga',
+        lblMultiEarHint: 'Wajib guna koma (,) atau titik (.) untuk pisahkan No. Telinga (cth: 1021, 1022)',
         lblSowTag: 'No. Telinga Induk',
         lblBoarTag: 'No. Telinga Pejantan',
         lblSex: 'Jantina',
@@ -658,13 +826,20 @@
         lblBreed: 'Baka',
         lblBirthDate: 'Tarikh Lahir',
         lblTestDate: 'Tarikh Ujian',
+        lblWeightMethod: 'Kaedah Berat',
+        optWeighed: 'Timbang Sebenar',
+        optVisual: 'Anggaran Mata',
         lblTestWt: 'Berat Ujian (kg)',
         lblLeftTeat: 'Puting Kiri',
         lblRightTeat: 'Puting Kanan',
-        lblBlindTeat: 'Puting Rosak',
+        teatDirHint: 'Arah sama dengan babi (dari belakang ke depan): Kiri babi = Puting Kiri',
+        lblLeftBlind: 'Puting Rosak Kiri',
+        lblRightBlind: 'Puting Rosak Kanan',
         lblFrontLeg: 'Skor Kaki Depan (1-5)',
         lblRearLeg: 'Skor Kaki Belakang (1-5)',
+        legHint: '1 = Cacat teruk | 3 = Ideal standard | 5 = Terlalu tegak',
         lblBodyLen: 'Panjang Badan (cm)',
+        bodyLenHint: 'Dari titik tengah antara pangkal telinga hingga pangkal ekor',
         lblShoulderW: 'Lebar Bahu (cm)',
         lblChestW: 'Lebar Dada (cm)',
         lblVulva: 'Keadaan Faraj',
@@ -691,15 +866,23 @@
         lblWeanPigCount: 'Bilangan Anak Cerai Susu',
         lblWeanSowCount: 'Bilangan Induk Keluar',
         lblWeanWt: 'Berat Cerai Susu Sekumpulan (kg)',
-        lblLibido: 'Skor Libido (1-5)',
+        lblDeferredBox: 'Pengecualian: Tangguh Cerai Susu ke Kumpulan Seterusnya',
+        lblDefSowCnt: 'Bilangan Induk Belum Cerai Susu',
+        lblDefPigCnt: 'Bilangan Anak Belum Cerai Susu',
+        lblDefTargetBatch: 'Kumpulan Sasaran Seterusnya',
+        lblDefSowTags: 'No. Telinga Induk Belum Cerai (Wajib guna , atau .)',
+        lblLibido: 'Skor Libido (0-5)',
+        libidoHint: '0 = Tiada nafsu langsung | 1 = Sangat rendah | 5 = Sangat tinggi',
         lblVol: 'Isipadu Mani (mL)',
         lblConc: 'Kepekatan Sperma',
         lblMot: 'Motiliti (%)',
         lblProg: 'Pergerakan Progresif (%)',
         lblAbn: 'Keabnormalan (%)',
         lblHeadCount: 'Bilangan Ternakan Semasa',
-        lblWaterAM: 'Meter Air Pagi',
-        lblWaterPM: 'Meter Air Petang',
+        lblTempAM: 'Suhu Pagi (°C)',
+        lblTempPM: 'Suhu Petang (°C)',
+        lblWaterAM: 'Meter Air Pagi (07:00)',
+        lblWaterPM: 'Meter Air Petang (17:00)',
         lblFeedCode: 'Kod Makanan',
         optOther1: 'Lain 1',
         optOther2: 'Lain 2',
@@ -707,28 +890,37 @@
         optOther4: 'Lain 4',
         lblFeedCustom: 'Nama Kod Makanan Lain',
         lblFeedBags: 'Beg Makanan (1 Beg = 50kg)',
+        lblTargetScope: 'Sasaran',
+        optIndivTags: 'No. Telinga Individu',
+        optUnnotchedLitter: 'Anak Babi Belum Bertanda (Sarang/Lokasi)',
+        lblLitterLoc: 'No. Induk / Lokasi Kandang',
+        lblAffCount: 'Bilangan Ekor',
         lblMedOpt: 'Pilihan Ubat',
         optMedReserved: 'Akan dikemas kini',
+        lblTreatReason: 'Sebab Rawatan',
+        lblSymptoms: 'Gejala (Dari Kepala ke Kaki)',
+        vetReminder: 'Sila maklumkan kepada pengurusan veterinar dan doktor haiwan.',
+        lblExitReason: 'Sebab Keluar',
+        optSale: 'Jualan',
+        optCull: 'Takai',
+        optDeath: 'Mati',
+        lblPigCat: 'Kategori Babi',
+        optCatBoar: 'Pejantan',
+        optCatSow: 'Induk',
+        optCatPiglet: 'Anak Babi',
+        optCatPorker: 'Babi Daging',
+        lblTotalWt: 'Jumlah Berat (kg)',
         lblFarrowDate: 'Tarikh Beranak',
-        lblMalCount: 'Bilangan Anak Cacat',
         lblMalSigns: 'Jenis Kecacatan / Tanda',
-        signSkin: 'Kerosakan Kulit',
-        signLimb: 'Kecacatan Kaki',
-        signDowner: 'Tidak Boleh Berdiri',
-        signHead: 'Kecacatan Kepala',
-        signGenital: 'Faraj / Dubur',
-        signFever: 'Suhu Tinggi',
-        signPant: 'Termengah',
-        signRed: 'Bintik Merah',
-        signDiarrhea: 'Cirit-birit',
-        signOther: 'Lain-lain',
         lblNote: 'Catatan Ringkas',
         lblPhoto: 'Foto (Mampat Auto)',
-        submitBtn: 'Hantar Rekod',
         step1Prep: '1. Menyedia & Memampat...',
         step2Send: '2. Sedang Menghantar...',
         step3Done: '3. Telah Dihantar! ID: ',
-        step3Queued: '3. Disimpan di Peranti'
+        step3Queued: '3. Disimpan di Peranti',
+        diaryHeader: 'Ringkasan Laporan Harian',
+        diaryRemind: 'Sila muat turun gambar ini dan muat naik ke kumpulan WhatsApp hari ini. Jika ingin merekod bilik lain, sila hantar dan muat turun secara berasingan.',
+        downloadPngBtn: 'Muat Turun Gambar Laporan (PNG)'
       },
       'en': {
         passLabel: 'Access Code',
@@ -736,6 +928,7 @@
         reloadBtn: 'Reload',
         soundOn: 'Sound: ON',
         soundOff: 'Sound: OFF',
+        workerPlaceholder: 'Your Name',
         badPass: 'Invalid access code',
         prevBtn: 'Prev',
         nextBtn: 'Next',
@@ -746,47 +939,57 @@
         rainLikely: 'Rain Expected',
         rainLow: 'Low Rain Chance',
         extraHeading: 'Analytics & Lookup',
-        batchGateTitle: 'Confirm Room & 3-Week Batch First',
-        batchRemind: 'Verify room & 3-week batch before proceeding',
+        batchGateTitle: 'Confirm Room & 3-Week Batch',
+        batchRemind: 'Note: Switching rooms switches data source. Verify batch before continuing.',
+        gduAutoWeekNote: 'No fixed batch: automatically logged under current ISO week',
         w1Label: 'Mating Wk',
         w2Label: 'Farrow Wk',
         w3Label: 'Wean Wk',
         confirmBatchBtn: 'Confirm Room & Batch',
         tapToChangeBatch: 'Change Batch',
+        deptBoar: 'Boar House (Left 1)',
+        deptBoarSub: 'Semen · Treat/Mort',
+        deptGdu: 'GDU (Right 1)',
+        deptGduSub: 'Selection · Water/Feed',
         deptGest: 'Gestation',
-        deptGestSub: 'Heat · Breeding',
+        deptGestSub: 'Heat · Breeding · Water/Feed',
         deptFarr: 'Farrowing',
         deptFarrSub: 'Transfer · Farrow · Wean',
         deptNurs: 'Nursery',
         deptNursSub: 'Water · Feed · Treat/Mort',
         deptPork: 'Porker',
         deptPorkSub: 'Water · Feed · Treat/Mort',
-        deptBoar: 'Boar House',
-        deptBoarSub: 'Semen Collection',
-        deptGdu: 'GDU',
-        deptGduSub: 'Selection · Water/Feed',
-        sideA: 'Side A',
-        sideB: 'Side B',
+        deptExit: 'Exit / Sales / Cull / Mortality',
+        deptExitSub: 'Outbound log & room reconciliation',
+        sideA: 'Side A (Left)',
+        sideB: 'Side B (Right)',
         tileFW: 'Water Meter & Feed',
-        tileFWSub: 'AM/PM · Bags (50kg)',
+        tileFWSub: '07:00 & 17:00 · Bags (50kg)',
         tileProd: 'Production Records',
         tileProdSub: 'Main Form',
-        tileSowIn: 'Sow Transfer-In (Wed)',
-        tileSowInSub: 'Sows moved in',
+        tileSowIn: 'This Week Sow Transfer-In',
+        tileSowInSub: 'Sows moved into room',
         tileFarrRec: 'Farrowing Record',
         tileFarrRecSub: 'Sow · Born · Wt',
-        tileWeanHead: 'Weaning: Counts (Thu)',
-        tileWeanHeadSub: 'Piglets & sows out',
+        tileWeanHead: 'This Week Weaning & Out',
+        tileWeanHeadSub: 'Includes deferred weaning exception',
         tileWeanWt: 'Weaning: Weight',
         tileWeanWtSub: 'Litter weight',
         tileMal: 'Live Malformation & Signs',
         tileMalSub: 'Sow + Date + Count + Photo',
         tileTreat: 'Treatment',
-        tileTreatSub: 'Ear Tag · Medication',
+        tileTreatSub: 'Ear Tag / Litter · Medication',
         tileMort: 'Mortality',
-        tileMortSub: 'Ear Tag · Batch',
+        tileMortSub: 'Ear Tag · Head-to-Toe Symptoms',
+        addNextBtn: '+ Add Next Entry',
+        submitAllBtn: 'Submit All Records',
+        queuedListTitle: 'Ready-to-Submit List',
+        delBtn: 'Remove',
+        errCommaDot: 'Multiple Ear Tags MUST be separated by a comma (,) or period (.)! Spaces alone are blocked.',
+        errNoName: 'Please enter your name at the top first.',
         lblDate: 'Date',
         lblEarTag: 'Ear Tag',
+        lblMultiEarHint: 'Must use comma (,) or period (.) to separate multiple Ear Tags (e.g. 1021, 1022)',
         lblSowTag: 'Sow Ear Tag',
         lblBoarTag: 'Boar Ear Tag',
         lblSex: 'Sex',
@@ -795,13 +998,20 @@
         lblBreed: 'Breed',
         lblBirthDate: 'Birth Date',
         lblTestDate: 'Test Date',
+        lblWeightMethod: 'Weight Method',
+        optWeighed: 'Actual Scale',
+        optVisual: 'Visual Estimate',
         lblTestWt: 'Test Weight (kg)',
         lblLeftTeat: 'Left Teats',
         lblRightTeat: 'Right Teats',
-        lblBlindTeat: 'Blind Teats',
+        teatDirHint: 'Facing same direction as pig (rear to front): Pig left = Left Teats',
+        lblLeftBlind: 'Left Blind Teats',
+        lblRightBlind: 'Right Blind Teats',
         lblFrontLeg: 'Front Leg (1-5)',
         lblRearLeg: 'Rear Leg (1-5)',
+        legHint: '1 = Severe defect | 3 = Ideal standard | 5 = Overly upright',
         lblBodyLen: 'Body Length (cm)',
+        bodyLenHint: 'From midpoint between ear bases along topline to tail root',
         lblShoulderW: 'Shoulder Width (cm)',
         lblChestW: 'Chest Width (cm)',
         lblVulva: 'Vulva Status',
@@ -828,15 +1038,23 @@
         lblWeanPigCount: 'Weaned Piglets',
         lblWeanSowCount: 'Sows Moved Out',
         lblWeanWt: 'Wean Litter Wt (kg)',
-        lblLibido: 'Libido (1-5)',
+        lblDeferredBox: 'Exception: Deferred Weaning to Next Batch',
+        lblDefSowCnt: 'Unweaned Sows Moved to Next Batch',
+        lblDefPigCnt: 'Unweaned Piglets Moved to Next Batch',
+        lblDefTargetBatch: 'Target Next Batch',
+        lblDefSowTags: 'Unweaned Sow Ear Tags (Must separate with , or .)',
+        lblLibido: 'Libido Score (0-5)',
+        libidoHint: '0 = Zero libido / refuses mount | 1 = Very low | 5 = Very high',
         lblVol: 'Volume (mL)',
         lblConc: 'Concentration',
         lblMot: 'Motility (%)',
         lblProg: 'Progressive (%)',
         lblAbn: 'Abnormality (%)',
-        lblHeadCount: 'Head Count',
-        lblWaterAM: 'AM Water Meter',
-        lblWaterPM: 'PM Water Meter',
+        lblHeadCount: 'Current Head Count',
+        lblTempAM: 'Morning Temp (°C)',
+        lblTempPM: 'Afternoon Temp (°C)',
+        lblWaterAM: 'Water Meter AM (07:00)',
+        lblWaterPM: 'Water Meter PM (17:00)',
         lblFeedCode: 'Feed Code',
         optOther1: 'Other 1',
         optOther2: 'Other 2',
@@ -844,28 +1062,37 @@
         optOther4: 'Other 4',
         lblFeedCustom: 'Custom Feed Name',
         lblFeedBags: 'Feed Bags (1 Bag = 50kg)',
+        lblTargetScope: 'Target',
+        optIndivTags: 'Individual Ear Tags',
+        optUnnotchedLitter: 'Unnotched Piglets (Litter / Pen)',
+        lblLitterLoc: 'Sow Tag / Pen Location',
+        lblAffCount: 'Head Count',
         lblMedOpt: 'Medication Option',
         optMedReserved: 'Pending update',
+        lblTreatReason: 'Treatment Reason',
+        lblSymptoms: 'Symptoms (Head to Toe)',
+        vetReminder: 'Please notify veterinary management and veterinarian.',
+        lblExitReason: 'Exit Reason',
+        optSale: 'Sale',
+        optCull: 'Cull',
+        optDeath: 'Mortality',
+        lblPigCat: 'Pig Category',
+        optCatBoar: 'Boar',
+        optCatSow: 'Sow',
+        optCatPiglet: 'Piglet',
+        optCatPorker: 'Porker',
+        lblTotalWt: 'Total Weight (kg)',
         lblFarrowDate: 'Farrowing Date',
-        lblMalCount: 'Malformed Count',
         lblMalSigns: 'Malformation / Signs',
-        signSkin: 'Skin Lesion',
-        signLimb: 'Limb Deformity',
-        signDowner: 'Downer',
-        signHead: 'Head Deformity',
-        signGenital: 'Genital / Anal',
-        signFever: 'High Temp',
-        signPant: 'Panting',
-        signRed: 'Red Spots',
-        signDiarrhea: 'Diarrhea',
-        signOther: 'Other',
         lblNote: 'Brief Note',
         lblPhoto: 'Photo (Auto-compressed)',
-        submitBtn: 'Submit Record',
         step1Prep: '1. Preparing & Compressing...',
         step2Send: '2. Uploading...',
         step3Done: '3. Submitted! ID: ',
-        step3Queued: '3. Saved Offline'
+        step3Queued: '3. Saved Offline',
+        diaryHeader: 'Daily Diary Summary',
+        diaryRemind: 'Please download this image and upload it to WhatsApp group today. For another room, submit and download separately.',
+        downloadPngBtn: 'Download Diary Report Image (PNG)'
       },
       'zh-TW': {
         passLabel: '請輸入密碼',
@@ -873,6 +1100,7 @@
         reloadBtn: '重新載入',
         soundOn: '音效：開',
         soundOff: '音效：關',
+        workerPlaceholder: '請輸入您的姓名',
         badPass: '密碼無效',
         prevBtn: '上一頁',
         nextBtn: '下一頁',
@@ -884,46 +1112,56 @@
         rainLow: '今日降雨機率偏低',
         extraHeading: '分析與查詢專區',
         batchGateTitle: '請先確認房號與三週次批次',
-        batchRemind: '請核對目前房號與三週次批次後再繼續',
+        batchRemind: '提醒：切換不同間房屬於不同資料來源，請核對目前房號與批次',
+        gduAutoWeekNote: '無固定批次者自動記錄當週週次為批次依據',
         w1Label: '配種週次',
         w2Label: '分娩週次',
         w3Label: '離乳週次',
         confirmBatchBtn: '確認房號與批次',
         tapToChangeBatch: '修改批次',
+        deptBoar: '公豬舍（左一）',
+        deptBoarSub: '採精 · 治療與死亡',
+        deptGdu: '後備母豬舍（右一）',
+        deptGduSub: '選種體型 · 水錶飼料',
         deptGest: '配懷舍',
-        deptGestSub: '發情 · 配種',
+        deptGestSub: '發情 · 配種 · 水錶飼料',
         deptFarr: '產房',
-        deptFarrSub: '轉入 · 分娩 · 離乳',
+        deptFarrSub: '轉入 · 分娩 · 離乳轉出',
         deptNurs: '保育舍',
-        deptNursSub: '水錶 · 飼料 · 治療死亡',
+        deptNursSub: '上下午水錶 · 飼料包數 · 治療死亡',
         deptPork: '肉豬舍',
-        deptPorkSub: '水錶 · 飼料 · 治療死亡',
-        deptBoar: '公豬舍',
-        deptBoarSub: '公豬採精',
-        deptGdu: '後備母豬舍',
-        deptGduSub: '選種 · 水錶飼料',
-        sideA: 'A 區',
-        sideB: 'B 區',
+        deptPorkSub: '上下午水錶 · 飼料包數 · 治療死亡',
+        deptExit: '離場 / 銷售 / 淘汰 / 死亡',
+        deptExitSub: '出豬來源棟舍與耳號核對',
+        sideA: 'A 區（左側）',
+        sideB: 'B 區（右側）',
         tileFW: '獨立水錶與飼料用料',
-        tileFWSub: '上午/下午水錶 · 飼料包數 (50kg)',
+        tileFWSub: '上午 07:00 與下午 17:00 · 包數 (50kg)',
         tileProd: '生產與選育紀錄',
         tileProdSub: '作業表單',
-        tileSowIn: '待產母豬轉入（週三）',
-        tileSowInSub: '轉入母豬頭數',
+        tileSowIn: '本週母豬轉入',
+        tileSowInSub: '登記轉入本間產房母豬頭數',
         tileFarrRec: '分娩紀錄',
-        tileFarrRecSub: '母豬 · 活仔/死胎 · 初生重',
-        tileWeanHead: '離乳與轉出頭數（週四）',
-        tileWeanHeadSub: '離乳仔豬與母豬出房',
+        tileFarrRecSub: '母豬耳號 · 活仔/死胎 · 初生重',
+        tileWeanHead: '本週離乳與轉出（含延後離乳例外）',
+        tileWeanHeadSub: '離乳頭數與移往下一批次例外',
         tileWeanWt: '離乳秤重明細',
         tileWeanWtSub: '離乳窩重紀錄',
         tileMal: '活體畸形與臨床異常',
         tileMalSub: '母豬 + 分娩日 + 頭數 + 照片',
         tileTreat: '治療紀錄',
-        tileTreatSub: '耳號 · 用藥點選',
+        tileTreatSub: '個體耳號或未打耳號小豬窩位',
         tileMort: '死亡紀錄',
-        tileMortSub: '耳號 · 三週次批次',
+        tileMortSub: '耳號 · 由頭到腳徵狀點選',
+        addNextBtn: '＋ 加入下一筆',
+        submitAllBtn: '送出全部資料',
+        queuedListTitle: '待送出清單（可連續新增多筆）',
+        delBtn: '刪除',
+        errCommaDot: '輸入多隻耳號時，強制規定必須使用逗號（,）或句點（.）分隔！不可只用空格。',
+        errNoName: '請先在上方輸入您的姓名再送出。',
         lblDate: '日期',
         lblEarTag: '耳號',
+        lblMultiEarHint: '多隻耳號強制以逗號（,）或句點（.）分隔（例如：1021, 1022）',
         lblSowTag: '母豬耳號',
         lblBoarTag: '公豬耳號',
         lblSex: '性別',
@@ -932,13 +1170,20 @@
         lblBreed: '品種',
         lblBirthDate: '出生日期',
         lblTestDate: '測定日期',
+        lblWeightMethod: '體重測量方式',
+        optWeighed: '實際秤重',
+        optVisual: '目測估重',
         lblTestWt: '測定體重 (kg)',
-        lblLeftTeat: '左邊乳頭數',
-        lblRightTeat: '右邊乳頭數',
-        lblBlindTeat: '無效乳頭數',
+        lblLeftTeat: '左邊有效乳頭數',
+        lblRightTeat: '右邊有效乳頭數',
+        teatDirHint: '方向說明：以與豬同向（從豬背後方往前看）為準，豬的左側＝左邊乳頭',
+        lblLeftBlind: '左側無效乳頭數',
+        lblRightBlind: '右側無效乳頭數',
         lblFrontLeg: '前肢評分 (1-5)',
         lblRearLeg: '後肢評分 (1-5)',
+        legHint: '1分 = 嚴重缺陷/臥系 | 3分 = 理想標準結構 | 5分 = 過度直立僵硬',
         lblBodyLen: '體長 (cm)',
+        bodyLenHint: '測量基準：自兩耳根連線中點沿背線量至尾根',
         lblShoulderW: '肩寬 (cm)',
         lblChestW: '胸寬 (cm)',
         lblVulva: '陰部發育',
@@ -955,7 +1200,7 @@
         lblHeatDate: '發情日期',
         lblBreedDate: '配種日期',
         lblServiceBoar: '配種公豬耳號',
-        lblSowInCount: '轉入母豬頭數',
+        lblSowInCount: '本週轉入母豬頭數',
         lblTNB: '總產頭數',
         lblNBA: '活仔數',
         lblStillborn: '死胎數',
@@ -965,53 +1210,91 @@
         lblWeanPigCount: '離乳仔豬頭數',
         lblWeanSowCount: '離乳母豬轉出頭數',
         lblWeanWt: '離乳窩重 (kg)',
-        lblLibido: '性慾調教評分 (1-5)',
+        lblDeferredBox: '例外：暫不離乳、移往下一批次',
+        lblDefSowCnt: '未離乳母豬頭數',
+        lblDefPigCnt: '未離乳小豬頭數',
+        lblDefTargetBatch: '移入目標批次週次',
+        lblDefSowTags: '未離乳母豬耳號（多隻強制用逗號 , 或句點 . 分隔）',
+        lblLibido: '性慾與調教評分 (0-5)',
+        libidoHint: '0分 = 完全無性慾/拒爬不動 | 1分 = 極低 | 5分 = 極高迅速上台',
         lblVol: '精液量 (mL)',
         lblConc: '精蟲濃度',
         lblMot: '活力 (%)',
         lblProg: '前進運動率 (%)',
         lblAbn: '畸形率 (%)',
         lblHeadCount: '當日存欄頭數',
-        lblWaterAM: '上午水錶度數',
-        lblWaterPM: '下午水錶度數',
+        lblTempAM: '上午舍內溫度 (°C)',
+        lblTempPM: '下午舍內溫度 (°C)',
+        lblWaterAM: '上午 07:00 水錶度數',
+        lblWaterPM: '下午 17:00 水錶度數',
         lblFeedCode: '飼料料號',
         optOther1: '其他 1',
         optOther2: '其他 2',
         optOther3: '其他 3',
         optOther4: '其他 4',
-        lblFeedCustom: '其他飼料名稱',
-        lblFeedBags: '飼料包數（1 包 = 50 公斤）',
-        lblMedOpt: '用藥選項',
-        optMedReserved: '待更新藥物清單',
+        lblFeedCustom: '其他飼料名稱（選填）',
+        lblFeedBags: '飼料使用包數（1 包 = 50 公斤）',
+        lblTargetScope: '對象類型',
+        optIndivTags: '有耳號個體（單隻或多隻）',
+        optUnnotchedLitter: '未打耳號小豬（整窩／欄位位置）',
+        lblLitterLoc: '母豬耳號或欄位位置（如 F3-12 欄）',
+        lblAffCount: '頭數',
+        lblMedOpt: '用藥選項（預留待補）',
+        optMedReserved: '藥物清單待設定',
+        lblTreatReason: '治療原因',
+        lblSymptoms: '臨床徵狀點選（由頭到腳）',
+        vetReminder: '請提醒獸醫管理與獸醫告知',
+        lblExitReason: '離場原因',
+        optSale: '銷售出欄',
+        optCull: '淘汰',
+        optDeath: '死亡',
+        lblPigCat: '豬隻類別',
+        optCatBoar: '公豬',
+        optCatSow: '母豬',
+        optCatPiglet: '小豬',
+        optCatPorker: '肉豬',
+        lblTotalWt: '總重量 (kg)',
         lblFarrowDate: '分娩日期',
-        lblMalCount: '畸形頭數',
         lblMalSigns: '畸形與外觀徵狀點選',
-        signSkin: '皮膚破損',
-        signLimb: '腳部/肢體畸形',
-        signDowner: '無法站立',
-        signHead: '頭部畸形',
-        signGenital: '陰部/肛門異常',
-        signFever: '高溫發燒',
-        signPant: '喘/呼吸急促',
-        signRed: '皮膚紅點',
-        signDiarrhea: '下痢',
-        signOther: '其他異常',
-        lblNote: '簡短補充說明',
-        lblPhoto: '照片（自動壓縮）',
-        submitBtn: '送出紀錄',
+        lblNote: '備註說明',
+        lblPhoto: '現場照片（自動縮小壓縮）',
         step1Prep: '1. 準備與壓縮中...',
         step2Send: '2. 正在送出...',
         step3Done: '3. 已送出並寫入！單號：',
-        step3Queued: '3. 已暫存本機待補傳'
+        step3Queued: '3. 已暫存本機待補傳',
+        diaryHeader: '每日工作日誌總結',
+        diaryRemind: '請下載此日報圖片並上傳至今日 WhatsApp 群組！若需輸入其他間房，請分開送出並下載對應房號的日報圖。',
+        downloadPngBtn: '下載日報圖片 (PNG)'
       }
     };
+
+    const SYMPTOMS_HEAD_TO_TOE = [
+      { code: 'oral_nasal_bleed', ms: 'Pendarahan Mulut/Hidung', en: 'Oral/Nasal Bleeding', 'zh-TW': '口鼻出血' },
+      { code: 'eye_swollen_protrude', ms: 'Mata Bengkak/Terjojol', en: 'Swollen/Protruding Eyes', 'zh-TW': '眼睛紅腫突出' },
+      { code: 'head_tilt_tremor', ms: 'Kepala Senget / Menggigil', en: 'Head Tilt / Tremor', 'zh-TW': '頭部歪斜 / 發抖' },
+      { code: 'panting', ms: 'Termengah-mengah', en: 'Panting / Dyspnea', 'zh-TW': '喘 / 呼吸急促' },
+      { code: 'skin_pale', ms: 'Kulit Pucat', en: 'Pale Skin', 'zh-TW': '皮膚白 / 蒼白' },
+      { code: 'skin_red', ms: 'Kulit Merah', en: 'Red Skin', 'zh-TW': '皮膚紅' },
+      { code: 'skin_swollen', ms: 'Kulit Bengkak Merah', en: 'Red Swollen Skin', 'zh-TW': '皮膚紅腫' },
+      { code: 'skin_spots_rash', ms: 'Tompok Merah / Ruam', en: 'Red Spots / Rash', 'zh-TW': '身上有斑點 / 紅斑' },
+      { code: 'skin_purple', ms: 'Badan Keunguan', en: 'Purplish Skin', 'zh-TW': '身上偏紫色' },
+      { code: 'skin_wound', ms: 'Luka pada Kulit', en: 'Skin Wounds', 'zh-TW': '皮膚有傷口' },
+      { code: 'body_odor', ms: 'Badan Berbau Busuk', en: 'Foul Body Odor', 'zh-TW': '身上有味道' },
+      { code: 'rectal_prolapse', ms: 'Dubur Terkeluar', en: 'Rectal Prolapse', 'zh-TW': '肛門突出' },
+      { code: 'diarrhea_vent', ms: 'Cirit-birit pada Dubur', en: 'Diarrhea at Vent', 'zh-TW': '肛門有下痢' },
+      { code: 'limb_injury', ms: 'Kaki Cedera', en: 'Limb / Foot Injury', 'zh-TW': '腳受傷 / 肢體受損' },
+      { code: 'unable_stand', ms: 'Tidak Boleh Berdiri', en: 'Unable to Stand', 'zh-TW': '無法站立' }
+    ];
 
     const state = {
       lang: 'ms',
       soundOn: true,
+      audioCtx: null,
+      workerName: '',
       profile: null,
       enteredAt: new Date().toISOString(),
       enteredMs: Date.now(),
+      stageStartMs: Date.now(),
       trajectory: [],
       history: [],
       redoStack: [],
@@ -1026,57 +1309,86 @@
         formType: ''
       },
       currentBatch: { w1: '', w2: '', w3: '' },
-      chips: {}
+      chips: {},
+      queuedRecords: [],
+      lastDiarySummary: null
     };
 
-    function playAlertTone(kind) {
-      if (!state.soundOn) return;
+    function unlockAudioContext() {
       try {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         if (!AudioCtx) return;
-        const ctx = new AudioCtx();
+        if (!state.audioCtx) state.audioCtx = new AudioCtx();
+        if (state.audioCtx.state === 'suspended') state.audioCtx.resume();
+      } catch (e) {}
+    }
+
+    function playTone(type) {
+      if (!state.soundOn) return;
+      unlockAudioContext();
+      try {
+        const ctx = state.audioCtx;
+        if (!ctx) return;
         const now = ctx.currentTime;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.connect(gain);
         gain.connect(ctx.destination);
 
-        if (kind === 'success') {
+        if (type === 'success') {
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(523.25, now);
-          osc.frequency.setValueAtTime(659.25, now + 0.11);
-          gain.gain.setValueAtTime(0.14, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          osc.frequency.setValueAtTime(587.33, now);
+          osc.frequency.setValueAtTime(880.0, now + 0.12);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
           osc.start(now);
-          osc.stop(now + 0.29);
-        } else if (kind === 'queued') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(392.0, now);
-          gain.gain.setValueAtTime(0.12, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.stop(now + 0.35);
+        } else if (type === 'step') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(660.0, now);
+          gain.gain.setValueAtTime(0.16, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
           osc.start(now);
-          osc.stop(now + 0.24);
+          osc.stop(now + 0.15);
         } else {
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(220.0, now);
-          gain.gain.setValueAtTime(0.12, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
           osc.start(now);
-          osc.stop(now + 0.26);
+          osc.stop(now + 0.29);
         }
       } catch (e) {}
     }
+
+    document.addEventListener('touchstart', unlockAudioContext, { passive: true });
+    document.addEventListener('click', unlockAudioContext, { passive: true });
 
     function toggleSound() {
       state.soundOn = !state.soundOn;
       localStorage.setItem(CONFIG.KEYS.SOUND, state.soundOn ? '1' : '0');
       applyTexts();
-      if (state.soundOn) playAlertTone('success');
+      if (state.soundOn) playTone('step');
+    }
+
+    function saveWorkerName(val) {
+      state.workerName = String(val || '').trim();
+      localStorage.setItem(CONFIG.KEYS.WORKER, state.workerName);
     }
 
     function reloadApp() {
       syncOfflineQueue();
       window.location.reload();
+    }
+
+    function goHomeHouse() {
+      playTone('step');
+      sendTelemetryBeacon('CLICK_HOME_HOUSE', [state.profile?.group, state.view.dept, state.view.room].filter(Boolean).join('/'));
+      state.view = { stage: 'depts', dept: '', wing: '', room: '', formType: '' };
+      state.queuedRecords = [];
+      state.history = [];
+      state.redoStack = [];
+      if (state.profile) renderView();
     }
 
     function detectSystemLang() {
@@ -1109,6 +1421,7 @@
       document.getElementById('lblPass').textContent = t.passLabel;
       document.getElementById('btnLogin').textContent = t.enterBtn;
       document.getElementById('btnReload').textContent = t.reloadBtn;
+      document.getElementById('workerNameInput').placeholder = t.workerPlaceholder;
       document.getElementById('btnSoundToggle').textContent = state.soundOn ? t.soundOn : t.soundOff;
       document.getElementById('btnSoundToggle').classList.toggle('active', state.soundOn);
       document.getElementById('btnNavPrev').textContent = '◀ ' + t.prevBtn;
@@ -1126,7 +1439,32 @@
     function logTraj(tag) {
       const sec = Math.round((Date.now() - state.enteredMs) / 1000);
       state.trajectory.push(sec + 's:' + tag);
-      if (state.trajectory.length > 50) state.trajectory.shift();
+      if (state.trajectory.length > 60) state.trajectory.shift();
+    }
+
+    function sendTelemetryBeacon(eventName, targetArea) {
+      if (!state.profile) return;
+      const dwell = Math.max(1, Math.round((Date.now() - state.stageStartMs) / 1000));
+      state.stageStartMs = Date.now();
+      const body = JSON.stringify({
+        token: CONFIG.API_TOKEN,
+        action: 'telemetry',
+        meta: {
+          worker_name: state.workerName || 'Unnamed',
+          role_level: state.profile.level,
+          event_name: eventName,
+          target_area: targetArea,
+          dwell_seconds: dwell,
+          trajectory_summary: state.trajectory.slice(-10).join(' -> '),
+          user_agent: navigator.userAgent,
+          screen_info: window.screen.width + 'x' + window.screen.height
+        }
+      });
+      fetch(CONFIG.GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: body
+      }).catch(() => {});
     }
 
     function parsePass(raw) {
@@ -1141,27 +1479,118 @@
     }
 
     function submitLogin() {
+      unlockAudioContext();
       const prof = parsePass(document.getElementById('inpPass').value);
       const err = document.getElementById('errLogin');
       if (!prof) {
         err.textContent = DICT[state.lang].badPass;
         err.classList.remove('hidden');
-        playAlertTone('error');
+        playTone('error');
         return;
       }
       err.classList.add('hidden');
       state.profile = prof;
       localStorage.setItem(CONFIG.KEYS.PASS, prof.code);
       logTraj('login:' + prof.group);
+      playTone('success');
+      sendTelemetryBeacon('LOGIN', prof.group + ':' + prof.level);
       openWorkspace();
     }
 
     function openWorkspace() {
       document.getElementById('loginCard').classList.add('hidden');
       document.getElementById('workspaceMain').classList.remove('hidden');
-      document.getElementById('locSub').textContent = DICT[state.lang].locationName;
-      document.getElementById('groupStatusSub').textContent = state.profile.group;
+      document.getElementById('locSub').textContent = `${DICT[state.lang].locationName} (${state.profile.group})`;
       renderView();
+    }
+
+    // GP 跨部門快捷切換列
+    function renderGpQuickStrip() {
+      const strip = document.getElementById('gpQuickStrip');
+      if (!state.profile || state.profile.group !== 'GP') {
+        strip.classList.add('hidden');
+        return;
+      }
+      strip.classList.remove('hidden');
+      const quickDepts = [
+        { id: 'Boar House', lbl: 'Boar' },
+        { id: 'GDU', lbl: 'GDU' },
+        { id: 'Gestation', lbl: 'Gestation' },
+        { id: 'Farrowing', lbl: 'Farrowing' },
+        { id: 'Nursery', lbl: 'Nursery' },
+        { id: 'Porker', lbl: 'Porker' },
+        { id: 'Exit', lbl: 'Exit' }
+      ];
+      strip.innerHTML = quickDepts.map(q =>
+        `<button type="button" class="pill-btn ${state.view.dept === q.id ? 'active' : ''}" onclick="jumpGpDept('${q.id}')">${q.lbl}</button>`
+      ).join('');
+    }
+
+    function jumpGpDept(deptId) {
+      pushHist();
+      state.queuedRecords = [];
+      state.view.dept = deptId;
+      state.view.wing = '';
+      state.view.room = deptId;
+      logTraj('gp_jump:' + deptId);
+      sendTelemetryBeacon('GP_JUMP_DEPT', deptId);
+      if (deptId === 'GDU' || deptId === 'Exit') {
+        const curW = isoWeek(new Date());
+        state.currentBatch = { w1: String(curW), w2: String(wrap52(curW + 16)), w3: String(wrap52(curW + 19)) };
+        state.view.stage = 'room_tiles';
+      } else {
+        enterBatchGate();
+        return;
+      }
+      renderView();
+    }
+
+    // PS 同棟舍房號快速切換列（例如 Nursery A 內可直接點 N1 跳 N2）
+    function renderRoomQuickStrip() {
+      const strip = document.getElementById('roomQuickStrip');
+      if (!state.profile || state.profile.group !== 'PS' || !['room_tiles', 'form', 'batch_gate'].includes(state.view.stage)) {
+        strip.classList.add('hidden');
+        return;
+      }
+      const rooms = getRoomsForDept(state.view.dept, state.view.wing);
+      if (!rooms.length) {
+        strip.classList.add('hidden');
+        return;
+      }
+      strip.classList.remove('hidden');
+      strip.innerHTML = rooms.map(r =>
+        `<button type="button" class="pill-btn ${state.view.room === r ? 'active' : ''}" onclick="jumpPsRoom('${r}')">${r}</button>`
+      ).join('');
+    }
+
+    function jumpPsRoom(roomCode) {
+      if (state.view.room === roomCode) return;
+      pushHist();
+      state.queuedRecords = [];
+      state.view.room = roomCode;
+      logTraj('ps_room_jump:' + roomCode);
+      sendTelemetryBeacon('PS_ROOM_JUMP', roomCode);
+      if (state.view.dept === 'GDU') {
+        const curW = isoWeek(new Date());
+        state.currentBatch = { w1: String(curW), w2: String(wrap52(curW + 16)), w3: String(wrap52(curW + 19)) };
+        state.view.stage = 'room_tiles';
+        renderView();
+      } else {
+        enterBatchGate();
+      }
+    }
+
+    function getRoomsForDept(dept, wing) {
+      if (dept === 'GDU') return ['GDU 1', 'GDU 2', 'GDU 3', 'GDU 4', 'GDU 5', 'GDU 6', 'GDU 7', 'GDU 8'];
+      if (dept === 'Farrowing') return ['F1', 'F2', 'F3', 'F4', 'F5', 'F6'];
+      if (dept === 'Nursery') return ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7'];
+      if (dept === 'Porker') {
+        const w = wing || 'A';
+        const arr = [];
+        for (let i = 1; i <= 8; i++) arr.push(`P${w}${i}A`, `P${w}${i}B`);
+        return arr;
+      }
+      return [];
     }
 
     function updateClockAndForecastCurve() {
@@ -1173,8 +1602,9 @@
 
       document.getElementById('clockNow').textContent = `${pad(curH)}:${pad(curM)}:${pad(now.getSeconds())}`;
       document.getElementById('dateSub').textContent = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-      document.getElementById('locSub').textContent = t.locationName;
-      if (state.profile) document.getElementById('groupStatusSub').textContent = state.profile.group;
+      document.getElementById('locSub').textContent = state.profile
+        ? `${t.locationName} (${state.profile.group})`
+        : t.locationName;
 
       const curTemp = state.hourly24[curH] !== undefined ? state.hourly24[curH] : 29;
       document.getElementById('tempNowVal').textContent = curTemp + '°C';
@@ -1185,11 +1615,7 @@
       const points = [];
       for (let offset = -k; offset <= k; offset++) {
         const hIdx = Math.max(0, Math.min(23, curH + offset));
-        points.push({
-          offset,
-          hour: hIdx,
-          temp: state.hourly24[hIdx] ?? curTemp
-        });
+        points.push({ offset, hour: hIdx, temp: state.hourly24[hIdx] ?? curTemp });
       }
 
       const temps = points.map(p => p.temp);
@@ -1199,7 +1625,7 @@
       const coords = points.map((pt, idx) => {
         const x = 14 + (idx / Math.max(1, points.length - 1)) * 212;
         const y = 38 - ((pt.temp - minT) / Math.max(1, maxT - minT)) * 24;
-        return { x, y, hour: pt.hour, temp: pt.temp, isNow: pt.offset === 0 };
+        return { x, y, hour: pt.hour, temp: pt.temp };
       });
 
       const centerPt = coords[Math.floor(coords.length / 2)];
@@ -1281,7 +1707,7 @@
     }
 
     function reopenBatchGate() {
-      if (!state.view.dept) return;
+      if (!state.view.dept || state.view.dept === 'GDU' || state.view.dept === 'Exit') return;
       pushHist();
       state.view.stage = 'batch_gate';
       renderView();
@@ -1293,18 +1719,26 @@
       const botGrid = document.getElementById('bottomGrid');
       const botTitle = document.getElementById('bottomTitle');
       const formPanel = document.getElementById('formPanel');
+      const diaryPanel = document.getElementById('diaryPanel');
       const extraPanel = document.getElementById('extraPanel');
 
+      renderGpQuickStrip();
+      renderRoomQuickStrip();
       topGrid.innerHTML = '';
       botGrid.innerHTML = '';
       formPanel.classList.add('hidden');
+      diaryPanel.classList.add('hidden');
       extraPanel.classList.add('hidden');
 
       const parts = [state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean);
       document.getElementById('locBannerText').textContent = parts.join(' › ');
 
       const batchChip = document.getElementById('batchBannerBtn');
-      if (state.view.room || ['batch_gate', 'room_tiles', 'form'].includes(state.view.stage)) {
+      if (state.view.dept === 'GDU') {
+        const curW = isoWeek(new Date());
+        batchChip.textContent = `W${curW} · ${t.gduAutoWeekNote}`;
+        batchChip.classList.remove('hidden');
+      } else if (state.view.room && state.view.dept !== 'Exit' && ['batch_gate', 'room_tiles', 'form'].includes(state.view.stage)) {
         const bStr = [state.currentBatch.w1, state.currentBatch.w2, state.currentBatch.w3].filter(Boolean).join('/');
         batchChip.textContent = (bStr ? `${bStr} · ` : '') + t.tapToChangeBatch;
         batchChip.classList.remove('hidden');
@@ -1314,19 +1748,17 @@
 
       if (['query', 'report', 'admin'].includes(state.profile.level)) {
         botTitle.classList.remove('hidden');
-        botGrid.appendChild(makeTile(t.deptFarr, t.extraHeading, 'A1', 't-farr', () => {
+        botGrid.appendChild(makeTile(t.deptFarr, t.extraHeading, 'A1', 't-farr', false, () => {
+          sendTelemetryBeacon('OPEN_ANALYSIS_TILE', 'Farrowing_Analysis');
           showExtra('Farrowing Analytics');
         }));
-        botGrid.appendChild(makeTile(t.extraHeading, state.profile.group, 'Q1', 't-gp', () => {
-          showExtra('Query Hub');
+        botGrid.appendChild(makeTile(t.extraHeading, state.profile.group, 'Q1', 't-gp', false, () => {
+          sendTelemetryBeacon('OPEN_QUERY_TILE', 'Sow_Boar_Lookup');
+          renderQueryBox();
         }));
         if (state.profile.level === 'admin') {
-          botGrid.appendChild(makeTile('QWERT', state.trajectory.slice(-3).join(' | '), 'LOG', 't-boar', () => {
-            showExtra(JSON.stringify({
-              dwellSec: Math.round((Date.now() - state.enteredMs) / 1000),
-              ua: navigator.userAgent,
-              trajectory: state.trajectory
-            }, null, 2));
+          botGrid.appendChild(makeTile('Telemetry', 'Admin', 'SYS', 't-boar', true, () => {
+            loadAdminTelemetry();
           }));
         }
       } else {
@@ -1335,30 +1767,50 @@
 
       if (state.view.stage === 'depts') {
         const depts = [
-          { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, cls: 't-gest' },
-          { id: 'Farrowing', title: t.deptFarr, sub: t.deptFarrSub, cls: 't-farr' },
-          { id: 'Nursery', title: t.deptNurs, sub: t.deptNursSub, cls: 't-nurs' },
-          { id: 'Porker', title: t.deptPork, sub: t.deptPorkSub, cls: 't-pork' },
-          { id: 'Boar House', title: t.deptBoar, sub: t.deptBoarSub, cls: 't-boar' },
-          { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, cls: 't-gdu' }
+          { id: 'Boar House', title: t.deptBoar, sub: t.deptBoarSub, cls: 't-boar', wide: false },
+          { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, cls: 't-gdu', wide: false },
+          { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, cls: 't-gest', wide: false },
+          { id: 'Farrowing', title: t.deptFarr, sub: t.deptFarrSub, cls: 't-farr', wide: false },
+          { id: 'Nursery', title: t.deptNurs, sub: t.deptNursSub, cls: 't-nurs', wide: false },
+          { id: 'Porker', title: t.deptPork, sub: t.deptPorkSub, cls: 't-pork', wide: false },
+          { id: 'Exit', title: t.deptExit, sub: t.deptExitSub, cls: 't-exit', wide: true }
         ];
         depts.forEach(d => {
-          topGrid.appendChild(makeTile(d.title, d.sub, state.profile.group, d.cls, () => {
+          topGrid.appendChild(makeTile(d.title, d.sub, state.profile.group, d.cls, d.wide, () => {
             pushHist();
+            state.queuedRecords = [];
             state.view.dept = d.id;
             state.view.wing = '';
             state.view.room = '';
             logTraj('dept:' + d.id);
-            if (state.profile.group === 'PS' && ['Gestation', 'Farrowing', 'Nursery', 'Porker'].includes(d.id)) {
-              state.view.stage = 'wing';
-            } else if (d.id === 'GDU') {
-              state.view.stage = 'room';
-            } else {
-              state.view.room = d.id;
-              enterBatchGate();
+            sendTelemetryBeacon('ENTER_DEPT', d.id);
+
+            if (d.id === 'Exit') {
+              state.view.room = 'Exit';
+              state.view.formType = 'exit_sales';
+              state.view.stage = 'form';
+              renderView();
               return;
             }
-            renderView();
+            if (d.id === 'GDU') {
+              const curW = isoWeek(new Date());
+              state.currentBatch = { w1: String(curW), w2: String(wrap52(curW + 16)), w3: String(wrap52(curW + 19)) };
+              if (state.profile.group === 'GP') {
+                state.view.room = 'GDU';
+                state.view.stage = 'room_tiles';
+              } else {
+                state.view.stage = 'room';
+              }
+              renderView();
+              return;
+            }
+            if (state.profile.group === 'PS' && ['Gestation', 'Farrowing', 'Nursery', 'Porker'].includes(d.id)) {
+              state.view.stage = 'wing';
+              renderView();
+              return;
+            }
+            state.view.room = d.id;
+            enterBatchGate();
           }));
         });
         runTileFlip();
@@ -1368,7 +1820,7 @@
       if (state.view.stage === 'wing') {
         const cls = deptCls(state.view.dept);
         [{ code: 'A', label: t.sideA }, { code: 'B', label: t.sideB }].forEach(w => {
-          topGrid.appendChild(makeTile(w.label, state.view.dept, w.code, cls, () => {
+          topGrid.appendChild(makeTile(w.label, state.view.dept, w.code, cls, false, () => {
             pushHist();
             state.view.wing = w.code;
             logTraj('wing:' + w.code);
@@ -1388,24 +1840,22 @@
 
       if (state.view.stage === 'room') {
         const cls = deptCls(state.view.dept);
-        let rooms = [];
-        if (state.view.dept === 'GDU') {
-          rooms = state.profile.group === 'GP'
-            ? ['GDU', 'GDU 1', 'GDU 2', 'GDU 3', 'GDU 4', 'GDU 5', 'GDU 6', 'GDU 7', 'GDU 8']
-            : ['GDU 1', 'GDU 2', 'GDU 3', 'GDU 4', 'GDU 5', 'GDU 6', 'GDU 7', 'GDU 8'];
-        } else if (state.view.dept === 'Farrowing') {
-          rooms = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6'];
-        } else if (state.view.dept === 'Nursery') {
-          rooms = ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7'];
-        } else if (state.view.dept === 'Porker') {
-          for (let i = 1; i <= 8; i++) rooms.push(i + 'A', i + 'B');
-        }
+        const rooms = getRoomsForDept(state.view.dept, state.view.wing);
         rooms.forEach(r => {
-          topGrid.appendChild(makeTile(r, state.view.dept, r, cls, () => {
+          topGrid.appendChild(makeTile(r, state.view.dept, r, cls, false, () => {
             pushHist();
+            state.queuedRecords = [];
             state.view.room = r;
             logTraj('room:' + r);
-            enterBatchGate();
+            sendTelemetryBeacon('SELECT_ROOM', r);
+            if (state.view.dept === 'GDU') {
+              const curW = isoWeek(new Date());
+              state.currentBatch = { w1: String(curW), w2: String(wrap52(curW + 16)), w3: String(wrap52(curW + 19)) };
+              state.view.stage = 'room_tiles';
+              renderView();
+            } else {
+              enterBatchGate();
+            }
           }));
         });
         runTileFlip();
@@ -1445,9 +1895,7 @@
 
       panel.innerHTML = `
         <div class="sec-title">${t.batchGateTitle}</div>
-        <div style="font-size:13px; font-weight:700; color:#0369a1; margin-bottom:6px;">
-          ${[state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean).join(' › ')} · ${t.batchRemind}
-        </div>
+        <div class="field-hint">${[state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean).join(' › ')} · ${t.batchRemind}</div>
         <div class="batch-trio">
           <div class="batch-box">
             <label>${t.w1Label}</label>
@@ -1519,75 +1967,86 @@
       const dept = state.view.dept;
       const cls = deptCls(dept);
 
-      grid.appendChild(makeTile(t.tileFW, t.tileFWSub, 'H2O/FEED', cls, () => {
+      grid.appendChild(makeTile(t.tileFW, t.tileFWSub, '07:00/17:00', cls, false, () => {
         pushHist();
+        state.queuedRecords = [];
         state.view.formType = 'daily_fw';
         state.view.stage = 'form';
         renderView();
       }));
 
       if (dept === 'Farrowing') {
-        grid.appendChild(makeTile(t.tileSowIn, t.tileSowInSub, 'WED', cls, () => {
+        grid.appendChild(makeTile(t.tileSowIn, t.tileSowInSub, 'IN', cls, false, () => {
           pushHist();
+          state.queuedRecords = [];
           state.view.formType = 'farr_sow_in';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeTile(t.tileFarrRec, t.tileFarrRecSub, 'BORN', cls, () => {
+        grid.appendChild(makeTile(t.tileFarrRec, t.tileFarrRecSub, 'BORN', cls, false, () => {
           pushHist();
+          state.queuedRecords = [];
           state.view.formType = 'farr_birth';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeTile(t.tileWeanHead, t.tileWeanHeadSub, 'THU-1', cls, () => {
+        grid.appendChild(makeTile(t.tileWeanHead, t.tileWeanHeadSub, 'WEAN', cls, false, () => {
           pushHist();
+          state.queuedRecords = [];
           state.view.formType = 'farr_wean_head';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeTile(t.tileWeanWt, t.tileWeanWtSub, 'THU-2', cls, () => {
+        grid.appendChild(makeTile(t.tileWeanWt, t.tileWeanWtSub, 'WT', cls, false, () => {
           pushHist();
+          state.queuedRecords = [];
           state.view.formType = 'farr_wean_wt';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeTile(t.tileMal, t.tileMalSub, 'MAL', cls, () => {
+        grid.appendChild(makeTile(t.tileMal, t.tileMalSub, 'MAL', cls, false, () => {
           pushHist();
+          state.queuedRecords = [];
           state.view.formType = 'malformation';
           state.view.stage = 'form';
           renderView();
         }));
       } else if (dept === 'Gestation') {
-        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'AI', cls, () => {
+        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'AI', cls, false, () => {
           pushHist();
+          state.queuedRecords = [];
           state.view.formType = 'gestation';
           state.view.stage = 'form';
           renderView();
         }));
       } else if (dept === 'Boar House') {
-        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'SEMEN', cls, () => {
+        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'SEMEN', cls, false, () => {
           pushHist();
+          state.queuedRecords = [];
           state.view.formType = 'boar_semen';
           state.view.stage = 'form';
           renderView();
         }));
       } else if (dept === 'GDU') {
-        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'SELECT', cls, () => {
+        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'SELECT', cls, false, () => {
           pushHist();
+          state.queuedRecords = [];
           state.view.formType = 'conformation';
           state.view.stage = 'form';
           renderView();
         }));
       }
 
-      grid.appendChild(makeTile(t.tileTreat, t.tileTreatSub, 'RX', cls, () => {
+      grid.appendChild(makeTile(t.tileTreat, t.tileTreatSub, 'RX', cls, false, () => {
         pushHist();
+        state.queuedRecords = [];
         state.view.formType = 'treatment';
         state.view.stage = 'form';
         renderView();
       }));
-      grid.appendChild(makeTile(t.tileMort, t.tileMortSub, 'MORT', cls, () => {
+      grid.appendChild(makeTile(t.tileMort, t.tileMortSub, 'MORT', cls, false, () => {
         pushHist();
+        state.queuedRecords = [];
         state.view.formType = 'mortality';
         state.view.stage = 'form';
         renderView();
@@ -1596,18 +2055,19 @@
 
     function deptCls(d) {
       return {
+        'Boar House': 't-boar',
+        'GDU': 't-gdu',
         'Gestation': 't-gest',
         'Farrowing': 't-farr',
         'Nursery': 't-nurs',
         'Porker': 't-pork',
-        'Boar House': 't-boar',
-        'GDU': 't-gdu'
+        'Exit': 't-exit'
       }[d] || 't-ps';
     }
 
-    function makeTile(title, sub, badge, cls, onClick) {
+    function makeTile(title, sub, badge, cls, wide, onClick) {
       const div = document.createElement('div');
-      div.className = 'live-tile ' + cls;
+      div.className = 'live-tile ' + cls + (wide ? ' wide' : '');
       div.innerHTML = `
         <div>
           <div class="tile-title">${title}</div>
@@ -1635,6 +2095,57 @@
       const p = document.getElementById('extraPanel');
       p.classList.remove('hidden');
       p.innerHTML = `<div class="notice-box">${txt}</div>`;
+    }
+
+    function renderQueryBox() {
+      const p = document.getElementById('extraPanel');
+      p.classList.remove('hidden');
+      p.innerHTML = `
+        <div class="sec-title">Query Lookup</div>
+        <div class="chip-row" style="margin-bottom:8px;">
+          <button type="button" class="chip-btn selected" id="qCatSow" onclick="setQCat('sow_history')">Sow History</button>
+          <button type="button" class="chip-btn" id="qCatBoar" onclick="setQCat('boar_records')">Boar Records</button>
+        </div>
+        <input type="text" id="qEarInp" class="input-box" placeholder="Ear Tag" />
+        <button type="button" class="primary-btn" onclick="execQuery()">Search</button>
+        <div id="qOutBox" class="notice-box hidden"></div>
+      `;
+      state.qCat = 'sow_history';
+    }
+
+    function setQCat(c) {
+      state.qCat = c;
+      document.getElementById('qCatSow').classList.toggle('selected', c === 'sow_history');
+      document.getElementById('qCatBoar').classList.toggle('selected', c === 'boar_records');
+    }
+
+    async function execQuery() {
+      const ear = document.getElementById('qEarInp').value.trim();
+      const out = document.getElementById('qOutBox');
+      out.classList.remove('hidden');
+      out.textContent = '...';
+      try {
+        const url = `${CONFIG.GAS_URL}?action=query&token=${encodeURIComponent(CONFIG.API_TOKEN)}&pass=${encodeURIComponent(state.profile.code)}&category=${encodeURIComponent(state.qCat)}&ear_tag=${encodeURIComponent(ear)}&worker_name=${encodeURIComponent(state.workerName)}`;
+        const r = await fetch(url);
+        const j = await r.json();
+        out.textContent = j.ok ? JSON.stringify(j.data, null, 2) : (j.error || 'ERR');
+      } catch (e) {
+        out.textContent = String(e);
+      }
+    }
+
+    async function loadAdminTelemetry() {
+      const p = document.getElementById('extraPanel');
+      p.classList.remove('hidden');
+      p.innerHTML = '<div class="notice-box">...</div>';
+      try {
+        const url = `${CONFIG.GAS_URL}?action=telemetry_read&token=${encodeURIComponent(CONFIG.API_TOKEN)}&pass=${encodeURIComponent(state.profile.code)}`;
+        const r = await fetch(url);
+        const j = await r.json();
+        p.innerHTML = `<div class="notice-box">${j.ok ? JSON.stringify(j.data, null, 2) : (j.error || 'ERR')}</div>`;
+      } catch (e) {
+        p.innerHTML = `<div class="notice-box">${String(e)}</div>`;
+      }
     }
 
     function chips(key, opts, multi) {
@@ -1667,11 +2178,23 @@
       }
     }
 
+    // 強制多耳號必須用逗號 (,) 或句點 (.) 分隔，禁止只用空格分隔
+    function validateMultiEarString(rawStr) {
+      const s = String(rawStr || '').trim();
+      if (!s) return true;
+      if (/\s+/.test(s) && !s.includes(',') && !s.includes('.')) {
+        return false;
+      }
+      return true;
+    }
+
     function renderForm(panel) {
       const t = DICT[state.lang];
       const ft = state.view.formType;
       const today = new Date().toISOString().slice(0, 10);
       panel.classList.remove('hidden');
+
+      const symptomOpts = SYMPTOMS_HEAD_TO_TOE.map(s => ({ v: s.code, l: s[state.lang] }));
 
       let html = `
         <div class="field-block">
@@ -1683,8 +2206,10 @@
       if (ft === 'daily_fw') {
         html += `
           <div class="field-block"><label class="field-label">${t.lblHeadCount}</label><input type="number" id="f_head_count" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblWaterAM}</label><input type="number" step="0.01" id="f_water_meter_am" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblWaterPM}</label><input type="number" step="0.01" id="f_water_meter_pm" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblTempAM}</label><input type="number" step="0.1" id="f_temp_am_c" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblTempPM}</label><input type="number" step="0.1" id="f_temp_pm_c" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWaterAM}</label><input type="number" step="0.1" id="f_water_meter_am" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWaterPM}</label><input type="number" step="0.1" id="f_water_meter_pm" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblFeedCode}</label>${chips('feed_code', [
             '300','301','302','303','304','305','306','307','308',
             {v:'Other_1',l:t.optOther1},{v:'Other_2',l:t.optOther2},{v:'Other_3',l:t.optOther3},{v:'Other_4',l:t.optOther4}
@@ -1712,6 +2237,16 @@
           <div class="field-block"><label class="field-label">${t.lblWeanPigCount}</label><input type="number" id="f_weaned_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblWeanSowCount}</label><input type="number" id="f_weaned_sow_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
+          <hr style="margin:12px 0; border:0; border-top:1px dashed #cbd5e1;" />
+          <div class="sec-title">${t.lblDeferredBox}</div>
+          <div class="field-block"><label class="field-label">${t.lblDefSowCnt}</label><input type="number" id="f_deferred_sow_count" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblDefPigCnt}</label><input type="number" id="f_deferred_piglet_count" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblDefTargetBatch}</label><input type="text" id="f_deferred_target_batch" class="input-box" /></div>
+          <div class="field-block">
+            <label class="field-label">${t.lblDefSowTags}</label>
+            <div class="field-hint">${t.lblMultiEarHint}</div>
+            <textarea id="f_deferred_sow_tags" rows="3" class="input-box"></textarea>
+          </div>
         `;
       } else if (ft === 'farr_wean_wt') {
         html += `
@@ -1724,13 +2259,13 @@
         html += `
           <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblFarrowDate}</label><input type="date" id="f_farrow_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblMalCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
-          <div class="field-block"><label class="field-label">${t.lblMalSigns}</label>${chips('selected_items', [
-            {v:'skin',l:t.signSkin},{v:'limb',l:t.signLimb},{v:'downer',l:t.signDowner},{v:'head',l:t.signHead},
-            {v:'genital',l:t.signGenital},{v:'fever',l:t.signFever},{v:'pant',l:t.signPant},{v:'red',l:t.signRed},
-            {v:'diarrhea',l:t.signDiarrhea},{v:'other',l:t.signOther}
-          ], true)}</div>
+          <div class="field-block">
+            <label class="field-label">${t.lblEarTag}</label>
+            <div class="field-hint">${t.lblMultiEarHint}</div>
+            <input type="text" id="f_ear_tags_list" class="input-box" />
+          </div>
+          <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
+          <div class="field-block"><label class="field-label">${t.lblMalSigns}</label>${chips('selected_items', symptomOpts, true)}</div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblPhoto}</label><input type="file" id="f_photo_file" accept="image/*" class="input-box" /></div>
         `;
@@ -1748,7 +2283,11 @@
         html += `
           <div class="field-block"><label class="field-label">${t.lblBoarTag}</label><input type="text" id="f_boar_ear_tag" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblDate}</label><input type="date" id="f_collection_date" class="input-box" value="${today}" /></div>
-          <div class="field-block"><label class="field-label">${t.lblLibido}</label>${chips('libido_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-block">
+            <label class="field-label">${t.lblLibido}</label>
+            <div class="field-hint">${t.libidoHint}</div>
+            ${chips('libido_score', ['0','1','2','3','4','5'], false)}
+          </div>
           <div class="field-block"><label class="field-label">${t.lblVol}</label><input type="number" step="1" id="f_volume_ml" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblConc}</label><input type="number" step="0.01" id="f_concentration_100m_ml" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblMot}</label><input type="number" step="1" id="f_motility_pct" class="input-box" /></div>
@@ -1761,14 +2300,28 @@
           <div class="field-block"><label class="field-label">${t.lblSex}</label>${chips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBreed}</label>${chips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBirthDate}</label><input type="date" id="f_birth_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblTestDate}</label><input type="date" id="f_test_date" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblTestDate}</label><input type="date" id="f_test_date" class="input-box" value="${today}" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWeightMethod}</label>${chips('weight_method', [{v:'weighed',l:t.optWeighed},{v:'visual',l:t.optVisual}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblTestWt}</label><input type="number" step="0.1" id="f_test_weight_kg" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblLeftTeat}</label>${chips('left_teats', ['6','7','8','9','10'], false)}</div>
+          <div class="field-block">
+            <label class="field-label">${t.lblLeftTeat}</label>
+            <div class="field-hint">${t.teatDirHint}</div>
+            ${chips('left_teats', ['6','7','8','9','10'], false)}
+          </div>
           <div class="field-block"><label class="field-label">${t.lblRightTeat}</label>${chips('right_teats', ['6','7','8','9','10'], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblBlindTeat}</label>${chips('blind_teats', ['0','1','2','3','4'], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblFrontLeg}</label>${chips('front_leg_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblLeftBlind}</label>${chips('left_blind_teats', ['0','1','2','3','4'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblRightBlind}</label>${chips('right_blind_teats', ['0','1','2','3','4'], false)}</div>
+          <div class="field-block">
+            <label class="field-label">${t.lblFrontLeg}</label>
+            <div class="field-hint">${t.legHint}</div>
+            ${chips('front_leg_score', ['1','2','3','4','5'], false)}
+          </div>
           <div class="field-block"><label class="field-label">${t.lblRearLeg}</label>${chips('rear_leg_score', ['1','2','3','4','5'], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblBodyLen}</label><input type="number" step="0.5" id="f_body_length_cm" class="input-box" /></div>
+          <div class="field-block">
+            <label class="field-label">${t.lblBodyLen}</label>
+            <div class="field-hint">${t.bodyLenHint}</div>
+            <input type="number" step="0.5" id="f_body_length_cm" class="input-box" />
+          </div>
           <div class="field-block"><label class="field-label">${t.lblShoulderW}</label><input type="number" step="0.5" id="f_shoulder_width_cm" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblChestW}</label><input type="number" step="0.5" id="f_chest_width_cm" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblVulva}</label>${chips('vulva_status', [{v:'Normal',l:t.optNormal},{v:'Small',l:t.optSmall},{v:'Upturned',l:t.optUpturned},{v:'NA',l:t.optNA}], false)}</div>
@@ -1776,22 +2329,150 @@
         `;
       } else if (ft === 'treatment') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblTargetScope}</label>${chips('target_scope', [{v:'individual',l:t.optIndivTags},{v:'litter_pen',l:t.optUnnotchedLitter}], false)}</div>
+          <div class="field-block">
+            <label class="field-label">${t.lblEarTag}</label>
+            <div class="field-hint">${t.lblMultiEarHint}</div>
+            <input type="text" id="f_ear_tags_list" class="input-box" />
+          </div>
+          <div class="field-block"><label class="field-label">${t.lblLitterLoc}</label><input type="text" id="f_litter_pen_location" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
           <div class="field-block"><label class="field-label">${t.lblMedOpt}</label>${chips('medication_option', [{v:'Reserved_1',l:t.optMedReserved}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblTreatReason}</label><input type="text" id="f_treatment_reason" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSymptoms}</label>${chips('symptoms_codes', symptomOpts, true)}</div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
+          <div class="field-hint" style="color:#b91c1c; font-weight:800;">${t.vetReminder}</div>
         `;
       } else if (ft === 'mortality') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblTargetScope}</label>${chips('target_scope', [{v:'individual',l:t.optIndivTags},{v:'litter_pen',l:t.optUnnotchedLitter}], false)}</div>
+          <div class="field-block">
+            <label class="field-label">${t.lblEarTag}</label>
+            <div class="field-hint">${t.lblMultiEarHint}</div>
+            <input type="text" id="f_ear_tags_list" class="input-box" />
+          </div>
+          <div class="field-block"><label class="field-label">${t.lblLitterLoc}</label><input type="text" id="f_litter_pen_location" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSymptoms}</label>${chips('symptoms_codes', symptomOpts, true)}</div>
+          <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
+          <div class="field-hint" style="color:#b91c1c; font-weight:800;">${t.vetReminder}</div>
+        `;
+      } else if (ft === 'exit_sales') {
+        html += `
+          <div class="field-block"><label class="field-label">${t.lblExitReason}</label>${chips('exit_reason', [{v:'Sale',l:t.optSale},{v:'Cull',l:t.optCull},{v:'Mortality',l:t.optDeath}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblPigCat}</label>${chips('pig_category', [{v:'Boar',l:t.optCatBoar},{v:'Sow',l:t.optCatSow},{v:'Piglet',l:t.optCatPiglet},{v:'Porker',l:t.optCatPorker}], false)}</div>
+          <div class="field-block"><label class="field-label">Source Wing / Room</label><input type="text" id="f_source_room" class="input-box" placeholder="e.g. PA1A / F2 / GA" /></div>
+          <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_head_count" class="input-box" /></div>
+          <div class="field-block">
+            <label class="field-label">${t.lblEarTag}</label>
+            <div class="field-hint">${t.lblMultiEarHint}</div>
+            <textarea id="f_ear_tags_list" rows="2" class="input-box"></textarea>
+          </div>
+          <div class="field-block"><label class="field-label">${t.lblTotalWt}</label><input type="number" step="0.1" id="f_total_weight_kg" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
         `;
       }
 
       html += `
-        <button type="button" class="primary-btn" id="btnSendForm" onclick="sendForm()">${t.submitBtn}</button>
+        <button type="button" class="secondary-btn" onclick="addNextEntryToQueue()">${t.addNextBtn}</button>
+        <div id="queuedCartBox" class="cart-list-box ${state.queuedRecords.length ? '' : 'hidden'}"></div>
+        <button type="button" class="primary-btn" id="btnSendForm" onclick="submitAllQueuedAndCurrent()">${t.submitAllBtn}</button>
         <div id="stageTracker" class="stage-tracker hidden"></div>
       `;
       panel.innerHTML = html;
+      refreshCartUI();
+    }
+
+    async function collectCurrentFormItem() {
+      const t = DICT[state.lang];
+      const data = {};
+      document.querySelectorAll('#formPanel [id^="f_"]').forEach(el => {
+        if (el.type === 'file') return;
+        data[el.id.replace(/^f_/, '')] = el.value;
+      });
+      Object.keys(state.chips).forEach(k => { data[k] = state.chips[k]; });
+
+      const multiFields = ['ear_tags_list', 'deferred_sow_tags'];
+      for (const mf of multiFields) {
+        if (data[mf] && !validateMultiEarString(data[mf])) {
+          alert(t.errCommaDot);
+          playTone('error');
+          return null;
+        }
+      }
+
+      if (state.view.formType === 'gestation' && data.breeding_date) {
+        const nowTime = new Date().toTimeString().slice(0, 8);
+        data.breeding_datetime_hidden = `${data.breeding_date} ${nowTime}`;
+      }
+      if (state.view.formType.startsWith('farr_')) {
+        data.sub_action = state.view.formType;
+      }
+      if (state.view.formType === 'treatment' || state.view.formType === 'mortality') {
+        data.event_type = state.view.formType;
+      }
+
+      let photo = null;
+      const photoInput = document.getElementById('f_photo_file');
+      if (photoInput && photoInput.files && photoInput.files[0]) {
+        photo = await compressPhoto(photoInput.files[0]);
+      }
+
+      return { data, photo };
+    }
+
+    function hasAnyInputData(dataObj) {
+      const ignoreKeys = new Set(['record_date', 'wean_date', 'collection_date', 'test_date']);
+      return Object.keys(dataObj).some(k => {
+        if (ignoreKeys.has(k)) return false;
+        const v = dataObj[k];
+        if (Array.isArray(v)) return v.length > 0;
+        return String(v || '').trim() !== '';
+      });
+    }
+
+    async function addNextEntryToQueue() {
+      const item = await collectCurrentFormItem();
+      if (!item) return;
+      if (!hasAnyInputData(item.data)) return;
+
+      state.queuedRecords.push(item);
+      playTone('step');
+      logTraj('add_next:' + state.queuedRecords.length);
+
+      document.querySelectorAll('#formPanel [id^="f_"]').forEach(el => {
+        if (el.type === 'date') return;
+        if (el.type === 'file') { el.value = ''; return; }
+        el.value = '';
+      });
+      document.querySelectorAll('#formPanel .chip-btn.selected').forEach(b => b.classList.remove('selected'));
+      Object.keys(state.chips).forEach(k => {
+        state.chips[k] = Array.isArray(state.chips[k]) ? [] : '';
+      });
+
+      refreshCartUI();
+    }
+
+    function removeQueuedItem(idx) {
+      state.queuedRecords.splice(idx, 1);
+      refreshCartUI();
+    }
+
+    function refreshCartUI() {
+      const t = DICT[state.lang];
+      const box = document.getElementById('queuedCartBox');
+      if (!box) return;
+      if (state.queuedRecords.length === 0) {
+        box.classList.add('hidden');
+        return;
+      }
+      box.classList.remove('hidden');
+      box.innerHTML = `<div style="font-size:13px; font-weight:800;">${t.queuedListTitle} (${state.queuedRecords.length})</div>` +
+        state.queuedRecords.map((rec, i) => {
+          const d = rec.data;
+          const label = d.ear_tag || d.sow_ear_tag || d.boar_ear_tag || d.ear_tags_list || d.litter_pen_location || ('#' + (i + 1));
+          return `<div class="cart-item"><span>#${i + 1} · ${label}</span><button type="button" class="del-mini-btn" onclick="removeQueuedItem(${i})">${t.delBtn}</button></div>`;
+        }).join('');
     }
 
     function setStageUI(el, cls, text) {
@@ -1826,46 +2507,42 @@
       });
     }
 
-    async function sendForm() {
+    async function submitAllQueuedAndCurrent() {
       const t = DICT[state.lang];
+      if (!state.workerName) {
+        alert(t.errNoName);
+        document.getElementById('workerNameInput').focus();
+        playTone('error');
+        return;
+      }
+
+      const currentItem = await collectCurrentFormItem();
+      if (!currentItem) return;
+
+      const allToSend = [...state.queuedRecords];
+      if (hasAnyInputData(currentItem.data)) {
+        allToSend.push(currentItem);
+      }
+      if (allToSend.length === 0) return;
+
       const btn = document.getElementById('btnSendForm');
       const stEl = document.getElementById('stageTracker');
       btn.disabled = true;
       setStageUI(stEl, 'st-prep', t.step1Prep);
 
-      const data = {};
-      document.querySelectorAll('#formPanel [id^="f_"]').forEach(el => {
-        if (el.type === 'file') return;
-        data[el.id.replace(/^f_/, '')] = el.value;
-      });
-      Object.keys(state.chips).forEach(k => { data[k] = state.chips[k]; });
-
       const ft = state.view.formType;
       let backendModule = 'daily_fw';
       if (ft === 'daily_fw') backendModule = 'daily_fw';
       else if (ft === 'conformation') backendModule = 'conformation';
-      else if (ft === 'gestation') {
-        backendModule = 'gestation';
-        const nowTime = new Date().toTimeString().slice(0, 8);
-        if (data.breeding_date) data.breeding_datetime_hidden = `${data.breeding_date} ${nowTime}`;
-      } else if (ft.startsWith('farr_')) {
-        backendModule = 'farrowing';
-        data.sub_action = ft;
-      } else if (ft === 'boar_semen') backendModule = 'boar_semen';
+      else if (ft === 'gestation') backendModule = 'gestation';
+      else if (ft.startsWith('farr_')) backendModule = 'farrowing';
+      else if (ft === 'boar_semen') backendModule = 'boar_semen';
       else if (ft === 'malformation') backendModule = 'malformation_disease';
-      else if (ft === 'treatment' || ft === 'mortality') {
-        backendModule = 'treatment_mortality';
-        data.event_type = ft;
-      }
-
-      let photo = null;
-      const photoInput = document.getElementById('f_photo_file');
-      if (photoInput && photoInput.files && photoInput.files[0]) {
-        photo = await compressPhoto(photoInput.files[0]);
-      }
+      else if (ft === 'treatment' || ft === 'mortality') backendModule = 'treatment_mortality';
+      else if (ft === 'exit_sales') backendModule = 'exit_sales';
 
       setStageUI(stEl, 'st-sending', t.step2Send);
-      logTraj('submit:' + backendModule);
+      logTraj('submit_batch:' + backendModule + 'x' + allToSend.length);
 
       const payload = {
         token: CONFIG.API_TOKEN,
@@ -1878,9 +2555,9 @@
           batch: state.currentBatch,
           module: backendModule
         },
-        data: data,
-        photo: photo,
+        records: allToSend,
         meta: {
+          worker_name: state.workerName,
           entered_at: state.enteredAt,
           submitted_at: new Date().toISOString(),
           dwell_seconds: Math.max(1, Math.round((Date.now() - state.enteredMs) / 1000)),
@@ -1902,8 +2579,11 @@
         });
         const j = await res.json();
         if (j && j.ok) {
-          setStageUI(stEl, 'st-done', t.step3Done + (j.rowId || 'OK'));
-          playAlertTone('success');
+          setStageUI(stEl, 'st-done', t.step3Done + (j.rowId || 'OK') + ` (${allToSend.length})`);
+          playTone('success');
+          state.queuedRecords = [];
+          refreshCartUI();
+          renderSymmetricalDiaryReport(allToSend, backendModule);
         } else {
           throw new Error(j && j.error ? j.error : 'ERR');
         }
@@ -1914,9 +2594,182 @@
         localStorage.setItem(CONFIG.KEYS.QUEUE, JSON.stringify(q));
         refreshQueuePill();
         setStageUI(stEl, 'st-queued', t.step3Queued);
-        playAlertTone('queued');
+        playTone('step');
+        renderSymmetricalDiaryReport(allToSend, backendModule);
       }
       btn.disabled = false;
+    }
+
+    // 左右對稱建築日報總結卡片 + 下載 YYYYMMDD Room diary report.png
+    function renderSymmetricalDiaryReport(records, mod) {
+      const t = DICT[state.lang];
+      const diaryPanel = document.getElementById('diaryPanel');
+      diaryPanel.classList.remove('hidden');
+
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const ymd = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
+      const displayDt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+      let waterM3 = 0, waterL = 0, feedBags = 0, feedKg = 0, headCnt = 0, mortCnt = 0;
+      const mortTags = [];
+      records.forEach(r => {
+        const d = r.data || {};
+        const am = parseFloat(d.water_meter_am);
+        const pm = parseFloat(d.water_meter_pm);
+        if (!isNaN(am) && !isNaN(pm) && pm >= am) {
+          waterM3 += (pm - am);
+          waterL += (pm - am) * 1000;
+        }
+        const bags = parseFloat(d.feed_bags);
+        if (!isNaN(bags)) {
+          feedBags += bags;
+          feedKg += bags * 50;
+        }
+        const hc = parseInt(d.head_count, 10);
+        if (!isNaN(hc)) headCnt += hc;
+        if (d.event_type === 'mortality' || d.exit_reason === 'Mortality') {
+          const ac = parseInt(d.affected_count || d.head_count || '1', 10) || 1;
+          mortCnt += ac;
+          if (d.ear_tags_list) mortTags.push(d.ear_tags_list);
+        }
+      });
+
+      const activeKey = `${state.view.dept}_${state.view.wing || 'SINGLE'}`;
+      const roomLabel = [state.profile.group, state.view.wing, state.view.room].filter(Boolean).join('-');
+      const activeSummaryLines = [
+        `${roomLabel} (${records.length})`,
+        headCnt ? `Heads: ${headCnt}` : '',
+        waterM3 > 0 ? `Water: ${waterM3.toFixed(1)} m³ (${waterL.toFixed(1)} L)` : '',
+        feedBags > 0 ? `Feed: ${feedBags} bags (${feedKg.toFixed(1)} kg)` : '',
+        mortCnt > 0 ? `Mort: ${mortCnt} [${mortTags.join(',')}]` : ''
+      ].filter(Boolean);
+
+      const symZones = [
+        { key: 'Boar House_SINGLE', title: 'Boar House', color: '#cfd8dc' },
+        { key: 'GDU_SINGLE', title: 'GDU', color: '#f3e5f5' },
+        { key: 'Gestation_A', title: 'Gestation A', color: '#e0f2f1' },
+        { key: 'Gestation_B', title: 'Gestation B', color: '#e0f2f1' },
+        { key: 'Farrowing_A', title: 'Farrowing A', color: '#ffebee' },
+        { key: 'Farrowing_B', title: 'Farrowing B', color: '#ffebee' },
+        { key: 'Nursery_A', title: 'Nursery A', color: '#fffde7' },
+        { key: 'Nursery_B', title: 'Nursery B', color: '#fffde7' },
+        { key: 'Porker_A', title: 'Porker A (1A-8B)', color: '#eceff1' },
+        { key: 'Porker_B', title: 'Porker B (1A-8B)', color: '#eceff1' }
+      ];
+
+      state.lastDiarySummary = {
+        fileName: `${ymd} ${roomLabel || 'Room'} diary report.png`,
+        displayDt,
+        workerName: state.workerName,
+        activeKey,
+        activeSummaryLines,
+        symZones,
+        isExit: state.view.dept === 'Exit'
+      };
+
+      const cellsHtml = symZones.map(z => {
+        const isAct = z.key === activeKey;
+        const bg = isAct ? z.color : '#f1f5f9';
+        const bodyTxt = isAct ? activeSummaryLines.join('<br>') : '-';
+        return `<div class="diary-cell ${isAct ? 'active-zone' : ''}" style="background:${bg};">
+          <div class="diary-cell-title">${z.title}</div>
+          <div>${bodyTxt}</div>
+        </div>`;
+      }).join('');
+
+      const exitActive = state.view.dept === 'Exit';
+      diaryPanel.innerHTML = `
+        <div class="sec-title">${t.diaryHeader}</div>
+        <div class="field-hint">${t.diaryRemind}</div>
+        <div class="diary-report-card">
+          <div class="diary-top-dt">${displayDt}</div>
+          <div class="diary-sym-grid">${cellsHtml}</div>
+          <div class="diary-cell ${exitActive ? 'active-zone' : ''}" style="margin-top:6px; background:${exitActive ? '#fff3e0' : '#f1f5f9'};">
+            <div class="diary-cell-title">Exit / Sales / Cull / Mortality</div>
+            <div>${exitActive ? activeSummaryLines.join('<br>') : '-'}</div>
+          </div>
+          <div class="diary-footer-sign">
+            <span>${state.workerName}</span>
+            <span>${displayDt}</span>
+          </div>
+        </div>
+        <button type="button" class="primary-btn" onclick="downloadDiaryPng()">${t.downloadPngBtn}</button>
+      `;
+    }
+
+    function downloadDiaryPng() {
+      const info = state.lastDiarySummary;
+      if (!info) return;
+      const canvas = document.createElement('canvas');
+      canvas.width = 720;
+      canvas.height = 920;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(16, 16, 688, 888);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 30px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(info.displayDt, 360, 62);
+
+      const colW = 326, rowH = 122, gapX = 16, gapY = 12;
+      info.symZones.forEach((z, i) => {
+        const col = i % 2;
+        const row = Math.floor(i / 2);
+        const x = 26 + col * (colW + gapX);
+        const y = 88 + row * (rowH + gapY);
+        const isAct = z.key === info.activeKey;
+
+        ctx.fillStyle = isAct ? z.color : '#f1f5f9';
+        ctx.fillRect(x, y, colW, rowH);
+        ctx.strokeStyle = isAct ? '#0f172a' : '#cbd5e1';
+        ctx.lineWidth = isAct ? 3 : 1.5;
+        ctx.strokeRect(x, y, colW, rowH);
+
+        ctx.textAlign = 'left';
+        ctx.fillStyle = isAct ? '#0f172a' : '#64748b';
+        ctx.font = 'bold 18px sans-serif';
+        ctx.fillText(z.title, x + 12, y + 28);
+
+        if (isAct) {
+          ctx.font = 'bold 15px sans-serif';
+          info.activeSummaryLines.forEach((line, li) => {
+            ctx.fillText(line, x + 12, y + 52 + li * 20);
+          });
+        }
+      });
+
+      const exY = 88 + 5 * (rowH + gapY);
+      ctx.fillStyle = info.isExit ? '#fff3e0' : '#f1f5f9';
+      ctx.fillRect(26, exY, 668, 86);
+      ctx.strokeStyle = info.isExit ? '#0f172a' : '#cbd5e1';
+      ctx.strokeRect(26, exY, 668, 86);
+      ctx.textAlign = 'left';
+      ctx.fillStyle = info.isExit ? '#0f172a' : '#64748b';
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText('Exit / Sales / Cull / Mortality', 38, exY + 28);
+      if (info.isExit) {
+        ctx.font = 'bold 15px sans-serif';
+        ctx.fillText(info.activeSummaryLines.join(' | '), 38, exY + 56);
+      }
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(info.workerName, 28, 882);
+      ctx.textAlign = 'right';
+      ctx.fillText(info.displayDt, 692, 882);
+
+      const link = document.createElement('a');
+      link.download = info.fileName;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      playTone('success');
     }
 
     function getQueue() {
@@ -1960,6 +2813,9 @@
 
     (function init() {
       state.soundOn = localStorage.getItem(CONFIG.KEYS.SOUND) !== '0';
+      state.workerName = localStorage.getItem(CONFIG.KEYS.WORKER) || '';
+      document.getElementById('workerNameInput').value = state.workerName;
+
       state.lang = detectSystemLang();
       document.documentElement.lang = state.lang;
       document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
@@ -1979,7 +2835,6 @@
         }
       }
     })();
-    // === [END MODULE 4] ===
   </script>
 </body>
 </html>
