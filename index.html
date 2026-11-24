@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1e293b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>GLA Field Hub</title>
+  <style>
+    /* === [START MODULE 3: METRO TILE & MULTI-TIER UI STYLES] === */
+    :root {
+      --bg-app: #0f172a;
+      --bg-panel: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-subtle: rgba(255, 255, 255, 0.12);
+
+      /* 指定色系規範 */
+      --gp-main: #5b2c6f;
+      --gp-mid: #7d3c98;
+      --gp-light: #9b59b6;
+
+      --ps-main: #2e7d32;
+      --gest-main: #1b5e20;
+      --gest-sub: #2e8b57;
+
+      --farr-main: #b71c1c;
+      --farr-sub: #d32f2f;
+
+      --nurs-main: #fbc02d;
+      --nurs-sub: #f9a825;
+
+      --pork-main: #90a4ae;
+      --pork-sub: #b0bec5;
+
+      --boar-main: #37474f;
+      --boar-sub: #455a64;
+
+      --gdu-main: #9575cd;
+      --gdu-sub: #b39ddb;
+
+      --maint-main: #ef6c00;
+      --maint-sub: #fb8c00;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .lang-btn, .top-action-btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+    }
+
+    .status-banner {
+      padding: 8px 14px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #1e293b;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .queue-badge {
+      background: #d97706;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    /* 密碼登入閘道 */
+    .lock-card {
+      max-width: 420px;
+      margin: 40px auto;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .lock-card h2 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+    }
+
+    .input-control, .select-control, .textarea-control {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 4px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 15px;
+      margin-top: 6px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 13px;
+      border: none;
+      border-radius: 4px;
+      background: #0284c7;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Windows Phone Metro 動態磚 */
+    .metro-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .metro-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .live-tile {
+      position: relative;
+      min-height: 112px;
+      padding: 14px;
+      border-radius: 2px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.14s ease, filter 0.14s ease;
+      perspective: 700px;
+      user-select: none;
+      overflow: hidden;
+    }
+
+    .live-tile:active {
+      transform: scale(0.96) rotateX(4deg);
+      filter: brightness(1.08);
+    }
+
+    .live-tile.wide {
+      grid-column: span 2;
+    }
+
+    .tile-flip-inner {
+      transition: transform 0.55s ease, opacity 0.4s ease;
+    }
+
+    .live-tile.flipped .tile-flip-inner {
+      transform: rotateX(12deg) translateY(-2px);
+    }
+
+    .tile-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .tile-sub {
+      font-size: 12px;
+      opacity: 0.92;
+      margin-top: 6px;
+    }
+
+    .tile-badge {
+      align-self: flex-end;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      background: rgba(0, 0, 0, 0.24);
+      border-radius: 2px;
+    }
+
+    /* 色系類別 */
+    .c-gp { background: var(--gp-main); color: #fff; }
+    .c-gp-mid { background: var(--gp-mid); color: #fff; }
+    .c-gp-light { background: var(--gp-light); color: #fff; }
+
+    .c-ps { background: var(--ps-main); color: #fff; }
+    .c-gest { background: var(--gest-main); color: #fff; }
+    .c-gest-sub { background: var(--gest-sub); color: #fff; }
+
+    .c-farr { background: var(--farr-main); color: #fff; }
+    .c-farr-sub { background: var(--farr-sub); color: #fff; }
+
+    .c-nurs { background: var(--nurs-main); color: #111827; }
+    .c-nurs-sub { background: var(--nurs-sub); color: #111827; }
+
+    .c-pork { background: var(--pork-main); color: #0f172a; }
+    .c-pork-sub { background: var(--pork-sub); color: #0f172a; }
+
+    .c-boar { background: var(--boar-main); color: #fff; }
+    .c-boar-sub { background: var(--boar-sub); color: #fff; }
+
+    .c-gdu { background: var(--gdu-main); color: #fff; }
+    .c-gdu-sub { background: var(--gdu-sub); color: #111827; }
+
+    .c-maint { background: var(--maint-main); color: #fff; }
+    .c-maint-sub { background: var(--maint-sub); color: #111827; }
+
+    /* 點選式選項群組 */
+    .section-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .field-group {
+      margin-bottom: 14px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 6px;
+    }
+
+    .choice-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .choice-chip {
+      padding: 9px 13px;
+      border-radius: 4px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .choice-chip.selected {
+      background: #0284c7;
+      border-color: #7dd3fc;
+      color: #fff;
+    }
+
+    .breadcrumb-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .back-btn {
+      background: #334155;
+      color: #fff;
+      border: 1px solid #64748b;
+      padding: 7px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .result-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 4px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+    /* === [END MODULE 3] === */
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-title" id="appTitle">GLA Field Hub</div>
+    <div class="header-controls">
+      <button class="lang-btn" data-lang="zh-TW" onclick="setLanguage('zh-TW')">繁中</button>
+      <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" data-lang="ms" onclick="setLanguage('ms')">BM</button>
+      <button class="top-action-btn" id="btnSwitchTier" onclick="openTierModal()">Tier / Pass</button>
+      <button class="top-action-btn" id="btnLogout" onclick="logoutSession()">Reset</button>
+    </div>
+  </header>
+
+  <div class="status-banner">
+    <span id="sessionInfo">Role: -</span>
+    <div>
+      <span id="netStatus">Online</span>
+      <span class="queue-badge hidden" id="queueBadge" onclick="flushOfflineQueue()">0</span>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- 密碼驗證畫面（首次進入需 gla8888，可記住於手機） -->
+    <section id="loginView" class="lock-card">
+      <h2 id="loginHeading">System Access</h2>
+      <label class="field-label" id="loginLabel" for="passInput">Password</label>
+      <input type="password" id="passInput" class="input-control" placeholder="gla8888" autocomplete="off" />
+      <button class="primary-btn" id="btnLogin" onclick="submitPassword()">Enter</button>
+      <div id="loginMsg" class="tile-sub" style="color:#fca5a5;"></div>
+    </section>
+
+    <!-- 主系統畫面 -->
+    <section id="mainView" class="hidden">
+      <div class="breadcrumb-bar">
+        <button class="back-btn hidden" id="btnBack" onclick="navigateBack()">← Back</button>
+        <div id="pathIndicator" style="font-size:13px; color:#cbd5e1;"></div>
+      </div>
+
+      <!-- 層級解鎖方塊列（依密碼層級顯示 gla9999 查詢 / 510067 報表 / qwert 管理） -->
+      <div id="tierModulesBar" class="metro-grid"></div>
+
+      <!-- 動態磚主畫布 -->
+      <div id="tileCanvas" class="metro-grid"></div>
+
+      <!-- 填報表單區 -->
+      <div id="formContainer" class="section-box hidden"></div>
+
+      <!-- 查詢方塊區（gla9999） -->
+      <div id="queryContainer" class="section-box hidden"></div>
+
+      <!-- 分析報表區（510067） -->
+      <div id="reportContainer" class="section-box hidden"></div>
+
+      <!-- 最高權限區（qwert） -->
+      <div id="adminContainer" class="section-box hidden"></div>
+    </section>
+  </main>
+
+  <script>
+    // === [START MODULE 4: TELEMETRY, IMAGE COMPRESSION, OFFLINE QUEUE & APP LOGIC] ===
+    const APP_CONFIG = {
+      GAS_WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbyEod8PcLLZYsglmyef9s3AHkzD4gpitKXQDew1YS6fqhlofZp43_iA9uw1SwQzzXiqRg/exec',
+      API_TOKEN: 'GLA_FIELD_INTAKE_TOKEN_2026',
+      PASSWORDS: {
+        worker: 'gla8888',
+        query: 'gla9999',
+        report: '510067',
+        admin: 'qwert'
+      },
+      STORAGE_KEYS: {
+        LANG: 'gla_hub_lang',
+        TIER: 'gla_hub_tier',
+        QUEUE: 'gla_hub_offline_queue',
+        STATS: 'gla_hub_today_counts'
+      },
+      MAX_PHOTO_DIM: 800,
+      PHOTO_QUALITY: 0.65
+    };
+
+    const I18N = {
+      'zh-TW': {
+        title: 'GLA 現場動態採集系統',
+        loginHeading: '系統登入驗證',
+        loginLabel: '請輸入密碼（小寫，驗證後記住於本機）',
+        enterBtn: '進入系統',
+        invalidPass: '密碼錯誤，請確認輸入內容。',
+        back: '返回上一層',
+        tierBtn: '層級/密碼',
+        resetBtn: '清除記憶',
+        gpTile: 'GP 核心群',
+        gpSub: '紫色系 · 不強制 A/B',
+        psTile: 'PS 商業擴群',
+        psSub: '草綠主磚 · A/B 雙翼分流',
+        queryTile: '資料查詢方塊 (gla9999)',
+        querySub: '巢狀查詢：母豬/公豬/等級',
+        reportTile: '綜合分析報表 (510067)',
+        reportSub: '分享檢視區',
+        adminTile: '最高全權限 (qwert)',
+        adminSub: '系統稽核與管理預留',
+        submitBtn: '送出紀錄',
+        savedOnline: '已成功寫入資料庫，單號：',
+        savedOffline: '目前網路不穩，已暫存於本機待補傳。',
+        malTitle: '活體畸形與臨床異常登記',
+        sowTagLabel: '母豬耳號（產房未打耳號仔豬必填）',
+        farrowDateLabel: '分娩日期（產房未打耳號仔豬必填）',
+        pigEarTagLabel: '個體耳號（已有耳號者填寫）',
+        affectedCountLabel: '畸形 / 異常頭數（整數）',
+        categoryLabel: '異常大類（點選）',
+        itemsLabel: '具體外觀 / 畸形 / 部位（可多選點選）',
+        briefNoteLabel: '少見異常或補充說明（簡短填寫）',
+        photoLabel: '拍照或選取照片（系統自動縮小壓縮）'
+      },
+      'en': {
+        title: 'GLA Field Data Hub',
+        loginHeading: 'System Access',
+        loginLabel: 'Enter Password (lowercase, remembered on device)',
+        enterBtn: 'Enter',
+        invalidPass: 'Invalid password.',
+        back: 'Back',
+        tierBtn: 'Tier / Pass',
+        resetBtn: 'Reset',
+        gpTile: 'GP Nucleus',
+        gpSub: 'Purple · No A/B Wing Required',
+        psTile: 'PS Commercial',
+        psSub: 'Grass Green · Wing A / B',
+        queryTile: 'Query Tiles (gla9999)',
+        querySub: 'Nested Lookup: Sow / Boar / Grade',
+        reportTile: 'Shared Reports (510067)',
+        reportSub: 'Analytical Summary',
+        adminTile: 'Full Admin (qwert)',
+        adminSub: 'Audit & Control Reserved',
+        submitBtn: 'Submit Record',
+        savedOnline: 'Saved to database. ID: ',
+        savedOffline: 'Saved locally (offline queue).',
+        malTitle: 'Live Malformation & Clinical Log',
+        sowTagLabel: 'Sow Ear Tag (Required for unnotched piglets)',
+        farrowDateLabel: 'Farrowing Date (Required for unnotched piglets)',
+        pigEarTagLabel: 'Individual Ear Tag (If tagged)',
+        affectedCountLabel: 'Affected Count (Integer)',
+        categoryLabel: 'Category (Tap)',
+        itemsLabel: 'Signs / Malformation / Organ (Tap)',
+        briefNoteLabel: 'Rare Anomaly / Brief Note',
+        photoLabel: 'Photo (Auto-compressed)'
+      },
+      'ms': {
+        title: 'Sistem Data Ladang GLA',
+        loginHeading: 'Akses Sistem',
+        loginLabel: 'Masukkan Kata Laluan (huruf kecil, diingat pada peranti)',
+        enterBtn: 'Masuk',
+        invalidPass: 'Kata laluan tidak sah.',
+        back: 'Kembali',
+        tierBtn: 'Tahap / Laluan',
+        resetBtn: 'Set Semula',
+        gpTile: 'Kumpulan GP',
+        gpSub: 'Ungu · Tanpa Sayap A/B',
+        psTile: 'Kumpulan PS',
+        psSub: 'Hijau Rumput · Sayap A / B',
+        queryTile: 'Carian Data (gla9999)',
+        querySub: 'Carian Berperingkat: Induk / Pejantan',
+        reportTile: 'Laporan Analisis (510067)',
+        reportSub: 'Ringkasan Dikongsi',
+        adminTile: 'Akses Penuh (qwert)',
+        adminSub: 'Audit & Kawalan Sistem',
+        submitBtn: 'Hantar Rekod',
+        savedOnline: 'Berjaya disimpan. ID: ',
+        savedOffline: 'Disimpan sementara di peranti.',
+        malTitle: 'Rekod Kecacatan Hidup & Klinikal',
+        sowTagLabel: 'No. Telinga Induk (Anak babi belum bertanda)',
+        farrowDateLabel: 'Tarikh Beranak (Anak babi belum bertanda)',
+        pigEarTagLabel: 'No. Telinga Individu (Jika ada)',
+        affectedCountLabel: 'Bilangan Terjejas (Nombor bulat)',
+        categoryLabel: 'Kategori (Pilih)',
+        itemsLabel: 'Tanda / Kecacatan / Organ (Pilih)',
+        briefNoteLabel: 'Catatan Ringkas / Kes Jarang',
+        photoLabel: 'Foto (Dimampatkan automatik)'
+      }
+    };
+
+    const state = {
+      lang: 'zh-TW',
+      tier: '',
+      enteredAt: new Date().toISOString(),
+      enteredMs: Date.now(),
+      trajectory: [],
+      navStack: [],
+      context: {
+        farmMode: '',
+        wing: '',
+        location: '',
+        module: ''
+      },
+      formSelections: {}
+    };
+
+    function detectInitialLanguage() {
+      const saved = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.LANG);
+      if (saved && I18N[saved]) return saved;
+      const navLangs = navigator.languages || [navigator.language || 'zh-TW'];
+      const joined = navLangs.join(',').toLowerCase();
+      if (joined.includes('ms') || joined.includes('my')) return 'ms';
+      if (joined.includes('en')) return 'en';
+      return 'zh-TW';
+    }
+
+    function setLanguage(lang) {
+      if (!I18N[lang]) return;
+      state.lang = lang;
+      document.documentElement.lang = lang;
+      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.LANG, lang);
+      recordTrajectory('lang:' + lang);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      applyTexts();
+      renderCurrentView();
+    }
+
+    function applyTexts() {
+      const t = I18N[state.lang];
+      document.getElementById('appTitle').textContent = t.title;
+      document.getElementById('loginHeading').textContent = t.loginHeading;
+      document.getElementById('loginLabel').textContent = t.loginLabel;
+      document.getElementById('btnLogin').textContent = t.enterBtn;
+      document.getElementById('btnBack').textContent = t.back;
+      document.getElementById('btnSwitchTier').textContent = t.tierBtn;
+      document.getElementById('btnLogout').textContent = t.resetBtn;
+      document.getElementById('sessionInfo').textContent = 'Tier: ' + (state.tier || '-');
+    }
+
+    function recordTrajectory(stepLabel) {
+      const sec = Math.round((Date.now() - state.enteredMs) / 1000);
+      state.trajectory.push(sec + 's:' + stepLabel);
+      if (state.trajectory.length > 40) state.trajectory.shift();
+    }
+
+    function resolveTierByPassword(raw) {
+      const p = String(raw || '').trim().toLowerCase();
+      if (p === APP_CONFIG.PASSWORDS.admin) return 'admin';
+      if (p === APP_CONFIG.PASSWORDS.report) return 'report';
+      if (p === APP_CONFIG.PASSWORDS.query) return 'query';
+      if (p === APP_CONFIG.PASSWORDS.worker) return 'worker';
+      return '';
+    }
+
+    function submitPassword() {
+      const raw = document.getElementById('passInput').value;
+      const tier = resolveTierByPassword(raw);
+      const msgEl = document.getElementById('loginMsg');
+      if (!tier) {
+        msgEl.textContent = I18N[state.lang].invalidPass;
+        return;
+      }
+      msgEl.textContent = '';
+      state.tier = tier;
+      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.TIER, tier);
+      recordTrajectory('auth:' + tier);
+      showMainApp();
+    }
+
+    function openTierModal() {
+      const nextPass = prompt(I18N[state.lang].loginLabel);
+      if (nextPass === null) return;
+      const tier = resolveTierByPassword(nextPass);
+      if (!tier) {
+        alert(I18N[state.lang].invalidPass);
+        return;
+      }
+      state.tier = tier;
+      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.TIER, tier);
+      recordTrajectory('switch_tier:' + tier);
+      applyTexts();
+      renderTierBar();
+      renderSpecialSections();
+    }
+
+    function logoutSession() {
+      localStorage.removeItem(APP_CONFIG.STORAGE_KEYS.TIER);
+      state.tier = '';
+      state.navStack = [];
+      state.context = { farmMode: '', wing: '', location: '', module: '' };
+      document.getElementById('mainView').classList.add('hidden');
+      document.getElementById('loginView').classList.remove('hidden');
+      document.getElementById('passInput').value = '';
+      applyTexts();
+    }
+
+    function showMainApp() {
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('mainView').classList.remove('hidden');
+      applyTexts();
+      renderTierBar();
+      renderCurrentView();
+      renderSpecialSections();
+    }
+
+    function renderTierBar() {
+      const bar = document.getElementById('tierModulesBar');
+      const t = I18N[state.lang];
+      const tiles = [];
+
+      if (['query', 'report', 'admin'].includes(state.tier)) {
+        tiles.push({
+          title: t.queryTile,
+          sub: t.querySub,
+          cls: 'c-gp-mid',
+          onClick: () => toggleSection('queryContainer')
+        });
+      }
+      if (['report', 'admin'].includes(state.tier)) {
+        tiles.push({
+          title: t.reportTile,
+          sub: t.reportSub,
+          cls: 'c-gest-sub',
+          onClick: () => toggleSection('reportContainer')
+        });
+      }
+      if (state.tier === 'admin') {
+        tiles.push({
+          title: t.adminTile,
+          sub: t.adminSub,
+          cls: 'c-boar',
+          onClick: () => toggleSection('adminContainer')
+        });
+      }
+
+      bar.innerHTML = '';
+      tiles.forEach(item => {
+        const el = createMetroTile(item.title, item.sub, 'TIER', item.cls, false, item.onClick);
+        bar.appendChild(el);
+      });
+    }
+
+    function toggleSection(id) {
+      const el = document.getElementById(id);
+      const isHidden = el.classList.contains('hidden');
+      ['formContainer', 'queryContainer', 'reportContainer', 'adminContainer'].forEach(k => {
+        document.getElementById(k).classList.add('hidden');
+      });
+      if (isHidden) {
+        el.classList.remove('hidden');
+        if (id === 'queryContainer') renderNestedQueryUI();
+        if (id === 'reportContainer') loadSharedReportUI();
+        if (id === 'adminContainer') renderAdminTelemetryUI();
+      }
+    }
+
+    function createMetroTile(title, sub, badge, colorClass, isWide, onClick) {
+      const div = document.createElement('div');
+      div.className = 'live-tile ' + colorClass + (isWide ? ' wide' : '');
+      div.innerHTML = `
+        <div class="tile-flip-inner">
+          <div class="tile-title">${title}</div>
+          <div class="tile-sub">${sub}</div>
+        </div>
+        <div class="tile-badge">${badge}</div>
+      `;
+      div.addEventListener('click', () => {
+        div.classList.add('flipped');
+        setTimeout(() => div.classList.remove('flipped'), 550);
+        onClick();
+      });
+      return div;
+    }
+
+    function renderCurrentView() {
+      const t = I18N[state.lang];
+      const canvas = document.getElementById('tileCanvas');
+      const backBtn = document.getElementById('btnBack');
+      const pathEl = document.getElementById('pathIndicator');
+      document.getElementById('formContainer').classList.add('hidden');
+
+      backBtn.classList.toggle('hidden', state.navStack.length === 0);
+      pathEl.textContent = [state.context.farmMode, state.context.wing, state.context.location, state.context.module]
+        .filter(Boolean).join(' › ');
+
+      canvas.innerHTML = '';
+
+      if (!state.context.farmMode) {
+        canvas.appendChild(createMetroTile(t.gpTile, t.gpSub, 'GP', 'c-gp', false, () => {
+          pushNav();
+          state.context.farmMode = 'GP';
+          state.context.wing = '';
+          recordTrajectory('mode:GP');
+          renderCurrentView();
+        }));
+        canvas.appendChild(createMetroTile(t.psTile, t.psSub, 'PS', 'c-ps', false, () => {
+          pushNav();
+          state.context.farmMode = 'PS';
+          recordTrajectory('mode:PS');
+          renderCurrentView();
+        }));
+        return;
+      }
+
+      if (state.context.farmMode === 'GP') {
+        renderFarmUnits('GP', '');
+        return;
+      }
+
+      // PS 場域：先選 Wing A / B 或直接進 Boar House / GDU 1-8
+      if (!state.context.wing) {
+        canvas.appendChild(createMetroTile('Wing A', 'PS Left Wing · 1,000 Sows', 'A', 'c-gest-sub', false, () => {
+          pushNav();
+          state.context.wing = 'A';
+          recordTrajectory('wing:A');
+          renderCurrentView();
+        }));
+        canvas.appendChild(createMetroTile('Wing B', 'PS Right Wing · 1,000 Sows', 'B', 'c-gest-sub', false, () => {
+          pushNav();
+          state.context.wing = 'B';
+          recordTrajectory('wing:B');
+          renderCurrentView();
+        }));
+        canvas.appendChild(createMetroTile('Boar House', 'Shared Boar House · 鐵灰', 'BH', 'c-boar', false, () => {
+          pushNav();
+          state.context.wing = 'SHARED';
+          state.context.location = 'Boar House';
+          recordTrajectory('loc:BoarHouse');
+          renderModuleTilesForLocation('Boar House', 'c-boar-sub');
+        }));
+        const gduRooms = ['GDU 1','GDU 2','GDU 3','GDU 4','GDU 5','GDU 6','GDU 7','GDU 8'];
+        gduRooms.forEach(room => {
+          canvas.appendChild(createMetroTile(room, 'GDU · 淡紫', 'GDU', 'c-gdu', false, () => {
+            pushNav();
+            state.context.wing = 'SHARED';
+            state.context.location = room;
+            recordTrajectory('loc:' + room);
+            renderModuleTilesForLocation(room, 'c-gdu-sub');
+          }));
+        });
+        return;
+      }
+
+      renderFarmUnits('PS', state.context.wing);
+    }
+
+    function renderFarmUnits(mode, wing) {
+      const canvas = document.getElementById('tileCanvas');
+      const prefix = mode === 'PS' ? ('Wing ' + wing + ' - ') : '';
+
+      const units = [
+        { name: prefix + 'Gestation', code: 'Gestation', sub: '綠色系 · 發情/配種/水料', cls: 'c-gest', subCls: 'c-gest-sub' },
+        { name: prefix + 'Farrowing', code: 'Farrowing', sub: '紅色系 · 分娩/離乳/畸形', cls: 'c-farr', subCls: 'c-farr-sub' },
+        { name: prefix + 'Nursery', code: 'Nursery', sub: '亮黃色 · 每日水料/異常', cls: 'c-nurs', subCls: 'c-nurs-sub' },
+        { name: prefix + 'Porker', code: 'Porker', sub: '淡灰色 · 每日水料/異常', cls: 'c-pork', subCls: 'c-pork-sub' },
+        { name: prefix + 'Boar House', code: 'Boar House', sub: '鐵灰色 · 採精/性慾/精液', cls: 'c-boar', subCls: 'c-boar-sub' },
+        { name: prefix + 'GDU', code: 'GDU', sub: '淡紫色 · 選種體型/水料', cls: 'c-gdu', subCls: 'c-gdu-sub' }
+      ];
+
+      units.forEach(u => {
+        canvas.appendChild(createMetroTile(u.name, u.sub, u.code, u.cls, false, () => {
+          pushNav();
+          if (u.code === 'GDU' && mode === 'GP') {
+            renderGduSubTiles(u.subCls);
+          } else if (u.code === 'Farrowing' && mode === 'PS') {
+            renderRoomTiles(wing + '-F', 1, 6, 'Farrowing', u.subCls);
+          } else if (u.code === 'Nursery' && mode === 'PS') {
+            renderRoomTiles(wing + '-N', 1, 7, 'Nursery', u.subCls);
+          } else if (u.code === 'Porker' && mode === 'PS') {
+            renderPorkerRoomTiles(wing + '-P', u.subCls);
+          } else {
+            state.context.location = (wing ? wing + '-' : '') + u.code;
+            recordTrajectory('loc:' + state.context.location);
+            renderModuleTilesForLocation(u.code, u.subCls);
+          }
+        }));
+      });
+    }
+
+    function renderGduSubTiles(subCls) {
+      const canvas = document.getElementById('tileCanvas');
+      canvas.innerHTML = '';
+      const opts = ['GDU', 'GDU 1', 'GDU 2', 'GDU 3', 'GDU 4', 'GDU 5', 'GDU 6', 'GDU 7', 'GDU 8'];
+      opts.forEach(opt => {
+        canvas.appendChild(createMetroTile(opt, 'GP GDU · 淡紫', 'GDU', 'c-gdu', false, () => {
+          pushNav();
+          state.context.location = opt;
+          recordTrajectory('loc:' + opt);
+          renderModuleTilesForLocation('GDU', subCls);
+        }));
+      });
+    }
+
+    function renderRoomTiles(tagPrefix, startNum, endNum, unitCode, subCls) {
+      const canvas = document.getElementById('tileCanvas');
+      canvas.innerHTML = '';
+      for (let i = startNum; i <= endNum; i++) {
+        const roomCode = tagPrefix + i;
+        canvas.appendChild(createMetroTile(roomCode, unitCode, roomCode, subCls, false, () => {
+          pushNav();
+          state.context.location = roomCode;
+          recordTrajectory('loc:' + roomCode);
+          renderModuleTilesForLocation(unitCode, subCls);
+        }));
+      }
+    }
+
+    function renderPorkerRoomTiles(tagPrefix, subCls) {
+      const canvas = document.getElementById('tileCanvas');
+      canvas.innerHTML = '';
+      for (let b = 1; b <= 8; b++) {
+        ['A', 'B'].forEach(side => {
+          const roomCode = tagPrefix + b + side;
+          canvas.appendChild(createMetroTile(roomCode, 'Porker 16 Rooms', roomCode, subCls, false, () => {
+            pushNav();
+            state.context.location = roomCode;
+            recordTrajectory('loc:' + roomCode);
+            renderModuleTilesForLocation('Porker', subCls);
+          }));
+        });
+      }
+    }
+
+    function renderModuleTilesForLocation(unitCode, subCls) {
+      const canvas = document.getElementById('tileCanvas');
+      canvas.innerHTML = '';
+      const mods = [
+        { key: 'conformation', title: '選種與外觀評測 / Selection', sub: '耳號·性別·品種·乳頭·體尺' },
+        { key: 'gestation', title: '發情與配種 / Heat & Breeding', sub: '耳號·發情日·配種日·公豬號' },
+        { key: 'farrowing', title: '分娩與離乳 / Farrow & Wean', sub: '母豬號·TNB/NBA·初生/離乳重' },
+        { key: 'boar_semen', title: '公豬採精 / Boar Semen', sub: '公豬號·性慾1-5·精液品管' },
+        { key: 'daily_fw', title: '每日水料 / Daily Feed & Water', sub: '存欄頭數·水錶·投料量' },
+        { key: 'malformation_disease', title: '活體畸形與異常 / Malformation & Signs', sub: '母豬號+分娩日+頭數+照片壓縮' }
+      ];
+
+      mods.forEach(m => {
+        canvas.appendChild(createMetroTile(m.title, m.sub, state.context.location, subCls, false, () => {
+          pushNav();
+          state.context.module = m.key;
+          recordTrajectory('mod:' + m.key);
+          renderFormByModule(m.key, m.title);
+        }));
+      });
+    }
+
+    function pushNav() {
+      state.navStack.push({
+        farmMode: state.context.farmMode,
+        wing: state.context.wing,
+        location: state.context.location,
+        module: state.context.module,
+        canvasHtml: document.getElementById('tileCanvas').innerHTML
+      });
+    }
+
+    function navigateBack() {
+      if (state.navStack.length === 0) return;
+      const prev = state.navStack.pop();
+      state.context.farmMode = prev.farmMode;
+      state.context.wing = prev.wing;
+      state.context.location = prev.location;
+      state.context.module = prev.module;
+      document.getElementById('formContainer').classList.add('hidden');
+      document.getElementById('btnBack').classList.toggle('hidden', state.navStack.length === 0);
+      document.getElementById('pathIndicator').textContent = [state.context.farmMode, state.context.wing, state.context.location, state.context.module]
+        .filter(Boolean).join(' › ');
+      document.getElementById('tileCanvas').innerHTML = prev.canvasHtml;
+      rebindCanvasClicks();
+    }
+
+    function rebindCanvasClicks() {
+      // 簡化返回時重新渲染對應層級
+      const canvas = document.getElementById('tileCanvas');
+      if (!canvas.innerHTML.trim()) {
+        renderCurrentView();
+      }
+    }
+
+    function renderChipGroup(groupId, options, multiSelect) {
+      state.formSelections[groupId] = multiSelect ? [] : '';
+      let html = `<div class="choice-wrap" id="chip_${groupId}">`;
+      options.forEach(opt => {
+        const val = typeof opt === 'object' ? opt.value : opt;
+        const lbl = typeof opt === 'object' ? opt.label : opt;
+        html += `<button type="button" class="choice-chip" data-group="${groupId}" data-val="${val}" data-multi="${multiSelect ? '1' : '0'}" onclick="onChipClick(this)">${lbl}</button>`;
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function onChipClick(btn) {
+      const group = btn.dataset.group;
+      const val = btn.dataset.val;
+      const multi = btn.dataset.multi === '1';
+      if (multi) {
+        btn.classList.toggle('selected');
+        const arr = state.formSelections[group] || [];
+        const idx = arr.indexOf(val);
+        if (idx >= 0) arr.splice(idx, 1);
+        else arr.push(val);
+        state.formSelections[group] = arr;
+      } else {
+        document.querySelectorAll(`.choice-chip[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        state.formSelections[group] = val;
+      }
+    }
+
+    function renderFormByModule(modKey, headingTitle) {
+      const box = document.getElementById('formContainer');
+      const t = I18N[state.lang];
+      box.classList.remove('hidden');
+
+      let fieldsHtml = `
+        <h3>${headingTitle}</h3>
+        <div class="field-group">
+          <label class="field-label">Record Date / 記錄日期</label>
+          <input type="date" id="f_record_date" class="input-control" value="${new Date().toISOString().slice(0,10)}" />
+        </div>
+      `;
+
+      if (modKey === 'conformation') {
+        fieldsHtml += `
+          <div class="field-group"><label class="field-label">Ear Tag / 耳號</label><input type="text" id="f_ear_tag" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Sex / 性別</label>${renderChipGroup('sex', [{value:'female',label:'母豬 Female'},{value:'male',label:'公豬 Male'}], false)}</div>
+          <div class="field-group"><label class="field-label">Breed / 品種</label>${renderChipGroup('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
+          <div class="field-group"><label class="field-label">Birth Date / 出生日</label><input type="date" id="f_birth_date" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Test Date / 測定日</label><input type="date" id="f_test_date" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Test Weight (kg) / 測定體重</label><input type="number" step="0.1" id="f_test_weight_kg" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Left Teats / 左乳頭數</label>${renderChipGroup('left_teats', ['6','7','8','9','10'], false)}</div>
+          <div class="field-group"><label class="field-label">Right Teats / 右乳頭數</label>${renderChipGroup('right_teats', ['6','7','8','9','10'], false)}</div>
+          <div class="field-group"><label class="field-label">Blind Teats / 無效乳頭數</label>${renderChipGroup('blind_teats', ['0','1','2','3','4'], false)}</div>
+          <div class="field-group"><label class="field-label">Front Leg Score (1-5) / 前肢評分</label>${renderChipGroup('front_leg_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-group"><label class="field-label">Rear Leg Score (1-5) / 後肢評分</label>${renderChipGroup('rear_leg_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-group"><label class="field-label">Body Length (cm) / 體長</label><input type="number" step="0.5" id="f_body_length_cm" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Shoulder Width (cm) / 肩寬</label><input type="number" step="0.5" id="f_shoulder_width_cm" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Chest Width (cm) / 胸寬</label><input type="number" step="0.5" id="f_chest_width_cm" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Vulva / 陰部發育（母豬）</label>${renderChipGroup('vulva_status', ['Normal 正常','Small 過小','Upturned 上翹','N/A'], false)}</div>
+          <div class="field-group"><label class="field-label">Testis Symmetry / 睪丸對稱性（公豬）</label>${renderChipGroup('testis_status', ['Symmetrical 對稱','Asymmetrical 不對稱','Small 過小','N/A'], false)}</div>
+        `;
+      } else if (modKey === 'gestation') {
+        fieldsHtml += `
+          <div class="field-group"><label class="field-label">Ear Tag / 耳號</label><input type="text" id="f_ear_tag" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Sex / 性別</label>${renderChipGroup('sex', [{value:'female',label:'母豬 Female'},{value:'male',label:'公豬 Male'}], false)}</div>
+          <div class="field-group"><label class="field-label">Breed / 品種</label>${renderChipGroup('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
+          <div class="field-group"><label class="field-label">Heat Observed / 看到發情</label>${renderChipGroup('heat_observed', [{value:'yes',label:'是 Yes / Ya'},{value:'no',label:'否 No / Tidak'}], false)}</div>
+          <div class="field-group"><label class="field-label">Heat Date / 發情日</label><input type="date" id="f_heat_date" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Breeding Date / 配種日</label><input type="date" id="f_breeding_date" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Service Boar Ear Tag / 配種公豬耳號</label><input type="text" id="f_service_boar_tag" class="input-control" /></div>
+        `;
+      } else if (modKey === 'farrowing') {
+        fieldsHtml += `
+          <div class="field-group"><label class="field-label">Sow Ear Tag / 母豬耳號</label><input type="text" id="f_sow_ear_tag" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Stage / 階段</label>${renderChipGroup('stage', ['Farrowing 分娩','Weaning 離乳','Both 皆有'], false)}</div>
+          <div class="field-group"><label class="field-label">Total Born (TNB) / 總產頭數</label><input type="number" id="f_total_born" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Born Alive (NBA) / 產活頭數</label><input type="number" id="f_born_alive" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Stillborn / 死胎數</label><input type="number" id="f_stillborn" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Mummified / 木乃伊數</label><input type="number" id="f_mummified" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Birth Litter Wt (kg) / 初生窩重</label><input type="number" step="0.1" id="f_birth_litter_wt_kg" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Wean Date / 離乳日</label><input type="date" id="f_wean_date" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Weaned Count / 離乳頭數</label><input type="number" id="f_weaned_count" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Wean Litter Wt (kg) / 離乳窩重</label><input type="number" step="0.1" id="f_wean_litter_wt_kg" class="input-control" /></div>
+        `;
+      } else if (modKey === 'boar_semen') {
+        fieldsHtml += `
+          <div class="field-group"><label class="field-label">Boar Ear Tag / 公豬耳號</label><input type="text" id="f_boar_ear_tag" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Collection Date / 採精日</label><input type="date" id="f_collection_date" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Libido / 性慾調教 (1-5)</label>${renderChipGroup('libido_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-group"><label class="field-label">Volume (mL) / 精液量</label><input type="number" step="1" id="f_volume_ml" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Concentration (10^8/mL) / 濃度</label><input type="number" step="0.01" id="f_concentration_100m_ml" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Motility (%) / 活力</label><input type="number" step="1" id="f_motility_pct" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Progressive (%) / 前進運動率</label><input type="number" step="1" id="f_progressive_pct" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Abnormality (%) / 畸形率</label><input type="number" step="1" id="f_abnormality_pct" class="input-control" /></div>
+        `;
+      } else if (modKey === 'daily_fw') {
+        fieldsHtml += `
+          <div class="field-group"><label class="field-label">Head Count / 存欄頭數</label><input type="number" id="f_head_count" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Water Meter / 水錶讀數</label><input type="number" step="0.01" id="f_water_meter_reading" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Feed Used (kg) / 投料量</label><input type="number" step="0.1" id="f_feed_used_kg" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">Feed Type / 飼料類別</label>${renderChipGroup('feed_type', ['GDU','Creep','Starter','Grower','Finisher','Gestation','Lactation'], false)}</div>
+        `;
+      } else if (modKey === 'malformation_disease') {
+        fieldsHtml += `
+          <div class="field-group"><label class="field-label">${t.sowTagLabel}</label><input type="text" id="f_sow_ear_tag" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">${t.farrowDateLabel}</label><input type="date" id="f_farrow_date" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">${t.pigEarTagLabel}</label><input type="text" id="f_ear_tag" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">${t.affectedCountLabel}</label><input type="number" id="f_affected_count" class="input-control" value="1" /></div>
+          <div class="field-group"><label class="field-label">${t.categoryLabel}</label>${renderChipGroup('category_group', ['活體畸形 Malformation','外觀初步徵狀 Clinical Sign','器官/系統異常 Organ/System'], false)}</div>
+          <div class="field-group"><label class="field-label">${t.itemsLabel}</label>${renderChipGroup('selected_items', [
+            '皮膚破損 Skin Tear','皮膚紅點 Red Spot','高溫/發燒 Fever','喘/呼吸急促 Panting',
+            '肢體/蹄部畸形 Limb/Hoof','無法站立 Downer','頭部畸形 Head','外陰/肛門/生殖 Genital/Anal',
+            '下痢 Diarrhea','跛腳 Lame','其他少見 Other'
+          ], true)}</div>
+          <div class="field-group"><label class="field-label">${t.briefNoteLabel}</label><input type="text" id="f_brief_note" class="input-control" /></div>
+          <div class="field-group"><label class="field-label">${t.photoLabel}</label><input type="file" id="f_photo_file" accept="image/*" class="input-control" /></div>
+        `;
+      }
+
+      fieldsHtml += `
+        <button type="button" class="primary-btn" id="btnSubmitForm" onclick="handleFormSubmit('${modKey}')">${t.submitBtn}</button>
+        <div id="submitFeedback" class="result-box hidden"></div>
+      `;
+
+      box.innerHTML = fieldsHtml;
+    }
+
+    function compressImageFileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        if (!file) {
+          resolve(null);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const img = new Image();
+          img.onload = () => {
+            let w = img.width;
+            let h = img.height;
+            const maxDim = APP_CONFIG.MAX_PHOTO_DIM;
+            if (w > maxDim || h > maxDim) {
+              if (w >= h) {
+                h = Math.round((h * maxDim) / w);
+                w = maxDim;
+              } else {
+                w = Math.round((w * maxDim) / h);
+                h = maxDim;
+              }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/jpeg', APP_CONFIG.PHOTO_QUALITY);
+            resolve({
+              mimeType: 'image/jpeg',
+              base64: dataUrl
+            });
+          };
+          img.onerror = reject;
+          img.src = ev.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleFormSubmit(modKey) {
+      const btn = document.getElementById('btnSubmitForm');
+      const fb = document.getElementById('submitFeedback');
+      btn.disabled = true;
+      fb.classList.remove('hidden');
+      fb.textContent = '...';
+
+      recordTrajectory('submit:' + modKey);
+      const dwellSeconds = Math.max(1, Math.round((Date.now() - state.enteredMs) / 1000));
+
+      const data = {};
+      document.querySelectorAll('#formContainer [id^="f_"]').forEach(inp => {
+        if (inp.type === 'file') return;
+        const key = inp.id.replace(/^f_/, '');
+        data[key] = inp.value;
+      });
+      Object.keys(state.formSelections).forEach(k => {
+        data[k] = state.formSelections[k];
+      });
+
+      let photoPayload = null;
+      const photoInput = document.getElementById('f_photo_file');
+      if (photoInput && photoInput.files && photoInput.files[0]) {
+        photoPayload = await compressImageFileToBase64(photoInput.files[0]);
+      }
+
+      const payload = {
+        token: APP_CONFIG.API_TOKEN,
+        module: modKey,
+        common: {
+          farm_mode: state.context.farmMode,
+          wing: state.context.wing,
+          location: state.context.location,
+          module: modKey
+        },
+        data: data,
+        photo: photoPayload,
+        meta: {
+          entered_at: state.enteredAt,
+          submitted_at: new Date().toISOString(),
+          dwell_seconds: dwellSeconds,
+          ui_lang: state.lang,
+          role_level: state.tier || 'worker',
+          device_summary: /mobile|android|iphone|ipad/i.test(navigator.userAgent) ? 'Mobile/Tablet' : 'Desktop',
+          user_agent: navigator.userAgent,
+          screen_info: window.screen.width + 'x' + window.screen.height + '@' + (window.devicePixelRatio || 1),
+          trajectory_summary: state.trajectory.join(' -> '),
+          offline_queued: false
+        }
+      };
+
+      await sendPayloadWithQueueFallback(payload, fb);
+      btn.disabled = false;
+    }
+
+    async function sendPayloadWithQueueFallback(payload, fbEl) {
+      const t = I18N[state.lang];
+      try {
+        const res = await fetch(APP_CONFIG.GAS_WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json && json.ok) {
+          fbEl.textContent = t.savedOnline + (json.rowId || 'OK');
+          return;
+        }
+        throw new Error(json && json.error ? json.error : 'Write failed');
+      } catch (err) {
+        payload.meta.offline_queued = true;
+        enqueueOfflinePayload(payload);
+        fbEl.textContent = t.savedOffline;
+      }
+    }
+
+    function enqueueOfflinePayload(payload) {
+      const list = getOfflineQueue();
+      list.push(payload);
+      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.QUEUE, JSON.stringify(list));
+      updateQueueBadge();
+    }
+
+    function getOfflineQueue() {
+      try {
+        return JSON.parse(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.QUEUE) || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function updateQueueBadge() {
+      const list = getOfflineQueue();
+      const badge = document.getElementById('queueBadge');
+      if (list.length > 0) {
+        badge.textContent = list.length + ' Pending';
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    async function flushOfflineQueue() {
+      const list = getOfflineQueue();
+      if (list.length === 0) return;
+      const remaining = [];
+      for (const item of list) {
+        try {
+          const res = await fetch(APP_CONFIG.GAS_WEB_APP_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(item)
+          });
+          const json = await res.json();
+          if (!json || !json.ok) remaining.push(item);
+        } catch (e) {
+          remaining.push(item);
+        }
+      }
+      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.QUEUE, JSON.stringify(remaining));
+      updateQueueBadge();
+    }
+
+    // 巢狀查詢方塊（gla9999）
+    function renderNestedQueryUI() {
+      const box = document.getElementById('queryContainer');
+      box.innerHTML = `
+        <h3>查詢主方塊 (gla9999)</h3>
+        <div class="choice-wrap">
+          <button type="button" class="choice-chip" onclick="selectQuerySub('sow_history')">母豬歷史與分娩查詢</button>
+          <button type="button" class="choice-chip" onclick="selectQuerySub('boar_records')">公豬採精與等級查詢</button>
+        </div>
+        <div id="querySubPanel" class="hidden" style="margin-top:12px;">
+          <label class="field-label">輸入耳號查詢 / Ear Tag</label>
+          <input type="text" id="q_ear_tag" class="input-control" placeholder="例如 L1072 或 D1421" />
+          <button type="button" class="primary-btn" id="btnRunQuery">執行查詢</button>
+          <div id="queryResult" class="result-box"></div>
+        </div>
+      `;
+    }
+
+    function selectQuerySub(category) {
+      const panel = document.getElementById('querySubPanel');
+      panel.classList.remove('hidden');
+      document.getElementById('btnRunQuery').onclick = () => runQueryLookup(category);
+    }
+
+    async function runQueryLookup(category) {
+      const ear = encodeURIComponent(document.getElementById('q_ear_tag').value.trim());
+      const pass = encodeURIComponent(APP_CONFIG.PASSWORDS.query);
+      const token = encodeURIComponent(APP_CONFIG.API_TOKEN);
+      const url = `${APP_CONFIG.GAS_WEB_APP_URL}?action=query&token=${token}&pass=${pass}&category=${category}&ear_tag=${ear}`;
+      const out = document.getElementById('queryResult');
+      out.textContent = '...';
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        out.textContent = json.ok ? JSON.stringify(json.data, null, 2) : (json.error || 'Error');
+      } catch (e) {
+        out.textContent = String(e);
+      }
+    }
+
+    async function loadSharedReportUI() {
+      const box = document.getElementById('reportContainer');
+      box.innerHTML = '<h3>綜合分析報表 (510067)</h3><div id="reportResult" class="result-box">...</div>';
+      const pass = encodeURIComponent(APP_CONFIG.PASSWORDS.report);
+      const token = encodeURIComponent(APP_CONFIG.API_TOKEN);
+      const url = `${APP_CONFIG.GAS_WEB_APP_URL}?action=report&token=${token}&pass=${pass}`;
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        document.getElementById('reportResult').textContent = json.ok ? JSON.stringify(json.data, null, 2) : (json.error || 'Error');
+      } catch (e) {
+        document.getElementById('reportResult').textContent = String(e);
+      }
+    }
+
+    function renderAdminTelemetryUI() {
+      const box = document.getElementById('adminContainer');
+      box.innerHTML = `
+        <h3>最高全權限控制台 (qwert)</h3>
+        <div class="result-box">${JSON.stringify({
+          enteredAt: state.enteredAt,
+          dwellSeconds: Math.round((Date.now() - state.enteredMs) / 1000),
+          userAgent: navigator.userAgent,
+          trajectory: state.trajectory
+        }, null, 2)}</div>
+      `;
+    }
+
+    function renderSpecialSections() {
+      if (!document.getElementById('queryContainer').classList.contains('hidden')) renderNestedQueryUI();
+      if (!document.getElementById('adminContainer').classList.contains('hidden')) renderAdminTelemetryUI();
+    }
+
+    window.addEventListener('online', () => {
+      document.getElementById('netStatus').textContent = 'Online';
+      flushOfflineQueue();
+    });
+    window.addEventListener('offline', () => {
+      document.getElementById('netStatus').textContent = 'Offline';
+    });
+
+    (function initApp() {
+      state.lang = detectInitialLanguage();
+      document.documentElement.lang = state.lang;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === state.lang);
+      });
+      applyTexts();
+      updateQueueBadge();
+      recordTrajectory('init');
+
+      const savedTier = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.TIER);
+      if (savedTier && resolveTierByPassword(savedTier)) {
+        state.tier = resolveTierByPassword(savedTier);
+        showMainApp();
+      }
+    })();
+    // === [END MODULE 4] ===
+  </script>
+</body>
+</html>
