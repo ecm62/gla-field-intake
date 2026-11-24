@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>GLA Field Hub</title>
   <style>
-    /* === [START MODULE 3: SOFT METRO TILES, COMPACT PIXEL WIDGET & RAIL NAV] === */
+    /* === [START MODULE 3: MOBILE COMPACT TILES, BIG TRIANGLES & SPLIT CARDS] === */
     :root {
       --text-primary: #0f172a;
       --text-secondary: #475569;
@@ -37,55 +37,62 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
+    html, body {
       margin: 0;
-      padding: 0 16px 74px 16px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
-      background: linear-gradient(180deg, #e8eef6 0%, #f7f9fc 100%);
-      color: var(--text-primary);
-      font-size: 16px;
-      min-height: 100vh;
+      padding: 0;
+      width: 100%;
+      max-width: 100vw;
       overflow-x: hidden;
     }
 
-    /* 左右側邊細長條 + 半隱形三角形 */
+    body {
+      padding: 8px 22px 68px 22px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background: linear-gradient(180deg, #e8eef6 0%, #f7f9fc 100%);
+      color: var(--text-primary);
+      font-size: 15px;
+      min-height: 100vh;
+    }
+
+    /* 左右側邊細長條 + 放大約 2.5 倍三角形 */
     .edge-rail {
       position: fixed;
       top: 0;
       bottom: 56px;
-      width: 14px;
+      width: 20px;
       z-index: 60;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(15, 23, 42, 0.035);
+      background: rgba(15, 23, 42, 0.04);
       cursor: pointer;
     }
-    .edge-rail:active { background: rgba(2, 132, 199, 0.16); }
+    .edge-rail:active { background: rgba(2, 132, 199, 0.18); }
     .edge-rail.left { left: 0; }
     .edge-rail.right { right: 0; }
 
-    .tri-ghost {
+    .tri-big {
       width: 0;
       height: 0;
-      opacity: 0.22;
+      opacity: 0.36;
     }
-    .edge-rail:active .tri-ghost { opacity: 0.65; }
+    .edge-rail:active .tri-big { opacity: 0.85; }
     .tri-left {
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-right: 7px solid #334155;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-right: 15px solid #1e293b;
     }
     .tri-right {
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-left: 7px solid #334155;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 15px solid #1e293b;
     }
 
-    /* 頂部控制列：BM -> EN -> 中 */
+    /* 頂部列：BM -> EN -> 中 + 重新更新 / 切換密碼 */
     .top-bar {
-      max-width: 960px;
-      margin: 10px auto 0 auto;
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto 8px auto;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -95,8 +102,9 @@
 
     .pill-group {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .pill-btn {
@@ -104,8 +112,8 @@
       background: #ffffff;
       color: #1e293b;
       border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 14px;
+      padding: 5px 10px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -115,118 +123,109 @@
       border-color: #0284c7;
     }
 
-    /* 緊湊型 Google 手機桌面時鐘、地點與溫度曲線框 */
-    .compact-widget {
-      max-width: 960px;
-      margin: 8px auto 12px auto;
+    /* 拆分成多個獨立小框：時間框、地點框、現有溫度與雨情框、未來溫度預報曲線框 */
+    .split-widget-wrap {
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto 10px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .mini-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .sub-box {
       background: #ffffff;
-      border-radius: 20px;
-      padding: 12px 15px;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      border-radius: 16px;
+      padding: 9px 12px;
       border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
 
-    .widget-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .time-date-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .clock-text {
-      font-size: 26px;
+    .clock-val {
+      font-size: 20px;
       font-weight: 800;
       color: #0f172a;
-      line-height: 1.1;
+      line-height: 1.15;
     }
 
-    .date-loc-text {
-      font-size: 13px;
+    .date-sub {
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-secondary);
+      margin-top: 2px;
     }
 
-    .rain-temp-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f1f5f9;
-      padding: 5px 11px;
-      border-radius: 14px;
+    .loc-val {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1.25;
     }
 
-    .now-temp-badge {
+    .temp-val {
       font-size: 18px;
       font-weight: 800;
       color: #0369a1;
     }
 
-    .rain-badge {
-      font-size: 13px;
+    .rain-txt {
+      font-size: 12px;
       font-weight: 700;
       color: #334155;
+      margin-top: 2px;
     }
 
-    .curve-box {
-      margin-top: 8px;
-      background: #f8fafc;
-      border-radius: 14px;
-      padding: 6px 10px 4px 10px;
-      border: 1px solid #eef2f6;
-    }
-
-    .curve-top-bar {
+    .curve-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 12px;
       font-weight: 700;
       color: #475569;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
-    .span-toggle {
+    .span-btn {
       border: 1px solid #cbd5e1;
-      background: #fff;
+      background: #f8fafc;
       border-radius: 8px;
-      padding: 2px 7px;
+      padding: 2px 6px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
     }
 
-    /* 密碼驗證框（零密碼暗示） */
+    /* 密碼框（零暗示，Enter 直接進入） */
     .auth-card {
-      max-width: 420px;
-      margin: 24px auto;
+      width: 100%;
+      max-width: 400px;
+      margin: 18px auto;
       background: #ffffff;
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: 0 6px 22px rgba(15, 23, 42, 0.07);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
       border: 1px solid #e2e8f0;
     }
 
     .field-label {
       display: block;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       color: #1e293b;
     }
 
-    .input-box, .select-box {
+    .input-box {
       width: 100%;
-      padding: 12px 14px;
-      font-size: 16px;
-      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 15px;
+      border-radius: 12px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       color: #0f172a;
@@ -234,158 +233,159 @@
 
     .primary-btn {
       width: 100%;
-      margin-top: 12px;
-      padding: 13px;
-      font-size: 16px;
+      margin-top: 10px;
+      padding: 11px;
+      font-size: 15px;
       font-weight: 800;
       border: none;
-      border-radius: 15px;
+      border-radius: 14px;
       background: #0284c7;
       color: #ffffff;
       cursor: pointer;
     }
 
-    /* 主工作區與房號批次提醒條 */
+    /* 主工作區直立窄寬適配 */
     .main-wrap {
-      max-width: 960px;
+      width: 100%;
+      max-width: 540px;
       margin: 0 auto;
     }
 
-    .context-banner {
+    .context-bar {
       background: #ffffff;
-      border: 1.5px solid #bae6fd;
-      border-radius: 16px;
-      padding: 10px 14px;
-      margin-bottom: 10px;
+      border: 1px solid #bae6fd;
+      border-radius: 14px;
+      padding: 8px 11px;
+      margin-bottom: 8px;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      font-size: 14px;
+      gap: 6px;
+      font-size: 13px;
       font-weight: 700;
-      color: #0f172a;
     }
 
-    .batch-pill {
+    .batch-chip {
       background: #e0f2fe;
       color: #0369a1;
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: 999px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    /* 三週次批次三個獨立框 */
-    .batch-trio-grid {
+    /* 三週次批次三個小框 */
+    .batch-trio {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin: 10px 0;
+      gap: 6px;
+      margin: 8px 0;
     }
 
-    .batch-cell {
+    .batch-box {
       background: #f8fafc;
       border: 1px solid #cbd5e1;
-      border-radius: 16px;
-      padding: 10px;
+      border-radius: 12px;
+      padding: 6px 4px;
       text-align: center;
     }
 
-    .batch-cell label {
+    .batch-box label {
       display: block;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #475569;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
-    .batch-stepper {
+    .stepper-row {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 3px;
     }
 
-    .step-mini-btn {
-      width: 32px;
-      height: 36px;
-      border-radius: 10px;
+    .step-btn {
+      width: 24px;
+      height: 30px;
+      border-radius: 8px;
       border: 1px solid #cbd5e1;
       background: #fff;
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 800;
+      padding: 0;
       cursor: pointer;
     }
 
-    .batch-num-input {
-      width: 54px;
-      height: 38px;
+    .batch-inp {
+      width: 42px;
+      height: 30px;
       text-align: center;
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 800;
       border: 1px solid #94a3b8;
-      border-radius: 10px;
+      border-radius: 8px;
       background: #fff;
+      padding: 0;
     }
 
-    /* 柔和圓弧動態磚 */
+    /* 縮小且防溢位的柔和圓弧動態磚 */
     .tile-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 11px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
     }
 
-    @media (min-width: 680px) {
-      .tile-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    @keyframes metroFlipPulse {
-      0% { transform: perspective(700px) rotateX(0deg) scale(1); }
-      45% { transform: perspective(700px) rotateX(14deg) scale(0.985); }
-      100% { transform: perspective(700px) rotateX(0deg) scale(1); }
+    @keyframes softFlip {
+      0% { transform: perspective(600px) rotateX(0deg); }
+      45% { transform: perspective(600px) rotateX(12deg); }
+      100% { transform: perspective(600px) rotateX(0deg); }
     }
 
     .live-tile {
-      border-radius: 22px;
-      padding: 16px;
-      min-height: 114px;
+      border-radius: 18px;
+      padding: 11px 11px;
+      min-height: 82px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       border: 1.5px solid transparent;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
-      transition: transform 0.14s ease;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      transition: transform 0.12s ease;
       user-select: none;
     }
 
     .live-tile:active { transform: scale(0.96); }
-    .live-tile.flipping { animation: metroFlipPulse 0.72s ease; }
+    .live-tile.flipping { animation: softFlip 0.65s ease; }
 
     .tile-title {
-      font-size: 19px;
+      font-size: 15px;
       font-weight: 800;
-      line-height: 1.25;
+      line-height: 1.2;
       color: #0f172a;
+      word-break: break-word;
     }
 
     .tile-sub {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       color: #334155;
-      margin-top: 6px;
+      margin-top: 4px;
+      line-height: 1.25;
     }
 
     .tile-badge {
       align-self: flex-end;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
-      padding: 3px 9px;
+      padding: 2px 7px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.78);
       color: #1e293b;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
     .t-gp { background: var(--tile-gp); border-color: var(--tile-gp-b); }
@@ -398,36 +398,36 @@
     .t-gdu { background: var(--tile-gdu); border-color: var(--tile-gdu-b); }
     .t-maint { background: var(--tile-maint); border-color: var(--tile-maint-b); }
 
-    .section-spacer { height: 22px; }
-    .section-title {
-      font-size: 17px;
+    .section-gap { height: 18px; }
+    .sec-title {
+      font-size: 15px;
       font-weight: 800;
-      margin: 4px 0 8px 2px;
+      margin: 4px 0 7px 2px;
       color: #1e293b;
     }
 
     .panel-card {
       background: #ffffff;
-      border-radius: 22px;
-      padding: 18px;
-      margin-top: 12px;
+      border-radius: 18px;
+      padding: 14px;
+      margin-top: 10px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
     }
 
-    .field-block { margin-bottom: 14px; }
+    .field-block { margin-bottom: 11px; }
 
     .chip-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
 
     .chip-btn {
-      padding: 10px 13px;
-      font-size: 15px;
+      padding: 8px 11px;
+      font-size: 13px;
       font-weight: 700;
-      border-radius: 13px;
+      border-radius: 11px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       color: #1e293b;
@@ -440,41 +440,55 @@
       border-color: #0284c7;
     }
 
-    .notice-box {
-      margin-top: 12px;
-      padding: 12px 14px;
+    .stage-tracker {
+      margin-top: 10px;
+      padding: 10px 12px;
       border-radius: 14px;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .stage-tracker.st-prep { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
+    .stage-tracker.st-sending { background: #fef9c3; border-color: #facc15; color: #854d0e; }
+    .stage-tracker.st-done { background: #dcfce7; border-color: #4ade80; color: #166534; }
+    .stage-tracker.st-queued { background: #ffedd5; border-color: #fb923c; color: #9a3412; }
+    .stage-tracker.st-err { background: #fee2e2; border-color: #f87171; color: #991b1b; }
+
+    .notice-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
       background: #f1f5f9;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 600;
       white-space: pre-wrap;
     }
 
-    /* 底部模擬手機上一頁／下一頁導航列 */
     .bottom-nav {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
-      height: 56px;
+      height: 52px;
       background: rgba(255, 255, 255, 0.96);
       border-top: 1px solid #cbd5e1;
       display: flex;
       align-items: center;
       justify-content: space-around;
       z-index: 50;
-      padding: 0 12px;
+      padding: 0 18px;
       gap: 10px;
     }
 
     .nav-btn {
       flex: 1;
-      height: 40px;
-      border-radius: 13px;
+      height: 36px;
+      border-radius: 12px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       color: #0f172a;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       cursor: pointer;
     }
@@ -484,15 +498,14 @@
   </style>
 </head>
 <body>
-  <!-- 左右側邊細長條 + 半隱形三角形 -->
   <div class="edge-rail left" onclick="goPrev()">
-    <div class="tri-ghost tri-left"></div>
+    <div class="tri-big tri-left"></div>
   </div>
   <div class="edge-rail right" onclick="goNext()">
-    <div class="tri-ghost tri-right"></div>
+    <div class="tri-big tri-right"></div>
   </div>
 
-  <!-- 頂部語系按鈕：BM -> EN -> 中 -->
+  <!-- 頂部：BM -> EN -> 中 + 重新更新 / 切換密碼（移除清除記憶與 basic 字樣） -->
   <div class="top-bar">
     <div class="pill-group">
       <button type="button" class="pill-btn" data-lang="ms" onclick="setLang('ms')">BM</button>
@@ -500,35 +513,42 @@
       <button type="button" class="pill-btn" data-lang="zh-TW" onclick="setLang('zh-TW')">中</button>
     </div>
     <div class="pill-group">
-      <span id="rolePill" class="pill-btn" style="cursor:default;">-</span>
+      <button type="button" class="pill-btn active" id="btnSoundToggle" onclick="toggleSound()"></button>
+      <button type="button" class="pill-btn" id="btnRefresh" onclick="refreshAllNow()"></button>
       <span id="queuePill" class="pill-btn hidden" style="background:#f59e0b; color:#fff; border-color:#f59e0b;" onclick="syncOfflineQueue()">0</span>
       <button type="button" class="pill-btn" id="btnSwitchCode" onclick="promptSwitchCode()"></button>
-      <button type="button" class="pill-btn" id="btnResetMem" onclick="resetMemory()"></button>
     </div>
   </div>
 
-  <!-- 緊湊型時鐘、日期、地點、天氣雨情與溫度變化曲線（含現在時間指示針） -->
-  <section class="compact-widget">
-    <div class="widget-header">
-      <div class="time-date-wrap">
-        <div class="clock-text" id="clockNow">--:--:--</div>
-        <div class="date-loc-text" id="dateLocLine">--</div>
+  <!-- 拆分成獨立小框：時間框、地點框、現有溫度與雨情框、未來溫度預報曲線框 -->
+  <section class="split-widget-wrap">
+    <div class="mini-row-2">
+      <div class="sub-box">
+        <div class="clock-val" id="clockNow">--:--:--</div>
+        <div class="date-sub" id="dateSub">--</div>
       </div>
-      <div class="rain-temp-wrap">
-        <div class="now-temp-badge" id="tempNowBadge">--°C</div>
-        <div class="rain-badge" id="rainBadge">--</div>
+      <div class="sub-box">
+        <div class="loc-val" id="locSub">--</div>
+        <div class="date-sub" id="groupStatusSub">-</div>
       </div>
     </div>
-    <div class="curve-box">
-      <div class="curve-top-bar">
-        <span id="curveHeading"></span>
-        <button type="button" class="span-toggle" id="btnToggleSpan" onclick="toggleCurveSpan()">6H / 12H</button>
+
+    <div class="mini-row-2">
+      <div class="sub-box">
+        <div class="temp-val" id="tempNowVal">--°C</div>
+        <div class="rain-txt" id="rainNowTxt">--</div>
       </div>
-      <svg id="hourlyCurveSvg" viewBox="0 0 360 68" width="100%" height="68"></svg>
+      <div class="sub-box">
+        <div class="curve-header">
+          <span id="curveTitle"></span>
+          <button type="button" class="span-btn" id="btnSpanToggle" onclick="toggleSpan()">±3H / ±6H</button>
+        </div>
+        <svg id="forecastCurveSvg" viewBox="0 0 240 52" width="100%" height="52"></svg>
+      </div>
     </div>
   </section>
 
-  <!-- 密碼登入畫面（零密碼暗示，按 Enter 直接登入） -->
+  <!-- 密碼輸入框（零暗示，Enter 直接進入） -->
   <section id="loginCard" class="auth-card">
     <label class="field-label" id="lblPass" for="inpPass"></label>
     <input type="password" id="inpPass" class="input-box" autocomplete="off" onkeydown="if(event.key==='Enter') submitLogin();" />
@@ -538,36 +558,28 @@
 
   <!-- 主工作區 -->
   <main id="workspaceMain" class="main-wrap hidden">
-    <!-- 目前所在房號與三週次批次提醒橫幅 -->
-    <div class="context-banner">
+    <div class="context-bar">
       <span id="locBannerText">-</span>
-      <span id="batchBannerBtn" class="batch-pill hidden" onclick="reopenBatchGate()"></span>
+      <span id="batchBannerBtn" class="batch-chip hidden" onclick="reopenBatchGate()"></span>
     </div>
 
-    <!-- 上方動態磚網格 -->
     <div id="topGrid" class="tile-grid"></div>
-
-    <!-- 間隔 -->
-    <div class="section-spacer"></div>
-
-    <!-- 下方分析與查詢方塊（依密碼層級顯示） -->
-    <div id="bottomTitle" class="section-title hidden"></div>
+    <div class="section-gap"></div>
+    <div id="bottomTitle" class="sec-title hidden"></div>
     <div id="bottomGrid" class="tile-grid"></div>
 
-    <!-- 表單面板 -->
     <div id="formPanel" class="panel-card hidden"></div>
-    <!-- 額外查詢/分析面板 -->
     <div id="extraPanel" class="panel-card hidden"></div>
   </main>
 
-  <!-- 底部模擬手機上一頁／下一頁導航列 -->
+  <!-- 底部上一頁／下一頁 -->
   <nav class="bottom-nav">
     <button type="button" class="nav-btn" id="btnNavPrev" onclick="goPrev()"></button>
     <button type="button" class="nav-btn" id="btnNavNext" onclick="goNext()"></button>
   </nav>
 
   <script>
-    // === [START MODULE 4: PURE SINGLE-LANG DICTIONARY, BATCH GATE, CURVE NEEDLE & TELEMETRY] ===
+    // === [START MODULE 4: CENTER-NOW FORECAST CURVE, SOUND ALERTS, STAGES & SYNC] ===
     const CONFIG = {
       GAS_URL: 'https://script.google.com/macros/s/AKfycbyEod8PcLLZYsglmyef9s3AHkzD4gpitKXQDew1YS6fqhlofZp43_iA9uw1SwQzzXiqRg/exec',
       API_TOKEN: 'GLA_FIELD_INTAKE_TOKEN_2026',
@@ -580,10 +592,11 @@
         admin: 'qwert'
       },
       KEYS: {
-        LANG: 'gla_sys_lang_v3',
-        PASS: 'gla_sys_pass_v3',
-        QUEUE: 'gla_sys_queue_v3',
-        ROOM_BATCHES: 'gla_room_batches_v3'
+        LANG: 'gla_sys_lang_v5',
+        PASS: 'gla_sys_pass_v5',
+        QUEUE: 'gla_sys_queue_v5',
+        ROOM_BATCHES: 'gla_room_batches_v5',
+        SOUND: 'gla_sound_on_v5'
       },
       LAT: 1.167,
       LON: 110.566,
@@ -591,62 +604,63 @@
       IMG_QUALITY: 0.65
     };
 
-    // 嚴格純單一語系字典（BM / EN / 中 絕不混雜）
     const DICT = {
       'ms': {
         passLabel: 'Kod Akses',
         enterBtn: 'Masuk',
         switchCode: 'Tukar Kod',
-        resetMem: 'Set Semula',
+        refreshBtn: 'Kemas Kini',
+        soundOn: 'Bunyi: ON',
+        soundOff: 'Bunyi: OFF',
         badPass: 'Kod akses tidak sah',
         prevBtn: 'Kembali',
         nextBtn: 'Seterusnya',
-        locationName: 'Serian · Kuching, Sarawak',
-        curve6h: 'Suhu 6 Jam Terkini',
-        curve12h: 'Suhu 12 Jam Terkini',
-        nowTag: 'Sekarang',
+        locationName: 'Serian · Kuching',
+        curveAroundNow3: 'Ramalan ±3 Jam',
+        curveAroundNow6: 'Ramalan ±6 Jam',
+        nowLabel: 'Kini',
         rainLikely: 'Dijangka Hujan',
         rainLow: 'Peluang Hujan Rendah',
         extraHeading: 'Analisis & Carian',
-        batchGateTitle: 'Tetapkan Kumpulan 3 Minggu Dahulu',
-        batchRemind: 'Sila sahkan bilik & kumpulan 3 minggu sebelum meneruskan',
+        batchGateTitle: 'Sahkan Bilik & Kumpulan 3 Minggu Dahulu',
+        batchRemind: 'Semak bilik & kumpulan 3 minggu sebelum meneruskan',
         w1Label: 'Minggu Kahwin',
         w2Label: 'Minggu Beranak',
         w3Label: 'Minggu Cerai Susu',
         confirmBatchBtn: 'Sahkan Bilik & Kumpulan',
         tapToChangeBatch: 'Tukar Kumpulan',
         deptGest: 'Kandang Bunting',
-        deptGestSub: 'Berahi · Kahwin · Air/Makanan',
+        deptGestSub: 'Berahi · Kahwin',
         deptFarr: 'Bilik Beranak',
-        deptFarrSub: 'Masuk Induk · Beranak · Cerai Susu',
+        deptFarrSub: 'Masuk · Beranak · Cerai',
         deptNurs: 'Bilik Asuhan',
-        deptNursSub: 'Meter Air · Makanan · Rawatan/Mati',
+        deptNursSub: 'Air · Makanan · Rawatan/Mati',
         deptPork: 'Bilik Pembesaran',
-        deptPorkSub: 'Meter Air · Makanan · Rawatan/Mati',
+        deptPorkSub: 'Air · Makanan · Rawatan/Mati',
         deptBoar: 'Kandang Pejantan',
-        deptBoarSub: 'Koleksi Mani · Kualiti Mani',
+        deptBoarSub: 'Koleksi Mani',
         deptGdu: 'Kandang GDU',
-        deptGduSub: 'Pemilihan · Konformasi · Air/Makanan',
+        deptGduSub: 'Pemilihan · Air/Makanan',
         sideA: 'Bahagian A',
         sideB: 'Bahagian B',
         tileFW: 'Meter Air & Makanan',
-        tileFWSub: 'Meter Pagi/Petang · Beg Makanan (50kg)',
+        tileFWSub: 'Pagi/Petang · Beg (50kg)',
         tileProd: 'Rekod Pengeluaran',
-        tileProdSub: 'Kahwin / Beranak / Mani / Pemilihan',
+        tileProdSub: 'Borang Utama',
         tileSowIn: 'Kemasukan Induk (Rabu)',
-        tileSowInSub: 'Rekod bilangan induk masuk bilik',
+        tileSowInSub: 'Bilangan induk masuk',
         tileFarrRec: 'Rekod Beranak',
-        tileFarrRecSub: 'No. Induk · Lahir Hidup/Mati · Berat',
+        tileFarrRecSub: 'Induk · Lahir · Berat',
         tileWeanHead: 'Cerai Susu: Bilangan (Khamis)',
-        tileWeanHeadSub: 'Bilangan anak & induk keluar bilik',
-        tileWeanWt: 'Cerai Susu: Butiran Berat',
-        tileWeanWtSub: 'Berat kumpulan cerai susu',
+        tileWeanHeadSub: 'Anak & induk keluar',
+        tileWeanWt: 'Cerai Susu: Berat',
+        tileWeanWtSub: 'Berat sekumpulan',
         tileMal: 'Kecacatan Hidup & Klinikal',
-        tileMalSub: 'No. Induk + Tarikh Beranak + Bilangan + Foto',
+        tileMalSub: 'Induk + Tarikh + Bilangan + Foto',
         tileTreat: 'Rawatan',
-        tileTreatSub: 'No. Telinga · Pilihan Ubat',
+        tileTreatSub: 'No. Telinga · Ubat',
         tileMort: 'Kematian',
-        tileMortSub: 'No. Telinga · Kumpulan 3 Minggu',
+        tileMortSub: 'No. Telinga · Kumpulan',
         lblDate: 'Tarikh',
         lblEarTag: 'No. Telinga',
         lblSowTag: 'No. Telinga Induk',
@@ -670,7 +684,7 @@
         optNormal: 'Normal',
         optSmall: 'Kecil',
         optUpturned: 'Menjongket',
-        optNA: 'Tidak Berkaitan',
+        optNA: 'N/A',
         lblTestis: 'Simetri Testis',
         optSym: 'Simetri',
         optAsym: 'Tidak Simetri',
@@ -697,90 +711,95 @@
         lblProg: 'Pergerakan Progresif (%)',
         lblAbn: 'Keabnormalan (%)',
         lblHeadCount: 'Bilangan Ternakan Semasa',
-        lblWaterAM: 'Meter Air Pagi (Masuk Kerja)',
-        lblWaterPM: 'Meter Air Petang (Tamat Kerja)',
+        lblWaterAM: 'Meter Air Pagi',
+        lblWaterPM: 'Meter Air Petang',
         lblFeedCode: 'Kod Makanan',
-        optOther1: 'Lain-lain 1',
-        optOther2: 'Lain-lain 2',
-        optOther3: 'Lain-lain 3',
-        optOther4: 'Lain-lain 4',
-        lblFeedCustom: 'Nama Kod Makanan Lain (Jika dipilih)',
-        lblFeedBags: 'Bilangan Beg Makanan (1 Beg = 50kg)',
-        lblMedOpt: 'Pilihan Ubat (Dikhaskan)',
-        optMedReserved: 'Pilihan Ubat akan dikemas kini',
+        optOther1: 'Lain 1',
+        optOther2: 'Lain 2',
+        optOther3: 'Lain 3',
+        optOther4: 'Lain 4',
+        lblFeedCustom: 'Nama Kod Makanan Lain',
+        lblFeedBags: 'Beg Makanan (1 Beg = 50kg)',
+        lblMedOpt: 'Pilihan Ubat',
+        optMedReserved: 'Akan dikemas kini',
         lblFarrowDate: 'Tarikh Beranak',
         lblMalCount: 'Bilangan Anak Cacat',
-        lblMalSigns: 'Jenis Kecacatan / Tanda Klinikal',
+        lblMalSigns: 'Jenis Kecacatan / Tanda',
         signSkin: 'Kerosakan Kulit',
         signLimb: 'Kecacatan Kaki',
         signDowner: 'Tidak Boleh Berdiri',
         signHead: 'Kecacatan Kepala',
         signGenital: 'Faraj / Dubur',
-        signFever: 'Suhu Tinggi / Demam',
-        signPant: 'Termengah-mengah',
+        signFever: 'Suhu Tinggi',
+        signPant: 'Termengah',
         signRed: 'Bintik Merah',
         signDiarrhea: 'Cirit-birit',
         signOther: 'Lain-lain',
         lblNote: 'Catatan Ringkas',
-        lblPhoto: 'Foto (Dimampatkan Automatik)',
+        lblPhoto: 'Foto (Mampat Auto)',
         submitBtn: 'Hantar Rekod',
-        savedOk: 'Rekod disimpan. No. Rujukan: ',
-        savedOffline: 'Disimpan sementara di peranti'
+        step1Prep: '1. Menyedia & Memampat...',
+        step2Send: '2. Sedang Menghantar...',
+        step3Done: '3. Telah Dihantar! ID: ',
+        step3Queued: '3. Disimpan di Peranti',
+        step3Err: '3. Gagal Dihantar'
       },
       'en': {
         passLabel: 'Access Code',
         enterBtn: 'Enter',
         switchCode: 'Switch Code',
-        resetMem: 'Reset',
+        refreshBtn: 'Refresh',
+        soundOn: 'Sound: ON',
+        soundOff: 'Sound: OFF',
         badPass: 'Invalid access code',
         prevBtn: 'Prev',
         nextBtn: 'Next',
-        locationName: 'Serian · Kuching, Sarawak',
-        curve6h: 'Last 6 Hours Temperature',
-        curve12h: 'Last 12 Hours Temperature',
-        nowTag: 'Now',
+        locationName: 'Serian · Kuching',
+        curveAroundNow3: 'Forecast ±3H',
+        curveAroundNow6: 'Forecast ±6H',
+        nowLabel: 'Now',
         rainLikely: 'Rain Expected',
         rainLow: 'Low Rain Chance',
         extraHeading: 'Analytics & Lookup',
         batchGateTitle: 'Confirm Room & 3-Week Batch First',
-        batchRemind: 'Verify room number and 3-week batch before proceeding',
-        w1Label: 'Mating Week',
-        w2Label: 'Farrow Week',
-        w3Label: 'Wean Week',
+        batchRemind: 'Verify room & 3-week batch before proceeding',
+        w1Label: 'Mating Wk',
+        w2Label: 'Farrow Wk',
+        w3Label: 'Wean Wk',
         confirmBatchBtn: 'Confirm Room & Batch',
         tapToChangeBatch: 'Change Batch',
         deptGest: 'Gestation',
-        deptGestSub: 'Heat · Breeding · Water & Feed',
+        deptGestSub: 'Heat · Breeding',
         deptFarr: 'Farrowing',
-        deptFarrSub: 'Sow Transfer · Farrow · Wean',
+        deptFarrSub: 'Transfer · Farrow · Wean',
         deptNurs: 'Nursery',
-        deptNursSub: 'Water Meter · Feed · Treat & Mortality',
+        deptNursSub: 'Water · Feed · Treat/Mort',
         deptPork: 'Porker',
-        deptPorkSub: 'Water Meter · Feed · Treat & Mortality',
+        deptPorkSub: 'Water · Feed · Treat/Mort',
         deptBoar: 'Boar House',
-        deptBoarSub: 'Semen Collection · Quality',
+        deptBoarSub: 'Semen Collection',
         deptGdu: 'GDU',
-        deptGduSub: 'Selection · Conformation · Water & Feed',
+        deptGduSub: 'Selection · Water/Feed',
         sideA: 'Side A',
         sideB: 'Side B',
         tileFW: 'Water Meter & Feed',
-        tileFWSub: 'AM/PM Water Meter · Feed Bags (50kg)',
+        tileFWSub: 'AM/PM · Bags (50kg)',
         tileProd: 'Production Records',
-        tileProdSub: 'Breeding / Farrow / Semen / Selection',
+        tileProdSub: 'Main Form',
         tileSowIn: 'Sow Transfer-In (Wed)',
-        tileSowInSub: 'Record sows moved into room',
+        tileSowInSub: 'Sows moved in',
         tileFarrRec: 'Farrowing Record',
-        tileFarrRecSub: 'Sow Tag · Born Alive/Still · Birth Wt',
-        tileWeanHead: 'Weaning: Headcounts (Thu)',
-        tileWeanHeadSub: 'Weaned piglets & sows moved out',
-        tileWeanWt: 'Weaning: Weight Details',
-        tileWeanWtSub: 'Weaning litter weight',
-        tileMal: 'Live Malformation & Clinical',
-        tileMalSub: 'Sow Tag + Farrow Date + Count + Photo',
+        tileFarrRecSub: 'Sow · Born · Wt',
+        tileWeanHead: 'Weaning: Counts (Thu)',
+        tileWeanHeadSub: 'Piglets & sows out',
+        tileWeanWt: 'Weaning: Weight',
+        tileWeanWtSub: 'Litter weight',
+        tileMal: 'Live Malformation & Signs',
+        tileMalSub: 'Sow + Date + Count + Photo',
         tileTreat: 'Treatment',
-        tileTreatSub: 'Ear Tag · Medication Options',
+        tileTreatSub: 'Ear Tag · Medication',
         tileMort: 'Mortality',
-        tileMortSub: 'Ear Tag · 3-Week Batch',
+        tileMortSub: 'Ear Tag · Batch',
         lblDate: 'Date',
         lblEarTag: 'Ear Tag',
         lblSowTag: 'Sow Ear Tag',
@@ -795,8 +814,8 @@
         lblLeftTeat: 'Left Teats',
         lblRightTeat: 'Right Teats',
         lblBlindTeat: 'Blind Teats',
-        lblFrontLeg: 'Front Leg Score (1-5)',
-        lblRearLeg: 'Rear Leg Score (1-5)',
+        lblFrontLeg: 'Front Leg (1-5)',
+        lblRearLeg: 'Rear Leg (1-5)',
         lblBodyLen: 'Body Length (cm)',
         lblShoulderW: 'Shoulder Width (cm)',
         lblChestW: 'Chest Width (cm)',
@@ -814,43 +833,43 @@
         lblHeatDate: 'Heat Date',
         lblBreedDate: 'Breeding Date',
         lblServiceBoar: 'Service Boar Tag',
-        lblSowInCount: 'Transferred-In Sow Count',
+        lblSowInCount: 'Sows Moved In',
         lblTNB: 'Total Born',
         lblNBA: 'Born Alive',
         lblStillborn: 'Stillborn',
         lblMummy: 'Mummified',
-        lblBirthWt: 'Birth Litter Weight (kg)',
+        lblBirthWt: 'Birth Litter Wt (kg)',
         lblWeanDate: 'Weaning Date',
-        lblWeanPigCount: 'Weaned Piglet Count',
-        lblWeanSowCount: 'Weaned Sow Out Count',
-        lblWeanWt: 'Wean Litter Weight (kg)',
-        lblLibido: 'Libido Score (1-5)',
-        lblVol: 'Semen Volume (mL)',
+        lblWeanPigCount: 'Weaned Piglets',
+        lblWeanSowCount: 'Sows Moved Out',
+        lblWeanWt: 'Wean Litter Wt (kg)',
+        lblLibido: 'Libido (1-5)',
+        lblVol: 'Volume (mL)',
         lblConc: 'Concentration',
         lblMot: 'Motility (%)',
         lblProg: 'Progressive (%)',
         lblAbn: 'Abnormality (%)',
-        lblHeadCount: 'Current Head Count',
-        lblWaterAM: 'Morning Water Meter (Start Shift)',
-        lblWaterPM: 'Afternoon Water Meter (End Shift)',
+        lblHeadCount: 'Head Count',
+        lblWaterAM: 'AM Water Meter',
+        lblWaterPM: 'PM Water Meter',
         lblFeedCode: 'Feed Code',
         optOther1: 'Other 1',
         optOther2: 'Other 2',
         optOther3: 'Other 3',
         optOther4: 'Other 4',
-        lblFeedCustom: 'Custom Feed Name (If Other selected)',
-        lblFeedBags: 'Feed Bags Used (1 Bag = 50kg)',
-        lblMedOpt: 'Medication Option (Reserved)',
-        optMedReserved: 'Medication list pending',
+        lblFeedCustom: 'Custom Feed Name',
+        lblFeedBags: 'Feed Bags (1 Bag = 50kg)',
+        lblMedOpt: 'Medication Option',
+        optMedReserved: 'Pending update',
         lblFarrowDate: 'Farrowing Date',
-        lblMalCount: 'Malformed Head Count',
-        lblMalSigns: 'Malformation / Clinical Signs',
+        lblMalCount: 'Malformed Count',
+        lblMalSigns: 'Malformation / Signs',
         signSkin: 'Skin Lesion',
         signLimb: 'Limb Deformity',
-        signDowner: 'Unable to Stand',
+        signDowner: 'Downer',
         signHead: 'Head Deformity',
-        signGenital: 'Vulva / Anal Anomaly',
-        signFever: 'High Temp / Fever',
+        signGenital: 'Genital / Anal',
+        signFever: 'High Temp',
         signPant: 'Panting',
         signRed: 'Red Spots',
         signDiarrhea: 'Diarrhea',
@@ -858,63 +877,68 @@
         lblNote: 'Brief Note',
         lblPhoto: 'Photo (Auto-compressed)',
         submitBtn: 'Submit Record',
-        savedOk: 'Saved successfully. ID: ',
-        savedOffline: 'Saved locally (offline queue)'
+        step1Prep: '1. Preparing & Compressing...',
+        step2Send: '2. Uploading...',
+        step3Done: '3. Submitted! ID: ',
+        step3Queued: '3. Saved Offline',
+        step3Err: '3. Upload Failed'
       },
       'zh-TW': {
-        passLabel: '請輸入存取密碼',
+        passLabel: '請輸入密碼',
         enterBtn: '確認進入',
         switchCode: '切換密碼',
-        resetMem: '清除記憶',
-        badPass: '密碼無效，請重新輸入',
+        refreshBtn: '重新更新',
+        soundOn: '音效：開',
+        soundOff: '音效：關',
+        badPass: '密碼無效',
         prevBtn: '上一頁',
         nextBtn: '下一頁',
-        locationName: '西連 · 古晉，砂拉越',
-        curve6h: '最近 6 小時溫度變化',
-        curve12h: '最近 12 小時溫度變化',
-        nowTag: '現在',
+        locationName: '西連 · 古晉',
+        curveAroundNow3: '現在前後 3 小時預報',
+        curveAroundNow6: '現在前後 6 小時預報',
+        nowLabel: '現在',
         rainLikely: '今日有降雨機率',
         rainLow: '今日降雨機率偏低',
         extraHeading: '分析與查詢專區',
         batchGateTitle: '請先確認房號與三週次批次',
-        batchRemind: '操作前請務必核對目前房號與三週次批次',
+        batchRemind: '請核對目前房號與三週次批次後再繼續',
         w1Label: '配種週次',
         w2Label: '分娩週次',
         w3Label: '離乳週次',
         confirmBatchBtn: '確認房號與批次',
         tapToChangeBatch: '修改批次',
         deptGest: '配懷舍',
-        deptGestSub: '發情 · 配種 · 水錶飼料',
+        deptGestSub: '發情 · 配種',
         deptFarr: '產房',
-        deptFarrSub: '母豬轉入 · 分娩 · 離乳',
+        deptFarrSub: '轉入 · 分娩 · 離乳',
         deptNurs: '保育舍',
-        deptNursSub: '上下午水錶 · 飼料包數 · 治療死亡',
+        deptNursSub: '水錶 · 飼料 · 治療死亡',
         deptPork: '肉豬舍',
-        deptPorkSub: '上下午水錶 · 飼料包數 · 治療死亡',
+        deptPorkSub: '水錶 · 飼料 · 治療死亡',
         deptBoar: '公豬舍',
-        deptBoarSub: '公豬採精 · 精液品質',
+        deptBoarSub: '公豬採精',
         deptGdu: '後備母豬舍',
-        deptGduSub: '選種體型 · 乳頭評分 · 水料',
+        deptGduSub: '選種 · 水錶飼料',
         sideA: 'A 區',
         sideB: 'B 區',
         tileFW: '獨立水錶與飼料用料',
-        tileFWSub: '上午/下午水錶度數 · 飼料包數 (50kg)',
+        tileFWSub: '上午/下午水錶 · 飼料包數 (50kg)',
         tileProd: '生產與選育紀錄',
-        tileProdSub: '配種 / 分娩 / 採精 / 選種',
+        tileProdSub: '作業表單',
         tileSowIn: '待產母豬轉入（週三）',
-        tileSowInSub: '登記轉入本間產房母豬頭數',
+        tileSowInSub: '轉入母豬頭數',
         tileFarrRec: '分娩紀錄',
-        tileFarrRecSub: '母豬耳號 · 活仔/死胎/木乃伊 · 初生重',
+        tileFarrRecSub: '母豬 · 活仔/死胎 · 初生重',
         tileWeanHead: '離乳與轉出頭數（週四）',
-        tileWeanHeadSub: '離乳仔豬頭數與離乳母豬出房頭數',
+        tileWeanHeadSub: '離乳仔豬與母豬出房',
         tileWeanWt: '離乳秤重明細',
-        tileWeanWtSub: '離乳窩重與重量紀錄',
+        tileWeanWtSub: '離乳窩重紀錄',
         tileMal: '活體畸形與臨床異常',
-        tileMalSub: '母豬耳號 + 分娩日 + 畸形頭數 + 照片',
+        tileMalSub: '母豬 + 分娩日 + 頭數 + 照片',
         tileTreat: '治療紀錄',
-        tileTreatSub: '個體耳號 · 用藥點選（預留）',
+        tileTreatSub: '耳號 · 用藥點選',
         tileMort: '死亡紀錄',
-        tileMortSub: '個體耳號 · 三週次批次',
+        tileMortSub: '耳號 · 三週次批次',
         lblDate: '日期',
         lblEarTag: '耳號',
         lblSowTag: '母豬耳號',
@@ -965,17 +989,17 @@
         lblProg: '前進運動率 (%)',
         lblAbn: '畸形率 (%)',
         lblHeadCount: '當日存欄頭數',
-        lblWaterAM: '上午水錶度數（上班時）',
-        lblWaterPM: '下午水錶度數（下班時）',
+        lblWaterAM: '上午水錶度數',
+        lblWaterPM: '下午水錶度數',
         lblFeedCode: '飼料料號',
         optOther1: '其他 1',
         optOther2: '其他 2',
         optOther3: '其他 3',
         optOther4: '其他 4',
-        lblFeedCustom: '其他飼料名稱（選填）',
-        lblFeedBags: '飼料使用包數（1 包 = 50 公斤）',
-        lblMedOpt: '用藥選項（預留待補）',
-        optMedReserved: '藥物清單待設定',
+        lblFeedCustom: '其他飼料名稱',
+        lblFeedBags: '飼料包數（1 包 = 50 公斤）',
+        lblMedOpt: '用藥選項',
+        optMedReserved: '待更新藥物清單',
         lblFarrowDate: '分娩日期',
         lblMalCount: '畸形頭數',
         lblMalSigns: '畸形與外觀徵狀點選',
@@ -990,26 +1014,30 @@
         signDiarrhea: '下痢',
         signOther: '其他異常',
         lblNote: '簡短補充說明',
-        lblPhoto: '現場照片（自動縮小壓縮）',
+        lblPhoto: '照片（自動壓縮）',
         submitBtn: '送出紀錄',
-        savedOk: '已成功寫入資料庫，單號：',
-        savedOffline: '目前離線，已暫存於本機待補傳'
+        step1Prep: '1. 準備與壓縮中...',
+        step2Send: '2. 正在送出...',
+        step3Done: '3. 已送出並寫入！單號：',
+        step3Queued: '3. 已暫存本機待補傳',
+        step3Err: '3. 送出失敗'
       }
     };
 
     const state = {
       lang: 'ms',
+      soundOn: true,
       profile: null,
       enteredAt: new Date().toISOString(),
       enteredMs: Date.now(),
       trajectory: [],
       history: [],
       redoStack: [],
-      curveSpan: 12, // 6 or 12 hours
+      halfSpan: 6, // 3 => ±3H, 6 => ±6H (現在在正中央)
       hourly24: Array.from({ length: 24 }, (_, h) => Math.round(25 + 6 * Math.sin(((h - 6) / 24) * Math.PI * 2))),
       rainProbMax: 40,
       view: {
-        stage: 'depts', // 'depts' | 'wing' | 'room' | 'batch_gate' | 'room_tiles' | 'form'
+        stage: 'depts',
         dept: '',
         wing: '',
         room: '',
@@ -1019,11 +1047,56 @@
       chips: {}
     };
 
+    function playAlertTone(kind) {
+      if (!state.soundOn) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (kind === 'success') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.11);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          osc.start(now);
+          osc.stop(now + 0.29);
+        } else if (kind === 'queued') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(392.0, now);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        } else {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220.0, now);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.26);
+        }
+      } catch (e) {}
+    }
+
+    function toggleSound() {
+      state.soundOn = !state.soundOn;
+      localStorage.setItem(CONFIG.KEYS.SOUND, state.soundOn ? '1' : '0');
+      applyTexts();
+      if (state.soundOn) playAlertTone('success');
+    }
+
     function detectSystemLang() {
       const saved = localStorage.getItem(CONFIG.KEYS.LANG);
       if (saved && DICT[saved]) return saved;
-      const rawList = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'ms'];
-      for (const item of rawList) {
+      const list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'ms'];
+      for (const item of list) {
         const low = String(item).toLowerCase();
         if (low.startsWith('ms') || low.includes('may') || low.includes('my')) return 'ms';
         if (low.startsWith('en')) return 'en';
@@ -1032,43 +1105,53 @@
       return 'ms';
     }
 
-    function setLang(langCode) {
-      if (!DICT[langCode]) return;
-      state.lang = langCode;
-      document.documentElement.lang = langCode;
-      localStorage.setItem(CONFIG.KEYS.LANG, langCode);
-      document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === langCode));
-      logTraj('lang:' + langCode);
-      applyStaticTranslations();
-      updateClockAndCurve();
+    function setLang(code) {
+      if (!DICT[code]) return;
+      state.lang = code;
+      document.documentElement.lang = code;
+      localStorage.setItem(CONFIG.KEYS.LANG, code);
+      document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
+      logTraj('lang:' + code);
+      applyTexts();
+      updateClockAndForecastCurve();
       if (state.profile) renderView();
     }
 
-    function applyStaticTranslations() {
+    function applyTexts() {
       const t = DICT[state.lang];
       document.getElementById('lblPass').textContent = t.passLabel;
       document.getElementById('btnLogin').textContent = t.enterBtn;
       document.getElementById('btnSwitchCode').textContent = t.switchCode;
-      document.getElementById('btnResetMem').textContent = t.resetMem;
+      document.getElementById('btnRefresh').textContent = t.refreshBtn;
+      document.getElementById('btnSoundToggle').textContent = state.soundOn ? t.soundOn : t.soundOff;
+      document.getElementById('btnSoundToggle').classList.toggle('active', state.soundOn);
       document.getElementById('btnNavPrev').textContent = '◀ ' + t.prevBtn;
       document.getElementById('btnNavNext').textContent = t.nextBtn + ' ▶';
       document.getElementById('bottomTitle').textContent = t.extraHeading;
-      document.getElementById('curveHeading').textContent = state.curveSpan === 6 ? t.curve6h : t.curve12h;
+      document.getElementById('curveTitle').textContent = state.halfSpan === 3 ? t.curveAroundNow3 : t.curveAroundNow6;
     }
 
-    function toggleCurveSpan() {
-      state.curveSpan = state.curveSpan === 12 ? 6 : 12;
-      applyStaticTranslations();
-      updateClockAndCurve();
+    function toggleSpan() {
+      state.halfSpan = state.halfSpan === 6 ? 3 : 6;
+      applyTexts();
+      updateClockAndForecastCurve();
     }
 
-    function logTraj(step) {
+    function refreshAllNow() {
+      logTraj('refresh');
+      loadForecastWeather();
+      syncOfflineQueue();
+      if (state.profile) renderView();
+      playAlertTone('success');
+    }
+
+    function logTraj(tag) {
       const sec = Math.round((Date.now() - state.enteredMs) / 1000);
-      state.trajectory.push(sec + 's:' + step);
+      state.trajectory.push(sec + 's:' + tag);
       if (state.trajectory.length > 50) state.trajectory.shift();
     }
 
-    function resolvePass(raw) {
+    function parsePass(raw) {
       const p = String(raw || '').trim().toLowerCase();
       if (p === CONFIG.PASSWORDS.ps_basic) return { group: 'PS', level: 'basic', code: p };
       if (p === CONFIG.PASSWORDS.ps_query) return { group: 'PS', level: 'query', code: p };
@@ -1080,27 +1163,28 @@
     }
 
     function submitLogin() {
-      const raw = document.getElementById('inpPass').value;
-      const prof = resolvePass(raw);
+      const prof = parsePass(document.getElementById('inpPass').value);
       const err = document.getElementById('errLogin');
       if (!prof) {
         err.textContent = DICT[state.lang].badPass;
         err.classList.remove('hidden');
+        playAlertTone('error');
         return;
       }
       err.classList.add('hidden');
       state.profile = prof;
       localStorage.setItem(CONFIG.KEYS.PASS, prof.code);
-      logTraj('login:' + prof.group + ':' + prof.level);
+      logTraj('login:' + prof.group);
       openWorkspace();
     }
 
     function promptSwitchCode() {
       const p = prompt(DICT[state.lang].passLabel);
       if (p === null) return;
-      const prof = resolvePass(p);
+      const prof = parsePass(p);
       if (!prof) {
         alert(DICT[state.lang].badPass);
+        playAlertTone('error');
         return;
       }
       state.profile = prof;
@@ -1108,27 +1192,20 @@
       state.view = { stage: 'depts', dept: '', wing: '', room: '', formType: '' };
       state.history = [];
       state.redoStack = [];
+      logTraj('switch:' + prof.group);
       openWorkspace();
-    }
-
-    function resetMemory() {
-      localStorage.removeItem(CONFIG.KEYS.PASS);
-      state.profile = null;
-      document.getElementById('workspaceMain').classList.add('hidden');
-      document.getElementById('loginCard').classList.remove('hidden');
-      document.getElementById('inpPass').value = '';
-      document.getElementById('rolePill').textContent = '-';
     }
 
     function openWorkspace() {
       document.getElementById('loginCard').classList.add('hidden');
       document.getElementById('workspaceMain').classList.remove('hidden');
-      document.getElementById('rolePill').textContent = state.profile.group + ' · ' + state.profile.level.toUpperCase();
+      document.getElementById('locSub').textContent = DICT[state.lang].locationName;
+      document.getElementById('groupStatusSub').textContent = state.profile.group;
       renderView();
     }
 
-    // 時鐘、日期與逐時溫度曲線（含現在時間點指示針）
-    function updateClockAndCurve() {
+    // 時鐘、日期與「現在在正中央」之未來溫度預報曲線
+    function updateClockAndForecastCurve() {
       const t = DICT[state.lang];
       const now = new Date();
       const pad = n => String(n).padStart(2, '0');
@@ -1136,74 +1213,76 @@
       const curM = now.getMinutes();
 
       document.getElementById('clockNow').textContent = `${pad(curH)}:${pad(curM)}:${pad(now.getSeconds())}`;
-      document.getElementById('dateLocLine').textContent =
-        `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} · ${t.locationName}`;
+      document.getElementById('dateSub').textContent = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+      document.getElementById('locSub').textContent = t.locationName;
+      if (state.profile) document.getElementById('groupStatusSub').textContent = state.profile.group;
 
-      const nowTemp = state.hourly24[curH] !== undefined ? state.hourly24[curH] : 29;
-      document.getElementById('tempNowBadge').textContent = nowTemp + '°C';
-      document.getElementById('rainBadge').textContent =
+      const curTemp = state.hourly24[curH] !== undefined ? state.hourly24[curH] : 29;
+      document.getElementById('tempNowVal').textContent = curTemp + '°C';
+      document.getElementById('rainNowTxt').textContent =
         (state.rainProbMax >= 50 ? t.rainLikely : t.rainLow) + ` (${state.rainProbMax}%)`;
 
-      const span = state.curveSpan;
-      const startH = Math.max(0, curH - (span - 1));
-      const hoursList = [];
-      for (let h = startH; h <= curH; h++) {
-        hoursList.push({ hour: h, temp: state.hourly24[h] ?? nowTemp });
-      }
-      if (hoursList.length < 2) {
-        hoursList.unshift({ hour: Math.max(0, curH - 1), temp: nowTemp });
+      const k = state.halfSpan; // 現在在正中央 idx = k，總共 2k + 1 點
+      const points = [];
+      for (let offset = -k; offset <= k; offset++) {
+        const hIdx = Math.max(0, Math.min(23, curH + offset));
+        points.push({
+          offset,
+          hour: hIdx,
+          temp: state.hourly24[hIdx] ?? curTemp
+        });
       }
 
-      const temps = hoursList.map(x => x.temp);
+      const temps = points.map(p => p.temp);
       const minT = Math.min(...temps) - 1;
       const maxT = Math.max(...temps) + 1;
 
-      const pts = hoursList.map((item, idx) => {
-        const x = 18 + (idx / (hoursList.length - 1)) * 316;
-        const y = 50 - ((item.temp - minT) / Math.max(1, maxT - minT)) * 34;
-        return { x, y, hour: item.hour, temp: item.temp };
+      const coords = points.map((pt, idx) => {
+        const x = 14 + (idx / Math.max(1, points.length - 1)) * 212;
+        const y = 38 - ((pt.temp - minT) / Math.max(1, maxT - minT)) * 24;
+        return { x, y, hour: pt.hour, temp: pt.temp, isNow: pt.offset === 0 };
       });
 
-      const lastPt = pts[pts.length - 1];
-      const dLine = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
-      const dArea = dLine + ` L${lastPt.x.toFixed(1)},56 L${pts[0].x.toFixed(1)},56 Z`;
+      const centerPt = coords[Math.floor(coords.length / 2)];
+      const linePath = coords.map((c, i) => (i === 0 ? 'M' : 'L') + c.x.toFixed(1) + ',' + c.y.toFixed(1)).join(' ');
+      const areaPath = linePath + ` L${coords[coords.length - 1].x.toFixed(1)},43 L${coords[0].x.toFixed(1)},43 Z`;
 
-      const svg = document.getElementById('hourlyCurveSvg');
+      const svg = document.getElementById('forecastCurveSvg');
       svg.innerHTML = `
         <defs>
-          <linearGradient id="gTemp" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="fcGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#0284c7" stop-opacity="0.28"/>
             <stop offset="100%" stop-color="#0284c7" stop-opacity="0.02"/>
           </linearGradient>
         </defs>
-        <path d="${dArea}" fill="url(#gTemp)"></path>
-        <path d="${dLine}" fill="none" stroke="#0284c7" stroke-width="2.6" stroke-linecap="round"></path>
-        ${pts.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.6" fill="#0369a1"></circle>`).join('')}
-        <!-- 現在時間指示針 -->
-        <line x1="${lastPt.x.toFixed(1)}" y1="8" x2="${lastPt.x.toFixed(1)}" y2="58" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"></line>
-        <circle cx="${lastPt.x.toFixed(1)}" cy="${lastPt.y.toFixed(1)}" r="5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"></circle>
-        <text x="${Math.min(285, lastPt.x - 18).toFixed(1)}" y="11" font-size="10" font-weight="800" fill="#dc2626">${t.nowTag} ${pad(curH)}:${pad(curM)} (${nowTemp}°)</text>
-        <text x="14" y="65" font-size="10" fill="#64748b">${pad(hoursList[0].hour)}:00</text>
-        <text x="${(lastPt.x - 14).toFixed(1)}" y="65" font-size="10" font-weight="700" fill="#0f172a">${pad(curH)}:00</text>
+        <path d="${areaPath}" fill="url(#fcGrad)"></path>
+        <path d="${linePath}" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round"></path>
+        ${coords.map(c => `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="2.2" fill="#0369a1"></circle>`).join('')}
+        <!-- 現在時間點在正中央 -->
+        <line x1="${centerPt.x.toFixed(1)}" y1="4" x2="${centerPt.x.toFixed(1)}" y2="45" stroke="#ef4444" stroke-width="1.6" stroke-dasharray="2.5,2"></line>
+        <circle cx="${centerPt.x.toFixed(1)}" cy="${centerPt.y.toFixed(1)}" r="4.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.4"></circle>
+        <text x="${centerPt.x.toFixed(1)}" y="10" text-anchor="middle" font-size="8.5" font-weight="800" fill="#dc2626">${t.nowLabel} ${curTemp}°</text>
+        <text x="12" y="51" font-size="8" fill="#64748b">${pad(coords[0].hour)}:00</text>
+        <text x="${centerPt.x.toFixed(1)}" y="51" text-anchor="middle" font-size="8" font-weight="700" fill="#dc2626">${pad(curH)}:00</text>
+        <text x="228" y="51" text-anchor="end" font-size="8" fill="#0369a1">${pad(coords[coords.length - 1].hour)}:00</text>
       `;
     }
 
-    async function loadHourlyWeather() {
+    async function loadForecastWeather() {
       try {
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${CONFIG.LAT}&longitude=${CONFIG.LON}&hourly=temperature_2m,precipitation_probability&timezone=Asia%2FKuching&forecast_days=1`;
         const res = await fetch(url);
-        const json = await res.json();
-        if (json && json.hourly && Array.isArray(json.hourly.temperature_2m)) {
-          state.hourly24 = json.hourly.temperature_2m.slice(0, 24).map(v => Math.round(v));
-          const probs = json.hourly.precipitation_probability || [];
+        const j = await res.json();
+        if (j && j.hourly && Array.isArray(j.hourly.temperature_2m)) {
+          state.hourly24 = j.hourly.temperature_2m.slice(0, 24).map(v => Math.round(v));
+          const probs = j.hourly.precipitation_probability || [];
           state.rainProbMax = probs.length ? Math.max(...probs.slice(0, 24)) : 0;
-          updateClockAndCurve();
+          updateClockAndForecastCurve();
         }
       } catch (e) {}
     }
 
-    // 導航前進/後退
-    function pushNavHistory() {
+    function pushHist() {
       state.history.push(JSON.parse(JSON.stringify(state.view)));
       state.redoStack = [];
     }
@@ -1212,7 +1291,7 @@
       if (!state.history.length) return;
       state.redoStack.push(JSON.parse(JSON.stringify(state.view)));
       state.view = state.history.pop();
-      logTraj('nav:prev');
+      logTraj('prev');
       renderView();
     }
 
@@ -1220,33 +1299,32 @@
       if (!state.redoStack.length) return;
       state.history.push(JSON.parse(JSON.stringify(state.view)));
       state.view = state.redoStack.pop();
-      logTraj('nav:next');
+      logTraj('next');
       renderView();
     }
 
-    // 房號批次記憶
     function getRoomKey() {
       return [state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean).join('_');
     }
 
-    function loadSavedRoomBatch() {
+    function loadSavedBatch() {
       try {
         const map = JSON.parse(localStorage.getItem(CONFIG.KEYS.ROOM_BATCHES) || '{}');
         return map[getRoomKey()] || null;
       } catch (e) { return null; }
     }
 
-    function saveRoomBatch(bObj) {
+    function saveBatch(obj) {
       try {
         const map = JSON.parse(localStorage.getItem(CONFIG.KEYS.ROOM_BATCHES) || '{}');
-        map[getRoomKey()] = bObj;
+        map[getRoomKey()] = obj;
         localStorage.setItem(CONFIG.KEYS.ROOM_BATCHES, JSON.stringify(map));
       } catch (e) {}
     }
 
     function reopenBatchGate() {
       if (!state.view.dept) return;
-      pushNavHistory();
+      pushHist();
       state.view.stage = 'batch_gate';
       renderView();
     }
@@ -1264,31 +1342,29 @@
       formPanel.classList.add('hidden');
       extraPanel.classList.add('hidden');
 
-      const locParts = [state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean);
-      document.getElementById('locBannerText').textContent = locParts.join(' › ');
+      const parts = [state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean);
+      document.getElementById('locBannerText').textContent = parts.join(' › ');
 
-      const batchPill = document.getElementById('batchBannerBtn');
-      if (state.view.room || (state.view.dept && state.view.stage !== 'depts' && state.view.stage !== 'wing' && state.view.stage !== 'room')) {
+      const batchChip = document.getElementById('batchBannerBtn');
+      if (state.view.room || ['batch_gate', 'room_tiles', 'form'].includes(state.view.stage)) {
         const bStr = [state.currentBatch.w1, state.currentBatch.w2, state.currentBatch.w3].filter(Boolean).join('/');
-        batchPill.textContent = (bStr ? `Batch: ${bStr} · ` : '') + t.tapToChangeBatch;
-        batchPill.classList.remove('hidden');
+        batchChip.textContent = (bStr ? `${bStr} · ` : '') + t.tapToChangeBatch;
+        batchChip.classList.remove('hidden');
       } else {
-        batchPill.classList.add('hidden');
+        batchChip.classList.add('hidden');
       }
 
-      // 下方分析與查詢方塊
       if (['query', 'report', 'admin'].includes(state.profile.level)) {
         botTitle.classList.remove('hidden');
-        botGrid.appendChild(createTile(t.deptFarr + ' Analysis', t.extraHeading, 'A1', 't-farr', () => {
-          showExtraNotice('Farrowing Analytics');
+        botGrid.appendChild(makeTile(t.deptFarr, t.extraHeading, 'A1', 't-farr', () => {
+          showExtra('Farrowing Analytics');
         }));
-        botGrid.appendChild(createTile('Query Hub', t.extraHeading, 'Q1', 't-gp', () => {
-          showExtraNotice('Sow & Boar Query Hub');
+        botGrid.appendChild(makeTile(t.extraHeading, state.profile.group, 'Q1', 't-gp', () => {
+          showExtra('Query Hub');
         }));
         if (state.profile.level === 'admin') {
-          botGrid.appendChild(createTile('Admin Log', 'QWERT', 'SYS', 't-boar', () => {
-            showExtraNotice(JSON.stringify({
-              enteredAt: state.enteredAt,
+          botGrid.appendChild(makeTile('QWERT', state.trajectory.slice(-3).join(' | '), 'LOG', 't-boar', () => {
+            showExtra(JSON.stringify({
               dwellSec: Math.round((Date.now() - state.enteredMs) / 1000),
               ua: navigator.userAgent,
               trajectory: state.trajectory
@@ -1299,7 +1375,6 @@
         botTitle.classList.add('hidden');
       }
 
-      // Stage 1: 六大部門
       if (state.view.stage === 'depts') {
         const depts = [
           { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, cls: 't-gest' },
@@ -1310,8 +1385,8 @@
           { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, cls: 't-gdu' }
         ];
         depts.forEach(d => {
-          topGrid.appendChild(createTile(d.title, d.sub, state.profile.group, d.cls, () => {
-            pushNavHistory();
+          topGrid.appendChild(makeTile(d.title, d.sub, state.profile.group, d.cls, () => {
+            pushHist();
             state.view.dept = d.id;
             state.view.wing = '';
             state.view.room = '';
@@ -1322,41 +1397,39 @@
               state.view.stage = 'room';
             } else {
               state.view.room = d.id;
-              enterBatchOrRoomTiles();
+              enterBatchGate();
               return;
             }
             renderView();
           }));
         });
-        triggerTileFlips();
+        runTileFlip();
         return;
       }
 
-      // Stage 2: A Side / B Side
       if (state.view.stage === 'wing') {
-        const cls = getDeptClass(state.view.dept);
+        const cls = deptCls(state.view.dept);
         [{ code: 'A', label: t.sideA }, { code: 'B', label: t.sideB }].forEach(w => {
-          topGrid.appendChild(createTile(w.label, state.view.dept, w.code, cls, () => {
-            pushNavHistory();
+          topGrid.appendChild(makeTile(w.label, state.view.dept, w.code, cls, () => {
+            pushHist();
             state.view.wing = w.code;
             logTraj('wing:' + w.code);
             if (['Farrowing', 'Nursery', 'Porker'].includes(state.view.dept)) {
               state.view.stage = 'room';
             } else {
               state.view.room = 'Gestation ' + w.code;
-              enterBatchOrRoomTiles();
+              enterBatchGate();
               return;
             }
             renderView();
           }));
         });
-        triggerTileFlips();
+        runTileFlip();
         return;
       }
 
-      // Stage 3: 房號點選
       if (state.view.stage === 'room') {
-        const cls = getDeptClass(state.view.dept);
+        const cls = deptCls(state.view.dept);
         let rooms = [];
         if (state.view.dept === 'GDU') {
           rooms = state.profile.group === 'GP'
@@ -1370,97 +1443,88 @@
           for (let i = 1; i <= 8; i++) rooms.push(i + 'A', i + 'B');
         }
         rooms.forEach(r => {
-          topGrid.appendChild(createTile(r, state.view.dept, r, cls, () => {
-            pushNavHistory();
+          topGrid.appendChild(makeTile(r, state.view.dept, r, cls, () => {
+            pushHist();
             state.view.room = r;
             logTraj('room:' + r);
-            enterBatchOrRoomTiles();
+            enterBatchGate();
           }));
         });
-        triggerTileFlips();
+        runTileFlip();
         return;
       }
 
-      // Stage 4: 三週次批次閘門（進入房號後先鎖定三週次批次，切換房號必提醒）
       if (state.view.stage === 'batch_gate') {
-        renderBatchGatePanel(formPanel);
+        renderBatchGate(formPanel);
         return;
       }
 
-      // Stage 5: 房號內層層作業方塊
       if (state.view.stage === 'room_tiles') {
-        renderRoomActionTiles(topGrid);
-        triggerTileFlips();
+        renderRoomTiles(topGrid);
+        runTileFlip();
         return;
       }
 
-      // Stage 6: 具體輸入表單
       if (state.view.stage === 'form') {
-        renderSpecificForm(formPanel);
+        renderForm(formPanel);
       }
     }
 
-    function enterBatchOrRoomTiles() {
-      const savedB = loadSavedRoomBatch();
-      if (savedB && savedB.w1) {
-        state.currentBatch = savedB;
-      } else {
-        state.currentBatch = { w1: '', w2: '', w3: '' };
-      }
-      // 每次進入/切換房號先進入批次確認閘門提醒核對房號與三週次批次
+    function enterBatchGate() {
+      const saved = loadSavedBatch();
+      state.currentBatch = saved && saved.w1 ? saved : { w1: '', w2: '', w3: '' };
       state.view.stage = 'batch_gate';
       renderView();
     }
 
-    function renderBatchGatePanel(panel) {
+    function renderBatchGate(panel) {
       const t = DICT[state.lang];
       panel.classList.remove('hidden');
-      const curW = getIsoWeekNum(new Date());
+      const curW = isoWeek(new Date());
       const def1 = state.currentBatch.w1 || curW;
       const def2 = state.currentBatch.w2 || wrap52(Number(def1) + 16);
       const def3 = state.currentBatch.w3 || wrap52(Number(def1) + 19);
 
       panel.innerHTML = `
-        <div class="section-title">${t.batchGateTitle}</div>
-        <div style="font-size:14px; font-weight:700; color:#0369a1; margin-bottom:8px;">
-          ${[state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean).join(' › ')} — ${t.batchRemind}
+        <div class="sec-title">${t.batchGateTitle}</div>
+        <div style="font-size:13px; font-weight:700; color:#0369a1; margin-bottom:6px;">
+          ${[state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean).join(' › ')} · ${t.batchRemind}
         </div>
-        <div class="batch-trio-grid">
-          <div class="batch-cell">
+        <div class="batch-trio">
+          <div class="batch-box">
             <label>${t.w1Label}</label>
-            <div class="batch-stepper">
-              <button type="button" class="step-mini-btn" onclick="stepBatch(1,-1)">-</button>
-              <input type="number" id="bw1" class="batch-num-input" min="1" max="52" value="${def1}" onchange="autoCalcW2W3()" />
-              <button type="button" class="step-mini-btn" onclick="stepBatch(1,1)">+</button>
+            <div class="stepper-row">
+              <button type="button" class="step-btn" onclick="stepW(1,-1)">-</button>
+              <input type="number" id="bw1" class="batch-inp" min="1" max="52" value="${def1}" onchange="syncW2W3()" />
+              <button type="button" class="step-btn" onclick="stepW(1,1)">+</button>
             </div>
           </div>
-          <div class="batch-cell">
+          <div class="batch-box">
             <label>${t.w2Label}</label>
-            <div class="batch-stepper">
-              <button type="button" class="step-mini-btn" onclick="stepBatch(2,-1)">-</button>
-              <input type="number" id="bw2" class="batch-num-input" min="1" max="52" value="${def2}" />
-              <button type="button" class="step-mini-btn" onclick="stepBatch(2,1)">+</button>
+            <div class="stepper-row">
+              <button type="button" class="step-btn" onclick="stepW(2,-1)">-</button>
+              <input type="number" id="bw2" class="batch-inp" min="1" max="52" value="${def2}" />
+              <button type="button" class="step-btn" onclick="stepW(2,1)">+</button>
             </div>
           </div>
-          <div class="batch-cell">
+          <div class="batch-box">
             <label>${t.w3Label}</label>
-            <div class="batch-stepper">
-              <button type="button" class="step-mini-btn" onclick="stepBatch(3,-1)">-</button>
-              <input type="number" id="bw3" class="batch-num-input" min="1" max="52" value="${def3}" />
-              <button type="button" class="step-mini-btn" onclick="stepBatch(3,1)">+</button>
+            <div class="stepper-row">
+              <button type="button" class="step-btn" onclick="stepW(3,-1)">-</button>
+              <input type="number" id="bw3" class="batch-inp" min="1" max="52" value="${def3}" />
+              <button type="button" class="step-btn" onclick="stepW(3,1)">+</button>
             </div>
           </div>
         </div>
-        <button type="button" class="primary-btn" onclick="confirmBatchGate()">${t.confirmBatchBtn}</button>
+        <button type="button" class="primary-btn" onclick="confirmBatch()">${t.confirmBatchBtn}</button>
       `;
     }
 
     function wrap52(n) {
-      let x = ((n - 1) % 52 + 52) % 52 + 1;
-      return x;
+      return ((n - 1) % 52 + 52) % 52 + 1;
     }
 
-    function getIsoWeekNum(d) {
+    function isoWeek(d) {
       const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
       const dayNum = date.getUTCDay() || 7;
       date.setUTCDate(date.getUTCDate() + 4 - dayNum);
@@ -1468,116 +1532,111 @@
       return Math.min(52, Math.ceil((((date - yearStart) / 86400000) + 1) / 7));
     }
 
-    function stepBatch(idx, delta) {
+    function stepW(idx, delta) {
       const el = document.getElementById('bw' + idx);
-      const next = wrap52((parseInt(el.value, 10) || 1) + delta);
-      el.value = next;
-      if (idx === 1) autoCalcW2W3();
+      el.value = wrap52((parseInt(el.value, 10) || 1) + delta);
+      if (idx === 1) syncW2W3();
     }
 
-    function autoCalcW2W3() {
+    function syncW2W3() {
       const w1 = parseInt(document.getElementById('bw1').value, 10) || 1;
       document.getElementById('bw2').value = wrap52(w1 + 16);
       document.getElementById('bw3').value = wrap52(w1 + 19);
     }
 
-    function confirmBatchGate() {
+    function confirmBatch() {
       const w1 = document.getElementById('bw1').value.trim();
       const w2 = document.getElementById('bw2').value.trim();
       const w3 = document.getElementById('bw3').value.trim();
       state.currentBatch = { w1, w2, w3 };
-      saveRoomBatch(state.currentBatch);
-      pushNavHistory();
+      saveBatch(state.currentBatch);
+      pushHist();
       state.view.stage = 'room_tiles';
       logTraj('batch:' + [w1, w2, w3].join('/'));
       renderView();
     }
 
-    // 房號內層層作業方塊
-    function renderRoomActionTiles(grid) {
+    function renderRoomTiles(grid) {
       const t = DICT[state.lang];
       const dept = state.view.dept;
-      const cls = getDeptClass(dept);
+      const cls = deptCls(dept);
 
-      // 1. 獨立水錶與飼料用料方塊（所有豬舍皆有獨立水錶與飼料）
-      grid.appendChild(createTile(t.tileFW, t.tileFWSub, 'H2O/FEED', cls, () => {
-        pushNavHistory();
+      grid.appendChild(makeTile(t.tileFW, t.tileFWSub, 'H2O/FEED', cls, () => {
+        pushHist();
         state.view.formType = 'daily_fw';
         state.view.stage = 'form';
         renderView();
       }));
 
-      // 2. 依部門展開專屬方塊
       if (dept === 'Farrowing') {
-        grid.appendChild(createTile(t.tileSowIn, t.tileSowInSub, 'WED', cls, () => {
-          pushNavHistory();
+        grid.appendChild(makeTile(t.tileSowIn, t.tileSowInSub, 'WED', cls, () => {
+          pushHist();
           state.view.formType = 'farr_sow_in';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(createTile(t.tileFarrRec, t.tileFarrRecSub, 'BORN', cls, () => {
-          pushNavHistory();
+        grid.appendChild(makeTile(t.tileFarrRec, t.tileFarrRecSub, 'BORN', cls, () => {
+          pushHist();
           state.view.formType = 'farr_birth';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(createTile(t.tileWeanHead, t.tileWeanHeadSub, 'THU-1', cls, () => {
-          pushNavHistory();
+        grid.appendChild(makeTile(t.tileWeanHead, t.tileWeanHeadSub, 'THU-1', cls, () => {
+          pushHist();
           state.view.formType = 'farr_wean_head';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(createTile(t.tileWeanWt, t.tileWeanWtSub, 'THU-2', cls, () => {
-          pushNavHistory();
+        grid.appendChild(makeTile(t.tileWeanWt, t.tileWeanWtSub, 'THU-2', cls, () => {
+          pushHist();
           state.view.formType = 'farr_wean_wt';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(createTile(t.tileMal, t.tileMalSub, 'MAL', cls, () => {
-          pushNavHistory();
+        grid.appendChild(makeTile(t.tileMal, t.tileMalSub, 'MAL', cls, () => {
+          pushHist();
           state.view.formType = 'malformation';
           state.view.stage = 'form';
           renderView();
         }));
       } else if (dept === 'Gestation') {
-        grid.appendChild(createTile(t.tileProd, t.tileProdSub, 'AI', cls, () => {
-          pushNavHistory();
+        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'AI', cls, () => {
+          pushHist();
           state.view.formType = 'gestation';
           state.view.stage = 'form';
           renderView();
         }));
       } else if (dept === 'Boar House') {
-        grid.appendChild(createTile(t.tileProd, t.tileProdSub, 'SEMEN', cls, () => {
-          pushNavHistory();
+        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'SEMEN', cls, () => {
+          pushHist();
           state.view.formType = 'boar_semen';
           state.view.stage = 'form';
           renderView();
         }));
       } else if (dept === 'GDU') {
-        grid.appendChild(createTile(t.tileProd, t.tileProdSub, 'SELECT', cls, () => {
-          pushNavHistory();
+        grid.appendChild(makeTile(t.tileProd, t.tileProdSub, 'SELECT', cls, () => {
+          pushHist();
           state.view.formType = 'conformation';
           state.view.stage = 'form';
           renderView();
         }));
       }
 
-      // 3. 治療與死亡分開方塊（先治療、後死亡）
-      grid.appendChild(createTile(t.tileTreat, t.tileTreatSub, 'RX', cls, () => {
-        pushNavHistory();
+      grid.appendChild(makeTile(t.tileTreat, t.tileTreatSub, 'RX', cls, () => {
+        pushHist();
         state.view.formType = 'treatment';
         state.view.stage = 'form';
         renderView();
       }));
-      grid.appendChild(createTile(t.tileMort, t.tileMortSub, 'MORT', cls, () => {
-        pushNavHistory();
+      grid.appendChild(makeTile(t.tileMort, t.tileMortSub, 'MORT', cls, () => {
+        pushHist();
         state.view.formType = 'mortality';
         state.view.stage = 'form';
         renderView();
       }));
     }
 
-    function getDeptClass(d) {
+    function deptCls(d) {
       return {
         'Gestation': 't-gest',
         'Farrowing': 't-farr',
@@ -1588,7 +1647,7 @@
       }[d] || 't-ps';
     }
 
-    function createTile(title, sub, badge, cls, fn) {
+    function makeTile(title, sub, badge, cls, onClick) {
       const div = document.createElement('div');
       div.className = 'live-tile ' + cls;
       div.innerHTML = `
@@ -1598,49 +1657,49 @@
         </div>
         <div class="tile-badge">${badge}</div>
       `;
-      div.addEventListener('click', fn);
+      div.addEventListener('click', onClick);
       return div;
     }
 
-    function triggerTileFlips() {
-      const list = document.querySelectorAll('#topGrid .live-tile');
-      list.forEach((el, i) => {
+    function runTileFlip() {
+      const tiles = document.querySelectorAll('#topGrid .live-tile');
+      tiles.forEach((el, idx) => {
         setTimeout(() => {
           setInterval(() => {
             el.classList.add('flipping');
-            setTimeout(() => el.classList.remove('flipping'), 740);
-          }, 4000 + i * 420);
-        }, i * 280);
+            setTimeout(() => el.classList.remove('flipping'), 680);
+          }, 4200 + idx * 420);
+        }, idx * 260);
       });
     }
 
-    function showExtraNotice(msg) {
+    function showExtra(txt) {
       const p = document.getElementById('extraPanel');
       p.classList.remove('hidden');
-      p.innerHTML = `<div class="notice-box">${msg}</div>`;
+      p.innerHTML = `<div class="notice-box">${txt}</div>`;
     }
 
-    function buildChips(groupKey, options, multi) {
-      state.chips[groupKey] = multi ? [] : '';
-      let html = '<div class="chip-row">';
-      options.forEach(o => {
+    function chips(key, opts, multi) {
+      state.chips[key] = multi ? [] : '';
+      let h = '<div class="chip-row">';
+      opts.forEach(o => {
         const v = typeof o === 'object' ? o.v : o;
         const l = typeof o === 'object' ? o.l : o;
-        html += `<button type="button" class="chip-btn" data-g="${groupKey}" data-v="${v}" data-m="${multi ? '1' : '0'}" onclick="handleChip(this)">${l}</button>`;
+        h += `<button type="button" class="chip-btn" data-g="${key}" data-v="${v}" data-m="${multi ? '1' : '0'}" onclick="toggleChip(this)">${l}</button>`;
       });
-      html += '</div>';
-      return html;
+      h += '</div>';
+      return h;
     }
 
-    function handleChip(btn) {
+    function toggleChip(btn) {
       const g = btn.dataset.g;
       const v = btn.dataset.v;
       const m = btn.dataset.m === '1';
       if (m) {
         btn.classList.toggle('selected');
         const arr = state.chips[g] || [];
-        const idx = arr.indexOf(v);
-        if (idx >= 0) arr.splice(idx, 1);
+        const i = arr.indexOf(v);
+        if (i >= 0) arr.splice(i, 1);
         else arr.push(v);
         state.chips[g] = arr;
       } else {
@@ -1650,7 +1709,7 @@
       }
     }
 
-    function renderSpecificForm(panel) {
+    function renderForm(panel) {
       const t = DICT[state.lang];
       const ft = state.view.formType;
       const today = new Date().toISOString().slice(0, 10);
@@ -1668,7 +1727,7 @@
           <div class="field-block"><label class="field-label">${t.lblHeadCount}</label><input type="number" id="f_head_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblWaterAM}</label><input type="number" step="0.01" id="f_water_meter_am" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblWaterPM}</label><input type="number" step="0.01" id="f_water_meter_pm" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblFeedCode}</label>${buildChips('feed_code', [
+          <div class="field-block"><label class="field-label">${t.lblFeedCode}</label>${chips('feed_code', [
             '300','301','302','303','304','305','306','307','308',
             {v:'Other_1',l:t.optOther1},{v:'Other_2',l:t.optOther2},{v:'Other_3',l:t.optOther3},{v:'Other_4',l:t.optOther4}
           ], false)}</div>
@@ -1709,7 +1768,7 @@
           <div class="field-block"><label class="field-label">${t.lblFarrowDate}</label><input type="date" id="f_farrow_date" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblMalCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
-          <div class="field-block"><label class="field-label">${t.lblMalSigns}</label>${buildChips('selected_items', [
+          <div class="field-block"><label class="field-label">${t.lblMalSigns}</label>${chips('selected_items', [
             {v:'skin',l:t.signSkin},{v:'limb',l:t.signLimb},{v:'downer',l:t.signDowner},{v:'head',l:t.signHead},
             {v:'genital',l:t.signGenital},{v:'fever',l:t.signFever},{v:'pant',l:t.signPant},{v:'red',l:t.signRed},
             {v:'diarrhea',l:t.signDiarrhea},{v:'other',l:t.signOther}
@@ -1720,9 +1779,9 @@
       } else if (ft === 'gestation') {
         html += `
           <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblSex}</label>${buildChips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblBreed}</label>${buildChips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblHeatObs}</label>${buildChips('heat_observed', [{v:'yes',l:t.optYes},{v:'no',l:t.optNo}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblSex}</label>${chips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblBreed}</label>${chips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblHeatObs}</label>${chips('heat_observed', [{v:'yes',l:t.optYes},{v:'no',l:t.optNo}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblHeatDate}</label><input type="date" id="f_heat_date" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblBreedDate}</label><input type="date" id="f_breeding_date" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblServiceBoar}</label><input type="text" id="f_service_boar_tag" class="input-box" /></div>
@@ -1731,7 +1790,7 @@
         html += `
           <div class="field-block"><label class="field-label">${t.lblBoarTag}</label><input type="text" id="f_boar_ear_tag" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblDate}</label><input type="date" id="f_collection_date" class="input-box" value="${today}" /></div>
-          <div class="field-block"><label class="field-label">${t.lblLibido}</label>${buildChips('libido_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblLibido}</label>${chips('libido_score', ['1','2','3','4','5'], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblVol}</label><input type="number" step="1" id="f_volume_ml" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblConc}</label><input type="number" step="0.01" id="f_concentration_100m_ml" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblMot}</label><input type="number" step="1" id="f_motility_pct" class="input-box" /></div>
@@ -1741,26 +1800,26 @@
       } else if (ft === 'conformation') {
         html += `
           <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblSex}</label>${buildChips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblBreed}</label>${buildChips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblSex}</label>${chips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblBreed}</label>${chips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBirthDate}</label><input type="date" id="f_birth_date" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblTestDate}</label><input type="date" id="f_test_date" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblTestWt}</label><input type="number" step="0.1" id="f_test_weight_kg" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblLeftTeat}</label>${buildChips('left_teats', ['6','7','8','9','10'], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblRightTeat}</label>${buildChips('right_teats', ['6','7','8','9','10'], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblBlindTeat}</label>${buildChips('blind_teats', ['0','1','2','3','4'], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblFrontLeg}</label>${buildChips('front_leg_score', ['1','2','3','4','5'], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblRearLeg}</label>${buildChips('rear_leg_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblLeftTeat}</label>${chips('left_teats', ['6','7','8','9','10'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblRightTeat}</label>${chips('right_teats', ['6','7','8','9','10'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblBlindTeat}</label>${chips('blind_teats', ['0','1','2','3','4'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblFrontLeg}</label>${chips('front_leg_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblRearLeg}</label>${chips('rear_leg_score', ['1','2','3','4','5'], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBodyLen}</label><input type="number" step="0.5" id="f_body_length_cm" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblShoulderW}</label><input type="number" step="0.5" id="f_shoulder_width_cm" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblChestW}</label><input type="number" step="0.5" id="f_chest_width_cm" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblVulva}</label>${buildChips('vulva_status', [{v:'Normal',l:t.optNormal},{v:'Small',l:t.optSmall},{v:'Upturned',l:t.optUpturned},{v:'NA',l:t.optNA}], false)}</div>
-          <div class="field-block"><label class="field-label">${t.lblTestis}</label>${buildChips('testis_status', [{v:'Symmetrical',l:t.optSym},{v:'Asymmetrical',l:t.optAsym},{v:'Small',l:t.optSmall},{v:'NA',l:t.optNA}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblVulva}</label>${chips('vulva_status', [{v:'Normal',l:t.optNormal},{v:'Small',l:t.optSmall},{v:'Upturned',l:t.optUpturned},{v:'NA',l:t.optNA}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblTestis}</label>${chips('testis_status', [{v:'Symmetrical',l:t.optSym},{v:'Asymmetrical',l:t.optAsym},{v:'Small',l:t.optSmall},{v:'NA',l:t.optNA}], false)}</div>
         `;
       } else if (ft === 'treatment') {
         html += `
           <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblMedOpt}</label>${buildChips('medication_option', [{v:'Reserved_1',l:t.optMedReserved}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblMedOpt}</label>${chips('medication_option', [{v:'Reserved_1',l:t.optMedReserved}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
         `;
       } else if (ft === 'mortality') {
@@ -1771,10 +1830,16 @@
       }
 
       html += `
-        <button type="button" class="primary-btn" id="btnSendForm" onclick="submitCurrentForm()">${t.submitBtn}</button>
-        <div id="submitMsgBox" class="notice-box hidden"></div>
+        <button type="button" class="primary-btn" id="btnSendForm" onclick="sendForm()">${t.submitBtn}</button>
+        <div id="stageTracker" class="stage-tracker hidden"></div>
       `;
       panel.innerHTML = html;
+    }
+
+    function setStageUI(el, cls, text) {
+      el.className = 'stage-tracker ' + cls;
+      el.classList.remove('hidden');
+      el.textContent = text;
     }
 
     function compressPhoto(file) {
@@ -1803,13 +1868,12 @@
       });
     }
 
-    async function submitCurrentForm() {
+    async function sendForm() {
       const t = DICT[state.lang];
       const btn = document.getElementById('btnSendForm');
-      const box = document.getElementById('submitMsgBox');
+      const stEl = document.getElementById('stageTracker');
       btn.disabled = true;
-      box.classList.remove('hidden');
-      box.textContent = '...';
+      setStageUI(stEl, 'st-prep', t.step1Prep);
 
       const data = {};
       document.querySelectorAll('#formPanel [id^="f_"]').forEach(el => {
@@ -1824,7 +1888,6 @@
       else if (ft === 'conformation') backendModule = 'conformation';
       else if (ft === 'gestation') {
         backendModule = 'gestation';
-        // 表面只選日期，送回後端自動附帶精確時間戳記
         const nowTime = new Date().toTimeString().slice(0, 8);
         if (data.breeding_date) data.breeding_datetime_hidden = `${data.breeding_date} ${nowTime}`;
       } else if (ft.startsWith('farr_')) {
@@ -1843,6 +1906,7 @@
         photo = await compressPhoto(photoInput.files[0]);
       }
 
+      setStageUI(stEl, 'st-sending', t.step2Send);
       logTraj('submit:' + backendModule);
 
       const payload = {
@@ -1880,7 +1944,8 @@
         });
         const j = await res.json();
         if (j && j.ok) {
-          box.textContent = t.savedOk + (j.rowId || 'OK');
+          setStageUI(stEl, 'st-done', t.step3Done + (j.rowId || 'OK'));
+          playAlertTone('success');
         } else {
           throw new Error(j && j.error ? j.error : 'ERR');
         }
@@ -1890,7 +1955,8 @@
         q.push(payload);
         localStorage.setItem(CONFIG.KEYS.QUEUE, JSON.stringify(q));
         refreshQueuePill();
-        box.textContent = t.savedOffline;
+        setStageUI(stEl, 'st-queued', t.step3Queued);
+        playAlertTone('queued');
       }
       btn.disabled = false;
     }
@@ -1935,19 +2001,20 @@
     window.addEventListener('online', syncOfflineQueue);
 
     (function init() {
+      state.soundOn = localStorage.getItem(CONFIG.KEYS.SOUND) !== '0';
       state.lang = detectSystemLang();
       document.documentElement.lang = state.lang;
       document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
-      applyStaticTranslations();
-      updateClockAndCurve();
-      setInterval(updateClockAndCurve, 1000);
-      loadHourlyWeather();
+      applyTexts();
+      updateClockAndForecastCurve();
+      setInterval(updateClockAndForecastCurve, 1000);
+      loadForecastWeather();
       refreshQueuePill();
       logTraj('init');
 
       const savedPass = localStorage.getItem(CONFIG.KEYS.PASS);
       if (savedPass) {
-        const prof = resolvePass(savedPass);
+        const prof = parsePass(savedPass);
         if (prof) {
           state.profile = prof;
           openWorkspace();
