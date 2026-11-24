@@ -1425,6 +1425,14 @@
 
     function translateQueryText(rawText) {
       let s = String(rawText || '');
+      if (!s) return '';
+      if (s.indexOf('GMT') !== -1 || s.indexOf('新加坡') !== -1) {
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) {
+          const pad = n => String(n).padStart(2, '0');
+          s = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        }
+      }
       if (state.lang === 'zh-TW') return s;
       CN_TO_OTHER.forEach(rule => {
         s = s.split(rule.cn).join(state.lang === 'en' ? rule.en : rule.ms);
