@@ -12,30 +12,30 @@
       --fg-dark: #111827;
       --fg-muted: #4b5563;
 
-      /* 清爽有層次色系 + 微圓弧 */
-      --c-boar: #94a3b8;
-      --c-boar-b: #64748b;
+      /* 清爽有層次色系 + 柔和圓弧 */
+      --c-boar: #cbd5e1;
+      --c-boar-b: #94a3b8;
 
-      --c-gdu: #d8b4fe;
-      --c-gdu-b: #a855f7;
+      --c-gdu: #e9d5ff;
+      --c-gdu-b: #c084fc;
 
-      --c-gest: #fca5a5;
-      --c-gest-b: #ef4444;
+      --c-gest: #fecaca;
+      --c-gest-b: #f87171;
 
-      --c-farr: #86efac;
-      --c-farr-b: #22c55e;
+      --c-farr: #bbf7d0;
+      --c-farr-b: #4ade80;
 
-      --c-nurs: #fde047;
-      --c-nurs-b: #eab308;
+      --c-nurs: #fef08a;
+      --c-nurs-b: #facc15;
 
-      --c-pork: #e2e8f0;
-      --c-pork-b: #94a3b8;
+      --c-pork: #e5e7eb;
+      --c-pork-b: #9ca3af;
 
       --c-exit: #fed7aa;
       --c-exit-b: #fb923c;
 
       --c-query: #bfdbfe;
-      --c-query-b: #3b82f6;
+      --c-query-b: #60a5fa;
     }
 
     * {
@@ -115,7 +115,7 @@
 
     .soft-pill {
       border: 1px solid #d1d5db;
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.9);
       color: #111827;
       border-radius: 12px;
       padding: 6px 11px;
@@ -241,7 +241,7 @@
 
     .span-btn {
       border: 1px solid #9ca3af;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       color: #111827;
       border-radius: 8px;
       padding: 2px 6px;
@@ -255,7 +255,7 @@
       width: 100%;
       max-width: 420px;
       margin: 18px auto;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       border-radius: 16px;
       padding: 20px;
       border: 1px solid #d1d5db;
@@ -331,7 +331,7 @@
     }
 
     .context-bar {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       border: 1px solid #d1d5db;
       border-radius: 14px;
       padding: 9px 12px;
@@ -412,16 +412,16 @@
       padding: 0;
     }
 
-    /* 柔和圓弧 + 全場 3D 翻轉與微旋轉動態磚 */
+    /* 純水平垂直 3D 翻轉動態磚（絕不傾斜、保留同色系層次、字型精緻放大） */
     .tile-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      gap: 9px;
     }
 
     .metro-flip-scene {
-      perspective: 900px;
-      min-height: 98px;
+      perspective: 1000px;
+      min-height: 104px;
       cursor: pointer;
     }
 
@@ -433,13 +433,13 @@
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 98px;
+      min-height: 104px;
       transform-style: preserve-3d;
-      transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.72s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     .metro-flip-scene.is-flipped .metro-flip-card {
-      transform: rotateX(180deg) rotateZ(1.5deg);
+      transform: rotateX(180deg);
     }
 
     .metro-face {
@@ -448,7 +448,7 @@
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       border-radius: 15px;
-      padding: 12px 12px;
+      padding: 13px 13px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -458,14 +458,14 @@
 
     .metro-back {
       transform: rotateX(180deg);
-      background: #ffffff !important;
-      border-color: #60a5fa;
+      filter: brightness(0.96);
     }
 
     .tile-title {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.22;
+      letter-spacing: 0.2px;
       color: #111827;
       word-break: break-word;
     }
@@ -474,8 +474,8 @@
       font-size: 13px;
       font-weight: 600;
       color: #1f2937;
-      margin-top: 5px;
-      line-height: 1.25;
+      margin-top: 6px;
+      line-height: 1.3;
     }
 
     .tile-badge {
@@ -484,7 +484,7 @@
       font-weight: 800;
       padding: 2px 8px;
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.68);
       color: #111827;
       margin-top: 6px;
     }
@@ -507,7 +507,7 @@
     }
 
     .panel-card {
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
       padding: 14px;
       margin-top: 10px;
@@ -702,7 +702,7 @@
     </div>
   </div>
 
-  <!-- 上方：時間框、地點框、現有溫度與雨情框、預報曲線框（各自獨立底色） -->
+  <!-- 上方：時間框、地點框、現有溫度與雨情框、預報曲線框 -->
   <section class="split-widget-wrap">
     <div class="mini-row-2">
       <div class="box-time">
@@ -730,7 +730,7 @@
     </div>
   </section>
 
-  <!-- 登入前畫面：姓名 + 密碼（零暗示） -->
+  <!-- 登入前畫面：姓名 + 密碼 -->
   <section id="loginCard" class="auth-card">
     <div class="field-block">
       <label class="field-label" id="lblWorkerName" for="loginWorkerInput"></label>
@@ -789,12 +789,12 @@
         admin: 'qwert'
       },
       KEYS: {
-        LANG: 'gla_sys_lang_v11',
-        PASS: 'gla_sys_pass_v11',
-        WORKER: 'gla_worker_name_v11',
-        QUEUE: 'gla_sys_queue_v11',
-        ROOM_BATCHES: 'gla_room_batches_v11',
-        SOUND: 'gla_sound_on_v11'
+        LANG: 'gla_sys_lang_v12',
+        PASS: 'gla_sys_pass_v12',
+        WORKER: 'gla_worker_name_v12',
+        QUEUE: 'gla_sys_queue_v12',
+        ROOM_BATCHES: 'gla_room_batches_v12',
+        SOUND: 'gla_sound_on_v12'
       },
       LAT: 1.167,
       LON: 110.566,
@@ -836,17 +836,17 @@
         confirmBatchBtn: 'Sahkan Bilik & Kumpulan',
         tapToChangeBatch: 'Tukar Kumpulan',
         deptBoar: 'Boar House',
-        deptBoarSub: 'Koleksi Mani · Rawatan/Mati',
+        deptBoarSub: 'Koleksi Mani & Libido',
         deptGdu: 'GDU',
-        deptGduSub: 'Pemilihan · Air/Makanan',
+        deptGduSub: 'Pemilihan & Konformasi',
         deptGest: 'Gestation',
-        deptGestSub: 'Berahi · Kahwin · Air/Makanan',
+        deptGestSub: 'Berahi & Kahwin',
         deptFarr: 'Farrowing',
         deptFarrSub: 'Masuk · Beranak · Cerai Susu',
         deptNurs: 'Nursery',
-        deptNursSub: 'Meter Air · Makanan · Rawatan/Mati',
+        deptNursSub: 'Meter Air & Makanan',
         deptPork: 'Porker',
-        deptPorkSub: 'Meter Air · Makanan · Rawatan/Mati',
+        deptPorkSub: 'Meter Air & Makanan',
         deptCullMort: 'Cull & Mortality',
         deptCullMortSub: 'Rekod takai & kematian',
         deptExitSale: 'Exit & Sales',
@@ -1017,17 +1017,17 @@
         confirmBatchBtn: 'Confirm Room & Batch',
         tapToChangeBatch: 'Change Batch',
         deptBoar: 'Boar House',
-        deptBoarSub: 'Semen · Treat/Mort',
+        deptBoarSub: 'Semen & Libido 0-5',
         deptGdu: 'GDU',
-        deptGduSub: 'Selection · Water/Feed',
+        deptGduSub: 'Selection & Teat Score',
         deptGest: 'Gestation',
-        deptGestSub: 'Heat · Breeding · Water/Feed',
+        deptGestSub: 'Heat & Breeding Log',
         deptFarr: 'Farrowing',
         deptFarrSub: 'Transfer · Farrow · Wean',
         deptNurs: 'Nursery',
-        deptNursSub: 'Water · Feed · Treat/Mort',
+        deptNursSub: 'Water & Feed (50kg)',
         deptPork: 'Porker',
-        deptPorkSub: 'Water · Feed · Treat/Mort',
+        deptPorkSub: 'Water & Feed (50kg)',
         deptCullMort: 'Cull & Mortality',
         deptCullMortSub: 'Cull & mortality records',
         deptExitSale: 'Exit & Sales',
@@ -1198,17 +1198,17 @@
         confirmBatchBtn: '確認房號與批次',
         tapToChangeBatch: '修改批次',
         deptBoar: '公豬舍',
-        deptBoarSub: '採精 · 治療與死亡',
+        deptBoarSub: '採精與性慾 0-5',
         deptGdu: 'GDU',
-        deptGduSub: '選種體型 · 水錶飼料',
+        deptGduSub: '選種體型與乳頭',
         deptGest: '配懷舍',
-        deptGestSub: '發情 · 配種 · 水錶飼料',
+        deptGestSub: '發情與配種紀錄',
         deptFarr: '產房',
         deptFarrSub: '轉入 · 分娩 · 離乳轉出',
         deptNurs: '保育舍',
-        deptNursSub: '上下午水錶 · 飼料包數 · 治療死亡',
+        deptNursSub: '水錶與飼料包數',
         deptPork: '肉豬舍',
-        deptPorkSub: '上下午水錶 · 飼料包數 · 治療死亡',
+        deptPorkSub: '水錶與飼料包數',
         deptCullMort: '淘汰與死亡',
         deptCullMortSub: '淘汰與死亡紀錄',
         deptExitSale: '離場與銷售',
@@ -1418,7 +1418,7 @@
       chips: {},
       queuedRecords: [],
       lastDiarySummary: null,
-      flipTimerId: null
+      flipTimers: []
     };
 
     function unlockAudioContext() {
@@ -1873,12 +1873,12 @@
         batchChip.classList.add('hidden');
       }
 
+      // 下方查詢與分析方塊（gla9999 / 510067 / gp3333 / qwert）
       if (['query', 'report', 'admin'].includes(state.profile.level)) {
         botTitle.classList.remove('hidden');
         botGrid.appendChild(makeMetroFlipTile(
           t.extraHeading,
-          t.queryEarPlaceholder,
-          'L1123 / Y1301',
+          [t.queryEarPlaceholder, 'Parity · Index · Hernia', 'Yellow Columns Only'],
           'QUERY',
           'm-query',
           () => {
@@ -1888,8 +1888,7 @@
         ));
         botGrid.appendChild(makeMetroFlipTile(
           t.deptFarr,
-          state.profile.group,
-          'Farrowing / Index',
+          [state.profile.group, 'Farrowing & Index', 'Batch Summary'],
           'A1',
           'm-farr',
           () => {
@@ -1900,8 +1899,7 @@
         if (state.profile.level === 'admin') {
           botGrid.appendChild(makeMetroFlipTile(
             'Telemetry',
-            'QWERT',
-            state.trajectory.slice(-2).join(' | '),
+            ['QWERT', state.trajectory.slice(-1)[0] || 'Active', 'Audit Log'],
             'SYS',
             'm-boar',
             () => {
@@ -1916,17 +1914,17 @@
       // Stage 1: 左右對稱部門排列 + 兩個一般方塊
       if (state.view.stage === 'depts') {
         const depts = [
-          { id: 'Boar House', title: t.deptBoar, sub: t.deptBoarSub, back: 'D1402 · 0-5', badge: 'BH', cls: 'm-boar' },
-          { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, back: 'L1123 · Y1301', badge: 'GDU', cls: 'm-gdu' },
-          { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, back: 'Heat · Mating', badge: 'GEST', cls: 'm-gest' },
-          { id: 'Farrowing', title: t.deptFarr, sub: t.deptFarrSub, back: 'Farrow · Wean', badge: 'FARR', cls: 'm-farr' },
-          { id: 'Nursery', title: t.deptNurs, sub: t.deptNursSub, back: '07:00 / 17:00', badge: 'NURS', cls: 'm-nurs' },
-          { id: 'Porker', title: t.deptPork, sub: t.deptPorkSub, back: 'Water / Feed', badge: 'PORK', cls: 'm-pork' },
-          { id: 'CullMort', title: t.deptCullMort, sub: t.deptCullMortSub, back: 'Cull / Mortality', badge: 'C/M', cls: 'm-exit' },
-          { id: 'ExitSale', title: t.deptExitSale, sub: t.deptExitSaleSub, back: 'Exit / Sales', badge: 'EXIT', cls: 'm-query' }
+          { id: 'Boar House', title: t.deptBoar, sub: [t.deptBoarSub, 'Libido 0-5 Score', 'Semen & Mortality'], badge: 'BH', cls: 'm-boar' },
+          { id: 'GDU', title: t.deptGdu, sub: [t.deptGduSub, 'Teats 6-10 & Legs', 'Water & Feed'], badge: 'GDU', cls: 'm-gdu' },
+          { id: 'Gestation', title: t.deptGest, sub: [t.deptGestSub, 'Heat & Mating Time', 'Sow & Boar Tag'], badge: 'GEST', cls: 'm-gest' },
+          { id: 'Farrowing', title: t.deptFarr, sub: [t.deptFarrSub, 'F1-F6 · Transfer & Wean', 'TNB / NBA / Birth Wt'], badge: 'FARR', cls: 'm-farr' },
+          { id: 'Nursery', title: t.deptNurs, sub: [t.deptNursSub, '07:00 & 17:00 Meter', '50kg Bags & Signs'], badge: 'NURS', cls: 'm-nurs' },
+          { id: 'Porker', title: t.deptPork, sub: [t.deptPorkSub, '1A-8B Rooms', 'Water & Feed'], badge: 'PORK', cls: 'm-pork' },
+          { id: 'CullMort', title: t.deptCullMort, sub: [t.deptCullMortSub, 'Head-to-Toe Signs', 'Vet Alert Notice'], badge: 'C/M', cls: 'm-exit' },
+          { id: 'ExitSale', title: t.deptExitSale, sub: [t.deptExitSaleSub, 'Source Room & Tags', 'Reconciliation'], badge: 'EXIT', cls: 'm-query' }
         ];
         depts.forEach(d => {
-          topGrid.appendChild(makeMetroFlipTile(d.title, d.sub, d.back, d.badge, d.cls, () => {
+          topGrid.appendChild(makeMetroFlipTile(d.title, d.sub, d.badge, d.cls, () => {
             pushHist();
             state.queuedRecords = [];
             state.view.dept = d.id;
@@ -1970,14 +1968,14 @@
             enterBatchGate();
           }));
         });
-        startMetro3DFlipLoop();
+        startIrregularFlipEngine();
         return;
       }
 
       if (state.view.stage === 'wing') {
         const cls = deptCls(state.view.dept);
         [{ code: 'A', label: t.sideA }, { code: 'B', label: t.sideB }].forEach(w => {
-          topGrid.appendChild(makeMetroFlipTile(w.label, state.view.dept, state.view.dept + ' ' + w.code, w.code, cls, () => {
+          topGrid.appendChild(makeMetroFlipTile(w.label, [state.view.dept, 'Wing ' + w.code, 'Select Room'], w.code, cls, () => {
             pushHist();
             state.view.wing = w.code;
             logTraj('wing:' + w.code);
@@ -1991,15 +1989,15 @@
             renderView();
           }));
         });
-        startMetro3DFlipLoop();
+        startIrregularFlipEngine();
         return;
       }
 
       if (state.view.stage === 'room') {
         const cls = deptCls(state.view.dept);
         const rooms = getRoomsForDept(state.view.dept, state.view.wing);
-        rooms.forEach(r => {
-          topGrid.appendChild(makeMetroFlipTile(r, state.view.dept, r, r, cls, () => {
+        rooms.forEach((r, idx) => {
+          topGrid.appendChild(makeMetroFlipTile(r, [state.view.dept, 'Room ' + r, 'Tap to Open'], r, cls, () => {
             pushHist();
             state.queuedRecords = [];
             state.view.room = r;
@@ -2015,7 +2013,7 @@
             }
           }));
         });
-        startMetro3DFlipLoop();
+        startIrregularFlipEngine();
         return;
       }
 
@@ -2026,7 +2024,7 @@
 
       if (state.view.stage === 'room_tiles') {
         renderRoomTiles(topGrid);
-        startMetro3DFlipLoop();
+        startIrregularFlipEngine();
         return;
       }
 
@@ -2124,7 +2122,7 @@
       const dept = state.view.dept;
       const cls = deptCls(dept);
 
-      grid.appendChild(makeMetroFlipTile(t.tileFW, t.tileFWSub, '07:00 AM / 17:00 PM · 50kg', 'H2O', cls, () => {
+      grid.appendChild(makeMetroFlipTile(t.tileFW, [t.tileFWSub, '07:00 AM / 17:00 PM', 'Feed 300-308 · 50kg'], 'H2O', cls, () => {
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'daily_fw';
@@ -2133,35 +2131,35 @@
       }));
 
       if (dept === 'Farrowing') {
-        grid.appendChild(makeMetroFlipTile(t.tileSowIn, t.tileSowInSub, 'Sow Transfer-In', 'IN', cls, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileSowIn, [t.tileSowInSub, 'Room Sow Count', 'Batch Log'], 'IN', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_sow_in';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeMetroFlipTile(t.tileFarrRec, t.tileFarrRecSub, 'TNB / NBA / Wt', 'BORN', cls, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileFarrRec, [t.tileFarrRecSub, 'Total / Alive / Still', 'Birth Litter Wt'], 'BORN', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_birth';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeMetroFlipTile(t.tileWeanHead, t.tileWeanHeadSub, 'Wean & Deferred', 'WEAN', cls, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileWeanHead, [t.tileWeanHeadSub, 'Weaned Counts', 'Deferred To Next'], 'WEAN', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_wean_head';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeMetroFlipTile(t.tileWeanWt, t.tileWeanWtSub, 'Litter Weight', 'WT', cls, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileWeanWt, [t.tileWeanWtSub, 'Wean Litter Wt', 'Batch Weight'], 'WT', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'farr_wean_wt';
           state.view.stage = 'form';
           renderView();
         }));
-        grid.appendChild(makeMetroFlipTile(t.tileMal, t.tileMalSub, 'Sow + Date + Photo', 'MAL', cls, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileMal, [t.tileMalSub, 'Sow + Farrow Date', 'Auto Photo Resize'], 'MAL', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'malformation';
@@ -2169,7 +2167,7 @@
           renderView();
         }));
       } else if (dept === 'Gestation') {
-        grid.appendChild(makeMetroFlipTile(t.tileProd, t.tileProdSub, 'Heat & Breeding', 'AI', cls, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileProd, [t.tileProdSub, 'Heat & Mating', 'Time Stamp Kept'], 'AI', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'gestation';
@@ -2177,7 +2175,7 @@
           renderView();
         }));
       } else if (dept === 'Boar House') {
-        grid.appendChild(makeMetroFlipTile(t.tileProd, t.tileProdSub, 'Libido 0-5 & Semen', 'SEMEN', cls, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileProd, [t.tileProdSub, 'Libido Score 0-5', 'Volume & Motility'], 'SEMEN', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'boar_semen';
@@ -2185,7 +2183,7 @@
           renderView();
         }));
       } else if (dept === 'GDU') {
-        grid.appendChild(makeMetroFlipTile(t.tileProd, t.tileProdSub, 'Teats · Legs · Body', 'SELECT', cls, () => {
+        grid.appendChild(makeMetroFlipTile(t.tileProd, [t.tileProdSub, 'Teats & Blind Teats', 'Legs & Body Length'], 'SELECT', cls, () => {
           pushHist();
           state.queuedRecords = [];
           state.view.formType = 'conformation';
@@ -2194,14 +2192,14 @@
         }));
       }
 
-      grid.appendChild(makeMetroFlipTile(t.tileTreat, t.tileTreatSub, 'Individual / Litter', 'RX', cls, () => {
+      grid.appendChild(makeMetroFlipTile(t.tileTreat, [t.tileTreatSub, 'Ear Tag or Litter', 'Medication Slot'], 'RX', cls, () => {
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'treatment';
         state.view.stage = 'form';
         renderView();
       }));
-      grid.appendChild(makeMetroFlipTile(t.tileMort, t.tileMortSub, 'Head-to-Toe Signs', 'MORT', cls, () => {
+      grid.appendChild(makeMetroFlipTile(t.tileMort, [t.tileMortSub, 'Head-to-Toe Signs', 'Vet Alert Notice'], 'MORT', cls, () => {
         pushHist();
         state.queuedRecords = [];
         state.view.formType = 'mortality';
@@ -2223,22 +2221,27 @@
       }[d] || 'm-query';
     }
 
-    function makeMetroFlipTile(frontTitle, frontSub, backText, badge, cls, onClick) {
+    // 正面與背面都用同色系、內容輪流變化、絕不傾斜、絕不死白
+    function makeMetroFlipTile(frontTitle, subList, badge, cls, onClick) {
+      const subs = Array.isArray(subList) && subList.length ? subList : [String(subList || '')];
       const scene = document.createElement('div');
       scene.className = 'metro-flip-scene';
+      scene.dataset.subs = JSON.stringify(subs);
+      scene.dataset.stepIdx = '0';
+
       scene.innerHTML = `
         <div class="metro-flip-card">
           <div class="metro-face ${cls}">
             <div>
               <div class="tile-title">${frontTitle}</div>
-              <div class="tile-sub">${frontSub}</div>
+              <div class="tile-sub" data-slot="front">${subs[0]}</div>
             </div>
             <div class="tile-badge">${badge}</div>
           </div>
-          <div class="metro-face metro-back">
+          <div class="metro-face metro-back ${cls}">
             <div>
               <div class="tile-title">${frontTitle}</div>
-              <div class="tile-sub">${backText}</div>
+              <div class="tile-sub" data-slot="back">${subs[1 % subs.length]}</div>
             </div>
             <div class="tile-badge">${badge}</div>
           </div>
@@ -2248,16 +2251,32 @@
       return scene;
     }
 
-    function startMetro3DFlipLoop() {
-      if (state.flipTimerId) clearInterval(state.flipTimerId);
+    // 不定時、不定量、律動不一致的隨機翻轉引擎
+    function startIrregularFlipEngine() {
+      state.flipTimers.forEach(id => clearTimeout(id));
+      state.flipTimers = [];
       const scenes = Array.from(document.querySelectorAll('.metro-flip-scene'));
       if (!scenes.length) return;
-      let cursor = 0;
-      state.flipTimerId = setInterval(() => {
-        const sc = scenes[cursor % scenes.length];
-        if (sc) sc.classList.toggle('is-flipped');
-        cursor++;
-      }, 1600);
+
+      function scheduleOne(sc) {
+        const delayMs = 2200 + Math.floor(Math.random() * 5800);
+        const tId = setTimeout(() => {
+          if (!document.body.contains(sc)) return;
+          const subs = JSON.parse(sc.dataset.subs || '[]');
+          let idx = parseInt(sc.dataset.stepIdx || '0', 10) + 1;
+          sc.dataset.stepIdx = String(idx);
+
+          const flippedNow = sc.classList.toggle('is-flipped');
+          const targetSlot = sc.querySelector(flippedNow ? '[data-slot="back"]' : '[data-slot="front"]');
+          if (targetSlot && subs.length > 0) {
+            targetSlot.textContent = subs[idx % subs.length];
+          }
+          scheduleOne(sc);
+        }, delayMs);
+        state.flipTimers.push(tId);
+      }
+
+      scenes.forEach(sc => scheduleOne(sc));
     }
 
     function renderQueryBox() {
@@ -2267,7 +2286,7 @@
       p.innerHTML = `
         <div class="sec-title">${t.extraHeading}</div>
         <div class="field-hint">${t.queryEarPlaceholder}</div>
-        <input type="text" id="qEarInp" class="input-box" placeholder="L1123 / 1123" onkeydown="if(event.key==='Enter') execQuery();" />
+        <input type="text" id="qEarInp" class="input-box" placeholder="L1123 / Y1301" onkeydown="if(event.key==='Enter') execQuery();" />
         <button type="button" class="primary-btn" onclick="execQuery()">${t.searchBtn}</button>
         <div id="qTilesResult" class="tile-grid" style="margin-top:10px;"></div>
         <div id="qOutBox" class="notice-box hidden"></div>
@@ -2302,12 +2321,10 @@
           const summaryLines = (c.fields || []).map(f =>
             `${translateQueryText(f.header)}: ${translateQueryText(f.value)}`
           );
-          const frontSub = summaryLines[0] || earTitle;
-          const backSub = summaryLines.slice(1).join(' | ') || frontSub;
+          const slides = summaryLines.length ? summaryLines : [earTitle];
           tilesBox.appendChild(makeMetroFlipTile(
             earTitle,
-            frontSub,
-            backSub,
+            slides,
             'TAG',
             palette[i % palette.length],
             () => {
@@ -2316,7 +2333,7 @@
             }
           ));
         });
-        startMetro3DFlipLoop();
+        startIrregularFlipEngine();
       } catch (e) {
         outBox.textContent = String(e);
       }
@@ -2846,16 +2863,16 @@
       ].filter(Boolean);
 
       const symZones = [
-        { key: 'Boar House_SINGLE', title: 'Boar House', color: '#94a3b8' },
-        { key: 'GDU_SINGLE', title: 'GDU', color: '#d8b4fe' },
-        { key: 'Gestation_A', title: 'Gestation A', color: '#fca5a5' },
-        { key: 'Gestation_B', title: 'Gestation B', color: '#fca5a5' },
-        { key: 'Farrowing_A', title: 'Farrowing A', color: '#86efac' },
-        { key: 'Farrowing_B', title: 'Farrowing B', color: '#86efac' },
-        { key: 'Nursery_A', title: 'Nursery A', color: '#fde047' },
-        { key: 'Nursery_B', title: 'Nursery B', color: '#fde047' },
-        { key: 'Porker_A', title: 'Porker A (1A-8B)', color: '#e2e8f0' },
-        { key: 'Porker_B', title: 'Porker B (1A-8B)', color: '#e2e8f0' }
+        { key: 'Boar House_SINGLE', title: 'Boar House', color: '#cbd5e1' },
+        { key: 'GDU_SINGLE', title: 'GDU', color: '#e9d5ff' },
+        { key: 'Gestation_A', title: 'Gestation A', color: '#fecaca' },
+        { key: 'Gestation_B', title: 'Gestation B', color: '#fecaca' },
+        { key: 'Farrowing_A', title: 'Farrowing A', color: '#bbf7d0' },
+        { key: 'Farrowing_B', title: 'Farrowing B', color: '#bbf7d0' },
+        { key: 'Nursery_A', title: 'Nursery A', color: '#fef08a' },
+        { key: 'Nursery_B', title: 'Nursery B', color: '#fef08a' },
+        { key: 'Porker_A', title: 'Porker A (1A-8B)', color: '#e5e7eb' },
+        { key: 'Porker_B', title: 'Porker B (1A-8B)', color: '#e5e7eb' }
       ];
 
       state.lastDiarySummary = {
