@@ -3,27 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#090d16" />
+  <meta name="theme-color" content="#f3f5f8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>GLA Metro Hub</title>
+  <title>GLA Field Hub</title>
   <style>
     :root {
-      --bg-metro: #090d16;
-      --bg-panel: #111827;
-      --border-metro: rgba(255, 255, 255, 0.16);
-      --fg-white: #ffffff;
-      --fg-soft: #e2e8f0;
+      --bg-light: #f3f5f8;
+      --fg-dark: #111827;
+      --fg-muted: #4b5563;
 
-      /* 微軟 Metro 高對比色票 */
-      --m-cobalt: #0050ef;
-      --m-crimson: #a20025;
-      --m-emerald: #008a00;
-      --m-amber: #b45309;
-      --m-violet: #6a00ff;
-      --m-steel: #334155;
-      --m-teal: #00aba9;
-      --m-magenta: #a80077;
-      --m-orange: #c2410c;
+      /* 清爽有層次色系 + 微圓弧 */
+      --c-boar: #94a3b8;
+      --c-boar-b: #64748b;
+
+      --c-gdu: #d8b4fe;
+      --c-gdu-b: #a855f7;
+
+      --c-gest: #fca5a5;
+      --c-gest-b: #ef4444;
+
+      --c-farr: #86efac;
+      --c-farr-b: #22c55e;
+
+      --c-nurs: #fde047;
+      --c-nurs-b: #eab308;
+
+      --c-pork: #e2e8f0;
+      --c-pork-b: #94a3b8;
+
+      --c-exit: #fed7aa;
+      --c-exit-b: #fb923c;
+
+      --c-query: #bfdbfe;
+      --c-query-b: #3b82f6;
     }
 
     * {
@@ -41,9 +53,9 @@
 
     body {
       padding: 8px 24px 72px 24px;
-      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Noto Sans TC", sans-serif;
-      background-color: var(--bg-metro);
-      color: var(--fg-white);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background: var(--bg-light);
+      color: var(--fg-dark);
       font-size: 16px;
       min-height: 100vh;
     }
@@ -52,34 +64,34 @@
     .edge-rail {
       position: fixed;
       top: 0;
-      bottom: 56px;
+      bottom: 54px;
       width: 22px;
       z-index: 60;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(17, 24, 39, 0.04);
       cursor: pointer;
     }
-    .edge-rail:active { background: rgba(0, 171, 169, 0.28); }
+    .edge-rail:active { background: rgba(59, 130, 246, 0.18); }
     .edge-rail.left { left: 0; }
     .edge-rail.right { right: 0; }
 
     .tri-big {
       width: 0;
       height: 0;
-      opacity: 0.45;
+      opacity: 0.42;
     }
-    .edge-rail:active .tri-big { opacity: 0.95; }
+    .edge-rail:active .tri-big { opacity: 0.9; }
     .tri-left {
       border-top: 22px solid transparent;
       border-bottom: 22px solid transparent;
-      border-right: 16px solid #ffffff;
+      border-right: 16px solid #1f2937;
     }
     .tri-right {
       border-top: 22px solid transparent;
       border-bottom: 22px solid transparent;
-      border-left: 16px solid #ffffff;
+      border-left: 16px solid #1f2937;
     }
 
     /* 頂部列 */
@@ -101,26 +113,27 @@
       flex-wrap: wrap;
     }
 
-    .metro-pill {
-      border: 1px solid var(--border-metro);
-      background: #1e293b;
-      color: #ffffff;
-      border-radius: 3px;
+    .soft-pill {
+      border: 1px solid #d1d5db;
+      background: rgba(255, 255, 255, 0.88);
+      color: #111827;
+      border-radius: 12px;
       padding: 6px 11px;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
     }
-    .metro-pill.active {
-      background: var(--m-cobalt);
-      border-color: #60a5fa;
+    .soft-pill.active {
+      background: #dbeafe;
+      border-color: #3b82f6;
+      color: #1e3a8a;
     }
 
     .home-house-btn {
-      border: 1.5px solid #38bdf8;
-      background: var(--m-cobalt);
-      color: #ffffff;
-      border-radius: 3px;
+      border: 1.5px solid #60a5fa;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-radius: 12px;
       padding: 5px 11px;
       font-size: 16px;
       font-weight: 800;
@@ -128,17 +141,17 @@
     }
 
     .exit-screen-btn {
-      border: 1px solid #f87171;
-      background: var(--m-crimson);
-      color: #ffffff;
-      border-radius: 3px;
+      border: 1px solid #fca5a5;
+      background: #fef2f2;
+      color: #b91c1c;
+      border-radius: 12px;
       padding: 6px 11px;
       font-size: 14px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    /* 分離式時間、地點、現有溫度與中心預報曲線小框 */
+    /* 上方時間、地點、現有溫度與雨情、預報曲線：各自獨立底色與圓弧 */
     .split-widget-wrap {
       width: 100%;
       max-width: 560px;
@@ -154,44 +167,65 @@
       gap: 7px;
     }
 
-    .metro-subbox {
-      background: var(--bg-panel);
-      border-radius: 3px;
-      padding: 10px 12px;
-      border: 1px solid var(--border-metro);
+    .box-time {
+      background: #e0f2fe;
+      border: 1px solid #7dd3fc;
+      border-radius: 14px;
+      padding: 9px 12px;
+    }
+
+    .box-loc {
+      background: #ede9fe;
+      border: 1px solid #c4b5fd;
+      border-radius: 14px;
+      padding: 9px 12px;
+    }
+
+    .box-temp {
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      border-radius: 14px;
+      padding: 9px 12px;
+    }
+
+    .box-curve {
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      border-radius: 14px;
+      padding: 8px 11px;
     }
 
     .clock-val {
-      font-size: 24px;
+      font-size: 23px;
       font-weight: 800;
-      color: #ffffff;
+      color: #0f172a;
       line-height: 1.1;
     }
 
     .date-sub {
       font-size: 13px;
       font-weight: 600;
-      color: #cbd5e1;
+      color: #374151;
       margin-top: 3px;
     }
 
     .loc-val {
       font-size: 15px;
       font-weight: 800;
-      color: #ffffff;
+      color: #111827;
       line-height: 1.25;
     }
 
     .temp-val {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
-      color: #38bdf8;
+      color: #0f172a;
     }
 
     .rain-txt {
       font-size: 13px;
       font-weight: 700;
-      color: #e2e8f0;
+      color: #1f2937;
       margin-top: 3px;
     }
 
@@ -201,30 +235,31 @@
       align-items: center;
       font-size: 12px;
       font-weight: 700;
-      color: #e2e8f0;
-      margin-bottom: 4px;
+      color: #1f2937;
+      margin-bottom: 3px;
     }
 
     .span-btn {
-      border: 1px solid #64748b;
-      background: #1e293b;
-      color: #ffffff;
-      border-radius: 2px;
+      border: 1px solid #9ca3af;
+      background: rgba(255, 255, 255, 0.8);
+      color: #111827;
+      border-radius: 8px;
       padding: 2px 6px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
     }
 
-    /* 登入框 / 離開框 */
+    /* 登入與離開卡片 */
     .auth-card, .exit-card {
       width: 100%;
       max-width: 420px;
       margin: 18px auto;
-      background: var(--bg-panel);
-      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 16px;
       padding: 20px;
-      border: 1px solid var(--border-metro);
+      border: 1px solid #d1d5db;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     }
 
     .exit-card { text-align: center; }
@@ -234,13 +269,13 @@
       font-size: 16px;
       font-weight: 700;
       margin-bottom: 6px;
-      color: #ffffff;
+      color: #111827;
     }
 
     .field-hint {
       font-size: 13px;
       font-weight: 600;
-      color: #93c5fd;
+      color: #374151;
       margin-bottom: 6px;
       line-height: 1.35;
     }
@@ -249,10 +284,10 @@
       width: 100%;
       padding: 11px 12px;
       font-size: 16px;
-      border-radius: 3px;
-      border: 1px solid #64748b;
-      background: #0f172a;
-      color: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #111827;
     }
 
     .primary-btn {
@@ -261,10 +296,10 @@
       padding: 12px;
       font-size: 16px;
       font-weight: 800;
-      border: none;
-      border-radius: 3px;
-      background: var(--m-cobalt);
-      color: #ffffff;
+      border: 1px solid #2563eb;
+      border-radius: 14px;
+      background: #dbeafe;
+      color: #1e3a8a;
       cursor: pointer;
     }
 
@@ -274,10 +309,10 @@
       padding: 11px;
       font-size: 15px;
       font-weight: 800;
-      border: 1.5px solid #38bdf8;
-      border-radius: 3px;
-      background: #0f172a;
-      color: #7dd3fc;
+      border: 1px solid #9ca3af;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #111827;
       cursor: pointer;
     }
 
@@ -296,9 +331,9 @@
     }
 
     .context-bar {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-metro);
-      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
       padding: 9px 12px;
       margin-bottom: 8px;
       display: flex;
@@ -308,14 +343,14 @@
       gap: 6px;
       font-size: 14px;
       font-weight: 700;
-      color: #ffffff;
     }
 
     .batch-chip {
-      background: var(--m-teal);
-      color: #ffffff;
+      background: #e0f2fe;
+      border: 1px solid #7dd3fc;
+      color: #0f172a;
       padding: 3px 9px;
-      border-radius: 2px;
+      border-radius: 10px;
       font-size: 12px;
       font-weight: 800;
       cursor: pointer;
@@ -329,9 +364,9 @@
     }
 
     .batch-box {
-      background: #0f172a;
-      border: 1px solid #475569;
-      border-radius: 3px;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
       padding: 6px 4px;
       text-align: center;
     }
@@ -340,7 +375,7 @@
       display: block;
       font-size: 12px;
       font-weight: 700;
-      color: #cbd5e1;
+      color: #374151;
       margin-bottom: 4px;
     }
 
@@ -354,10 +389,10 @@
     .step-btn {
       width: 26px;
       height: 32px;
-      border-radius: 2px;
-      border: 1px solid #64748b;
-      background: #1e293b;
-      color: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #f9fafb;
+      color: #111827;
       font-size: 16px;
       font-weight: 800;
       padding: 0;
@@ -370,14 +405,14 @@
       text-align: center;
       font-size: 16px;
       font-weight: 800;
-      border: 1px solid #94a3b8;
-      border-radius: 2px;
-      background: #090d16;
-      color: #ffffff;
+      border: 1px solid #9ca3af;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #111827;
       padding: 0;
     }
 
-    /* 真正 3D 雙面翻轉 Windows Phone Metro 動態磚 */
+    /* 柔和圓弧 + 全場 3D 翻轉與微旋轉動態磚 */
     .tile-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -386,7 +421,7 @@
 
     .metro-flip-scene {
       perspective: 900px;
-      min-height: 96px;
+      min-height: 98px;
       cursor: pointer;
     }
 
@@ -398,13 +433,13 @@
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 96px;
+      min-height: 98px;
       transform-style: preserve-3d;
-      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .metro-flip-scene.is-flipped .metro-flip-card {
-      transform: rotateX(180deg);
+      transform: rotateX(180deg) rotateZ(1.5deg);
     }
 
     .metro-face {
@@ -412,32 +447,33 @@
       inset: 0;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
-      border-radius: 3px;
+      border-radius: 15px;
       padding: 12px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border: 1px solid rgba(255, 255, 255, 0.22);
+      border: 1.5px solid rgba(17, 24, 39, 0.14);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
     .metro-back {
       transform: rotateX(180deg);
-      background: #1e293b !important;
-      border-color: #38bdf8;
+      background: #ffffff !important;
+      border-color: #60a5fa;
     }
 
     .tile-title {
       font-size: 18px;
       font-weight: 800;
       line-height: 1.2;
-      color: #ffffff;
+      color: #111827;
       word-break: break-word;
     }
 
     .tile-sub {
       font-size: 13px;
       font-weight: 600;
-      color: #f1f5f9;
+      color: #1f2937;
       margin-top: 5px;
       line-height: 1.25;
     }
@@ -446,38 +482,37 @@
       align-self: flex-end;
       font-size: 11px;
       font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 2px;
-      background: rgba(0, 0, 0, 0.35);
-      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.72);
+      color: #111827;
       margin-top: 6px;
     }
 
-    .m-boar { background: var(--m-steel); }
-    .m-gdu { background: var(--m-violet); }
-    .m-gest { background: var(--m-emerald); }
-    .m-farr { background: var(--m-crimson); }
-    .m-nurs { background: var(--m-amber); }
-    .m-pork { background: #475569; }
-    .m-exit { background: var(--m-orange); }
-    .m-query { background: var(--m-cobalt); }
-    .m-teal { background: var(--m-teal); }
-    .m-mag { background: var(--m-magenta); }
+    .m-boar { background: var(--c-boar); border-color: var(--c-boar-b); }
+    .m-gdu { background: var(--c-gdu); border-color: var(--c-gdu-b); }
+    .m-gest { background: var(--c-gest); border-color: var(--c-gest-b); }
+    .m-farr { background: var(--c-farr); border-color: var(--c-farr-b); }
+    .m-nurs { background: var(--c-nurs); border-color: var(--c-nurs-b); }
+    .m-pork { background: var(--c-pork); border-color: var(--c-pork-b); }
+    .m-exit { background: var(--c-exit); border-color: var(--c-exit-b); }
+    .m-query { background: var(--c-query); border-color: var(--c-query-b); }
 
     .section-gap { height: 18px; }
     .sec-title {
       font-size: 17px;
       font-weight: 800;
       margin: 4px 0 7px 2px;
-      color: #ffffff;
+      color: #111827;
     }
 
     .panel-card {
-      background: var(--bg-panel);
-      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
       padding: 14px;
       margin-top: 10px;
-      border: 1px solid var(--border-metro);
+      border: 1px solid #d1d5db;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     }
 
     .field-block { margin-bottom: 12px; }
@@ -492,61 +527,61 @@
       padding: 8px 11px;
       font-size: 14px;
       font-weight: 700;
-      border-radius: 3px;
-      border: 1px solid #64748b;
-      background: #0f172a;
-      color: #ffffff;
+      border-radius: 11px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #111827;
       cursor: pointer;
     }
 
     .chip-btn.selected {
-      background: var(--m-cobalt);
-      border-color: #93c5fd;
+      background: #dbeafe;
+      border-color: #2563eb;
+      color: #1e3a8a;
     }
 
     .cart-list-box {
       margin-top: 10px;
       padding: 10px;
-      border-radius: 3px;
-      background: #0f172a;
-      border: 1px solid #475569;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
     }
     .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 6px 0;
-      border-bottom: 1px dashed #334155;
+      border-bottom: 1px dashed #d1d5db;
       font-size: 14px;
       font-weight: 700;
     }
     .cart-item:last-child { border-bottom: none; }
     .del-mini-btn {
-      border: 1px solid #f87171;
-      background: var(--m-crimson);
-      color: #ffffff;
-      border-radius: 2px;
+      border: 1px solid #fca5a5;
+      background: #fef2f2;
+      color: #b91c1c;
+      border-radius: 8px;
       padding: 3px 8px;
       font-size: 12px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    /* 左右對稱日報總結卡片 */
     .diary-report-card {
       margin-top: 12px;
       background: #ffffff;
-      color: #0f172a;
-      border: 3px solid #0f172a;
-      border-radius: 3px;
+      color: #111827;
+      border: 2px solid #374151;
+      border-radius: 14px;
       padding: 12px;
     }
     .diary-top-dt {
       font-size: 20px;
       font-weight: 900;
       text-align: center;
-      color: #0f172a;
-      border-bottom: 2px solid #0f172a;
+      color: #111827;
+      border-bottom: 2px solid #374151;
       padding-bottom: 6px;
       margin-bottom: 8px;
     }
@@ -556,17 +591,17 @@
       gap: 6px;
     }
     .diary-cell {
-      border-radius: 2px;
+      border-radius: 10px;
       padding: 7px 8px;
       border: 1px solid #cbd5e1;
-      background: #e2e8f0;
-      color: #475569;
+      background: #f3f4f6;
+      color: #6b7280;
       font-size: 11px;
       line-height: 1.3;
     }
     .diary-cell.active-zone {
-      border: 2px solid #0f172a;
-      color: #0f172a;
+      border: 2px solid #111827;
+      color: #111827;
       font-weight: 800;
     }
     .diary-cell-title {
@@ -577,36 +612,36 @@
     .diary-footer-sign {
       margin-top: 8px;
       padding-top: 6px;
-      border-top: 2px solid #0f172a;
+      border-top: 2px solid #374151;
       display: flex;
       justify-content: space-between;
       font-size: 14px;
       font-weight: 900;
-      color: #0f172a;
+      color: #111827;
     }
 
     .stage-tracker {
       margin-top: 10px;
       padding: 10px 12px;
-      border-radius: 3px;
-      background: #0f172a;
-      border: 1.5px solid #64748b;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1.5px solid #cbd5e1;
       font-size: 15px;
       font-weight: 800;
     }
-    .stage-tracker.st-prep { background: #1e3a8a; border-color: #60a5fa; color: #ffffff; }
-    .stage-tracker.st-sending { background: #78350f; border-color: #fbbf24; color: #fef08a; }
-    .stage-tracker.st-done { background: #14532d; border-color: #4ade80; color: #dcfce7; }
-    .stage-tracker.st-queued { background: #7c2d12; border-color: #fb923c; color: #ffedd5; }
-    .stage-tracker.st-err { background: #7f1d1d; border-color: #f87171; color: #fee2e2; }
+    .stage-tracker.st-prep { background: #eff6ff; border-color: #60a5fa; color: #1e3a8a; }
+    .stage-tracker.st-sending { background: #fefce8; border-color: #facc15; color: #854d0e; }
+    .stage-tracker.st-done { background: #f0fdf4; border-color: #4ade80; color: #166534; }
+    .stage-tracker.st-queued { background: #fff7ed; border-color: #fb923c; color: #9a3412; }
+    .stage-tracker.st-err { background: #fef2f2; border-color: #f87171; color: #991b1b; }
 
     .notice-box {
       margin-top: 8px;
       padding: 10px 12px;
-      border-radius: 3px;
-      background: #0f172a;
-      border: 1px solid #475569;
-      color: #f8fafc;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      color: #111827;
       font-size: 14px;
       font-weight: 600;
       white-space: pre-wrap;
@@ -618,8 +653,8 @@
       right: 0;
       bottom: 0;
       height: 54px;
-      background: #111827;
-      border-top: 1px solid var(--border-metro);
+      background: rgba(255, 255, 255, 0.96);
+      border-top: 1px solid #d1d5db;
       display: flex;
       align-items: center;
       justify-content: space-around;
@@ -631,10 +666,10 @@
     .nav-btn {
       flex: 1;
       height: 38px;
-      border-radius: 3px;
-      border: 1px solid #64748b;
-      background: #1e293b;
-      color: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      background: #f9fafb;
+      color: #111827;
       font-size: 15px;
       font-weight: 800;
       cursor: pointer;
@@ -651,41 +686,41 @@
     <div class="tri-big tri-right"></div>
   </div>
 
-  <!-- 頂部：小房子回首頁 + 語系 BM/EN/中 + 音效 + 重新載入 + 離開畫面 -->
+  <!-- 頂部：小房子回首頁 + 語系 BM/EN/中 + 音效 + 重新載入 + 離開 -->
   <div class="top-bar">
     <div class="pill-group">
       <button type="button" class="home-house-btn" id="btnHomeHouse" onclick="goHomeHouse()" title="Home">🏠</button>
-      <button type="button" class="metro-pill" data-lang="ms" onclick="setLang('ms')">BM</button>
-      <button type="button" class="metro-pill" data-lang="en" onclick="setLang('en')">EN</button>
-      <button type="button" class="metro-pill" data-lang="zh-TW" onclick="setLang('zh-TW')">中</button>
+      <button type="button" class="soft-pill" data-lang="ms" onclick="setLang('ms')">BM</button>
+      <button type="button" class="soft-pill" data-lang="en" onclick="setLang('en')">EN</button>
+      <button type="button" class="soft-pill" data-lang="zh-TW" onclick="setLang('zh-TW')">中</button>
     </div>
     <div class="pill-group">
-      <button type="button" class="metro-pill active" id="btnSoundToggle" onclick="toggleSound()"></button>
-      <button type="button" class="metro-pill" id="btnReload" onclick="reloadApp()"></button>
+      <button type="button" class="soft-pill active" id="btnSoundToggle" onclick="toggleSound()"></button>
+      <button type="button" class="soft-pill" id="btnReload" onclick="reloadApp()"></button>
       <button type="button" class="exit-screen-btn" id="btnExitScreen" onclick="openExitScreen()"></button>
-      <span id="queuePill" class="metro-pill hidden" style="background:#b45309; border-color:#fbbf24;" onclick="syncOfflineQueue()">0</span>
+      <span id="queuePill" class="soft-pill hidden" style="background:#fef3c7; border-color:#f59e0b;" onclick="syncOfflineQueue()">0</span>
     </div>
   </div>
 
-  <!-- 分離式時間、地點、現有溫度與中心預報曲線小框 -->
+  <!-- 上方：時間框、地點框、現有溫度與雨情框、預報曲線框（各自獨立底色） -->
   <section class="split-widget-wrap">
     <div class="mini-row-2">
-      <div class="metro-subbox">
+      <div class="box-time">
         <div class="clock-val" id="clockNow">--:--:--</div>
         <div class="date-sub" id="dateSub">--</div>
       </div>
-      <div class="metro-subbox">
+      <div class="box-loc">
         <div class="loc-val" id="locSub">--</div>
         <div class="date-sub" id="groupStatusSub">-</div>
       </div>
     </div>
 
     <div class="mini-row-2">
-      <div class="metro-subbox">
+      <div class="box-temp">
         <div class="temp-val" id="tempNowVal">--°C</div>
         <div class="rain-txt" id="rainNowTxt">--</div>
       </div>
-      <div class="metro-subbox">
+      <div class="box-curve">
         <div class="curve-header">
           <span id="curveTitle"></span>
           <button type="button" class="span-btn" id="btnSpanToggle" onclick="toggleSpan()">±3H/±6H</button>
@@ -695,7 +730,7 @@
     </div>
   </section>
 
-  <!-- 登入前畫面：先輸入姓名 + 密碼（零暗示） -->
+  <!-- 登入前畫面：姓名 + 密碼（零暗示） -->
   <section id="loginCard" class="auth-card">
     <div class="field-block">
       <label class="field-label" id="lblWorkerName" for="loginWorkerInput"></label>
@@ -706,13 +741,13 @@
       <input type="password" id="inpPass" class="input-box" autocomplete="off" onkeydown="if(event.key==='Enter') submitLogin();" />
     </div>
     <button type="button" class="primary-btn" id="btnLogin" onclick="submitLogin()"></button>
-    <div id="errLogin" class="notice-box hidden" style="background:#7f1d1d; border-color:#f87171;"></div>
+    <div id="errLogin" class="notice-box hidden" style="background:#fef2f2; border-color:#f87171; color:#991b1b;"></div>
   </section>
 
   <!-- 離開畫面 -->
   <section id="exitCard" class="exit-card hidden">
     <div style="font-size:21px; font-weight:900; margin-bottom:8px;" id="exitTitle"></div>
-    <div style="font-size:14px; color:#cbd5e1; margin-bottom:14px;" id="exitDesc"></div>
+    <div style="font-size:14px; color:#4b5563; margin-bottom:14px;" id="exitDesc"></div>
     <button type="button" class="primary-btn" id="btnReenterFromExit" onclick="reenterFromExit()"></button>
   </section>
 
@@ -754,12 +789,12 @@
         admin: 'qwert'
       },
       KEYS: {
-        LANG: 'gla_sys_lang_v10',
-        PASS: 'gla_sys_pass_v10',
-        WORKER: 'gla_worker_name_v10',
-        QUEUE: 'gla_sys_queue_v10',
-        ROOM_BATCHES: 'gla_room_batches_v10',
-        SOUND: 'gla_sound_on_v10'
+        LANG: 'gla_sys_lang_v11',
+        PASS: 'gla_sys_pass_v11',
+        WORKER: 'gla_worker_name_v11',
+        QUEUE: 'gla_sys_queue_v11',
+        ROOM_BATCHES: 'gla_room_batches_v11',
+        SOUND: 'gla_sound_on_v11'
       },
       LAT: 1.167,
       LON: 110.566,
@@ -800,24 +835,24 @@
         w3Label: 'Minggu Cerai Susu',
         confirmBatchBtn: 'Sahkan Bilik & Kumpulan',
         tapToChangeBatch: 'Tukar Kumpulan',
-        deptBoar: 'Kandang Pejantan (Kiri 1)',
+        deptBoar: 'Boar House',
         deptBoarSub: 'Koleksi Mani · Rawatan/Mati',
-        deptGdu: 'Kandang GDU (Kanan 1)',
+        deptGdu: 'GDU',
         deptGduSub: 'Pemilihan · Air/Makanan',
-        deptGest: 'Kandang Bunting',
+        deptGest: 'Gestation',
         deptGestSub: 'Berahi · Kahwin · Air/Makanan',
-        deptFarr: 'Bilik Beranak',
+        deptFarr: 'Farrowing',
         deptFarrSub: 'Masuk · Beranak · Cerai Susu',
-        deptNurs: 'Bilik Asuhan',
+        deptNurs: 'Nursery',
         deptNursSub: 'Meter Air · Makanan · Rawatan/Mati',
-        deptPork: 'Bilik Pembesaran',
+        deptPork: 'Porker',
         deptPorkSub: 'Meter Air · Makanan · Rawatan/Mati',
-        deptCullMort: 'Takai & Kematian',
+        deptCullMort: 'Cull & Mortality',
         deptCullMortSub: 'Rekod takai & kematian',
-        deptExitSale: 'Keluar & Jualan',
+        deptExitSale: 'Exit & Sales',
         deptExitSaleSub: 'Rekod keluar & jualan',
-        sideA: 'Bahagian A (Kiri)',
-        sideB: 'Bahagian B (Kanan)',
+        sideA: 'Side A',
+        sideB: 'Side B',
         tileFW: 'Meter Air & Makanan',
         tileFWSub: '07:00 & 17:00 · Beg (50kg)',
         tileProd: 'Rekod Pengeluaran',
@@ -981,9 +1016,9 @@
         w3Label: 'Wean Wk',
         confirmBatchBtn: 'Confirm Room & Batch',
         tapToChangeBatch: 'Change Batch',
-        deptBoar: 'Boar House (Left 1)',
+        deptBoar: 'Boar House',
         deptBoarSub: 'Semen · Treat/Mort',
-        deptGdu: 'GDU (Right 1)',
+        deptGdu: 'GDU',
         deptGduSub: 'Selection · Water/Feed',
         deptGest: 'Gestation',
         deptGestSub: 'Heat · Breeding · Water/Feed',
@@ -997,8 +1032,8 @@
         deptCullMortSub: 'Cull & mortality records',
         deptExitSale: 'Exit & Sales',
         deptExitSaleSub: 'Exit & sales records',
-        sideA: 'Side A (Left)',
-        sideB: 'Side B (Right)',
+        sideA: 'Side A',
+        sideB: 'Side B',
         tileFW: 'Water Meter & Feed',
         tileFWSub: '07:00 & 17:00 · Bags (50kg)',
         tileProd: 'Production Records',
@@ -1162,9 +1197,9 @@
         w3Label: '離乳週次',
         confirmBatchBtn: '確認房號與批次',
         tapToChangeBatch: '修改批次',
-        deptBoar: '公豬舍（左一）',
+        deptBoar: '公豬舍',
         deptBoarSub: '採精 · 治療與死亡',
-        deptGdu: '後備母豬舍（右一）',
+        deptGdu: 'GDU',
         deptGduSub: '選種體型 · 水錶飼料',
         deptGest: '配懷舍',
         deptGestSub: '發情 · 配種 · 水錶飼料',
@@ -1178,8 +1213,8 @@
         deptCullMortSub: '淘汰與死亡紀錄',
         deptExitSale: '離場與銷售',
         deptExitSaleSub: '離場與銷售紀錄',
-        sideA: 'A 區（左側）',
-        sideB: 'B 區（右側）',
+        sideA: 'A 區',
+        sideB: 'B 區',
         tileFW: '獨立水錶與飼料用料',
         tileFWSub: '上午 07:00 與下午 17:00 · 包數 (50kg)',
         tileProd: '生產與選育紀錄',
@@ -1331,7 +1366,6 @@
       { code: 'unable_stand', ms: 'Tidak Boleh Berdiri', en: 'Unable to Stand', 'zh-TW': '無法站立' }
     ];
 
-    // 中文至 BM / EN 常用詞彙轉換表（供《育種總查詢庫(轉)》動態翻譯）
     const CN_TO_OTHER = [
       { cn: '母豬主檔', en: 'Sow Master', ms: 'Induk Utama' },
       { cn: '配種', en: 'Mating', ms: 'Kahwin' },
@@ -1383,7 +1417,8 @@
       currentBatch: { w1: '', w2: '', w3: '' },
       chips: {},
       queuedRecords: [],
-      lastDiarySummary: null
+      lastDiarySummary: null,
+      flipTimerId: null
     };
 
     function unlockAudioContext() {
@@ -1503,7 +1538,7 @@
       state.lang = code;
       document.documentElement.lang = code;
       localStorage.setItem(CONFIG.KEYS.LANG, code);
-      document.querySelectorAll('.metro-pill[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
+      document.querySelectorAll('.soft-pill[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
       logTraj('lang:' + code);
       applyTexts();
       updateClockAndForecastCurve();
@@ -1634,7 +1669,7 @@
         { id: 'ExitSale', lbl: 'Exit/Sale' }
       ];
       strip.innerHTML = quickDepts.map(q =>
-        `<button type="button" class="metro-pill ${state.view.dept === q.id ? 'active' : ''}" onclick="jumpGpDept('${q.id}')">${q.lbl}</button>`
+        `<button type="button" class="soft-pill ${state.view.dept === q.id ? 'active' : ''}" onclick="jumpGpDept('${q.id}')">${q.lbl}</button>`
       ).join('');
     }
 
@@ -1651,7 +1686,7 @@
       }
       strip.classList.remove('hidden');
       strip.innerHTML = rooms.map(r =>
-        `<button type="button" class="metro-pill ${state.view.room === r ? 'active' : ''}" onclick="jumpPsRoom('${r}')">${r}</button>`
+        `<button type="button" class="soft-pill ${state.view.room === r ? 'active' : ''}" onclick="jumpPsRoom('${r}')">${r}</button>`
       ).join('');
     }
 
@@ -1728,19 +1763,19 @@
       svg.innerHTML = `
         <defs>
           <linearGradient id="fcGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.38"/>
-            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.03"/>
+            <stop offset="0%" stop-color="#16a34a" stop-opacity="0.32"/>
+            <stop offset="100%" stop-color="#16a34a" stop-opacity="0.03"/>
           </linearGradient>
         </defs>
         <path d="${areaPath}" fill="url(#fcGrad)"></path>
-        <path d="${linePath}" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"></path>
-        ${coords.map(c => `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="2.2" fill="#7dd3fc"></circle>`).join('')}
-        <line x1="${centerPt.x.toFixed(1)}" y1="4" x2="${centerPt.x.toFixed(1)}" y2="45" stroke="#f87171" stroke-width="1.6" stroke-dasharray="2.5,2"></line>
-        <circle cx="${centerPt.x.toFixed(1)}" cy="${centerPt.y.toFixed(1)}" r="4.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.4"></circle>
-        <text x="${centerPt.x.toFixed(1)}" y="10" text-anchor="middle" font-size="8.5" font-weight="800" fill="#fca5a5">${t.nowLabel} ${curTemp}°</text>
-        <text x="12" y="51" font-size="8" fill="#94a3b8">${pad(coords[0].hour)}:00</text>
-        <text x="${centerPt.x.toFixed(1)}" y="51" text-anchor="middle" font-size="8" font-weight="700" fill="#fca5a5">${pad(curH)}:00</text>
-        <text x="228" y="51" text-anchor="end" font-size="8" fill="#7dd3fc">${pad(coords[coords.length - 1].hour)}:00</text>
+        <path d="${linePath}" fill="none" stroke="#15803d" stroke-width="2.2" stroke-linecap="round"></path>
+        ${coords.map(c => `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="2.2" fill="#166534"></circle>`).join('')}
+        <line x1="${centerPt.x.toFixed(1)}" y1="4" x2="${centerPt.x.toFixed(1)}" y2="45" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="2.5,2"></line>
+        <circle cx="${centerPt.x.toFixed(1)}" cy="${centerPt.y.toFixed(1)}" r="4.5" fill="#dc2626" stroke="#ffffff" stroke-width="1.4"></circle>
+        <text x="${centerPt.x.toFixed(1)}" y="10" text-anchor="middle" font-size="8.5" font-weight="800" fill="#b91c1c">${t.nowLabel} ${curTemp}°</text>
+        <text x="12" y="51" font-size="8" fill="#374151">${pad(coords[0].hour)}:00</text>
+        <text x="${centerPt.x.toFixed(1)}" y="51" text-anchor="middle" font-size="8" font-weight="700" fill="#b91c1c">${pad(curH)}:00</text>
+        <text x="228" y="51" text-anchor="end" font-size="8" fill="#166534">${pad(coords[coords.length - 1].hour)}:00</text>
       `;
     }
 
@@ -1838,7 +1873,6 @@
         batchChip.classList.add('hidden');
       }
 
-      // 查詢與分析專區（gla9999 / 510067 / gp3333 / qwert）
       if (['query', 'report', 'admin'].includes(state.profile.level)) {
         botTitle.classList.remove('hidden');
         botGrid.appendChild(makeMetroFlipTile(
@@ -1857,7 +1891,7 @@
           state.profile.group,
           'Farrowing / Index',
           'A1',
-          'm-teal',
+          'm-farr',
           () => {
             sendTelemetryBeacon('OPEN_ANALYSIS_TILE', 'Farrowing_Analysis');
             renderAnalysisBox();
@@ -1869,7 +1903,7 @@
             'QWERT',
             state.trajectory.slice(-2).join(' | '),
             'SYS',
-            'm-mag',
+            'm-boar',
             () => {
               loadAdminTelemetry();
             }
@@ -1879,17 +1913,17 @@
         botTitle.classList.add('hidden');
       }
 
-      // Stage 1: 左右對稱部門排列 + 兩個一般 Metro 方塊
+      // Stage 1: 左右對稱部門排列 + 兩個一般方塊
       if (state.view.stage === 'depts') {
         const depts = [
-          { id: 'Boar House', title: t.deptBoar, sub: t.deptBoarSub, back: 'D1402 · 0-5 Libido', badge: 'BH', cls: 'm-boar' },
-          { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, back: 'L1123 · Y1301 · Teats', badge: 'GDU', cls: 'm-gdu' },
-          { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, back: 'Heat · Mating · Time', badge: 'GEST', cls: 'm-gest' },
-          { id: 'Farrowing', title: t.deptFarr, sub: t.deptFarrSub, back: 'F1-F6 · Farrow · Wean', badge: 'FARR', cls: 'm-farr' },
-          { id: 'Nursery', title: t.deptNurs, sub: t.deptNursSub, back: 'N1-N7 · 07:00/17:00', badge: 'NURS', cls: 'm-nurs' },
-          { id: 'Porker', title: t.deptPork, sub: t.deptPorkSub, back: '1A-8B · Water/Feed', badge: 'PORK', cls: 'm-pork' },
-          { id: 'CullMort', title: t.deptCullMort, sub: t.deptCullMortSub, back: 'Head-to-Toe Signs', badge: 'C/M', cls: 'm-exit' },
-          { id: 'ExitSale', title: t.deptExitSale, sub: t.deptExitSaleSub, back: 'Room / Ear Tag Audit', badge: 'EXIT', cls: 'm-teal' }
+          { id: 'Boar House', title: t.deptBoar, sub: t.deptBoarSub, back: 'D1402 · 0-5', badge: 'BH', cls: 'm-boar' },
+          { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, back: 'L1123 · Y1301', badge: 'GDU', cls: 'm-gdu' },
+          { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, back: 'Heat · Mating', badge: 'GEST', cls: 'm-gest' },
+          { id: 'Farrowing', title: t.deptFarr, sub: t.deptFarrSub, back: 'Farrow · Wean', badge: 'FARR', cls: 'm-farr' },
+          { id: 'Nursery', title: t.deptNurs, sub: t.deptNursSub, back: '07:00 / 17:00', badge: 'NURS', cls: 'm-nurs' },
+          { id: 'Porker', title: t.deptPork, sub: t.deptPorkSub, back: 'Water / Feed', badge: 'PORK', cls: 'm-pork' },
+          { id: 'CullMort', title: t.deptCullMort, sub: t.deptCullMortSub, back: 'Cull / Mortality', badge: 'C/M', cls: 'm-exit' },
+          { id: 'ExitSale', title: t.deptExitSale, sub: t.deptExitSaleSub, back: 'Exit / Sales', badge: 'EXIT', cls: 'm-query' }
         ];
         depts.forEach(d => {
           topGrid.appendChild(makeMetroFlipTile(d.title, d.sub, d.back, d.badge, d.cls, () => {
@@ -2185,11 +2219,10 @@
         'Nursery': 'm-nurs',
         'Porker': 'm-pork',
         'CullMort': 'm-exit',
-        'ExitSale': 'm-teal'
+        'ExitSale': 'm-query'
       }[d] || 'm-query';
     }
 
-    // 真正雙面 3D 翻轉 Windows Phone Metro 動態磚
     function makeMetroFlipTile(frontTitle, frontSub, backText, badge, cls, onClick) {
       const scene = document.createElement('div');
       scene.className = 'metro-flip-scene';
@@ -2207,7 +2240,7 @@
               <div class="tile-title">${frontTitle}</div>
               <div class="tile-sub">${backText}</div>
             </div>
-            <div class="tile-badge">LIVE · ${badge}</div>
+            <div class="tile-badge">${badge}</div>
           </div>
         </div>
       `;
@@ -2216,17 +2249,17 @@
     }
 
     function startMetro3DFlipLoop() {
-      const scenes = document.querySelectorAll('.metro-flip-scene');
-      scenes.forEach((sc, idx) => {
-        setTimeout(() => {
-          setInterval(() => {
-            sc.classList.toggle('is-flipped');
-          }, 4200 + idx * 550);
-        }, idx * 450);
-      });
+      if (state.flipTimerId) clearInterval(state.flipTimerId);
+      const scenes = Array.from(document.querySelectorAll('.metro-flip-scene'));
+      if (!scenes.length) return;
+      let cursor = 0;
+      state.flipTimerId = setInterval(() => {
+        const sc = scenes[cursor % scenes.length];
+        if (sc) sc.classList.toggle('is-flipped');
+        cursor++;
+      }, 1600);
     }
 
-    // 查詢方塊：耳號模糊比對 + 僅呈現黃色標題欄位 + 以動態磚方塊呈現 + 三語翻譯
     function renderQueryBox() {
       const t = DICT[state.lang];
       const p = document.getElementById('extraPanel');
@@ -2263,7 +2296,7 @@
           return;
         }
         outBox.classList.add('hidden');
-        const palette = ['m-query', 'm-teal', 'm-gest', 'm-gdu', 'm-farr'];
+        const palette = ['m-query', 'm-farr', 'm-nurs', 'm-gdu', 'm-gest'];
         cards.forEach((c, i) => {
           const earTitle = translateQueryText(c.earTag);
           const summaryLines = (c.fields || []).map(f =>
@@ -2405,7 +2438,7 @@
           <div class="field-block"><label class="field-label">${t.lblWeanPigCount}</label><input type="number" id="f_weaned_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblWeanSowCount}</label><input type="number" id="f_weaned_sow_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" placeholder="L1123" /></div>
-          <hr style="margin:12px 0; border:0; border-top:1px dashed #475569;" />
+          <hr style="margin:12px 0; border:0; border-top:1px dashed #cbd5e1;" />
           <div class="sec-title">${t.lblDeferredBox}</div>
           <div class="field-block"><label class="field-label">${t.lblDefSowCnt}</label><input type="number" id="f_deferred_sow_count" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblDefPigCnt}</label><input type="number" id="f_deferred_piglet_count" class="input-box" /></div>
@@ -2509,7 +2542,7 @@
           <div class="field-block"><label class="field-label">${t.lblTreatReason}</label><input type="text" id="f_treatment_reason" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblSymptoms}</label>${chips('symptoms_codes', symptomOpts, true)}</div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
-          <div class="field-hint" style="color:#fca5a5; font-weight:800;">${t.vetReminder}</div>
+          <div class="field-hint" style="color:#b91c1c; font-weight:800;">${t.vetReminder}</div>
         `;
       } else if (ft === 'mortality') {
         html += `
@@ -2524,7 +2557,7 @@
           <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
           <div class="field-block"><label class="field-label">${t.lblSymptoms}</label>${chips('symptoms_codes', symptomOpts, true)}</div>
           <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
-          <div class="field-hint" style="color:#fca5a5; font-weight:800;">${t.vetReminder}</div>
+          <div class="field-hint" style="color:#b91c1c; font-weight:800;">${t.vetReminder}</div>
         `;
       } else if (ft === 'exit_sales') {
         html += `
@@ -2813,16 +2846,16 @@
       ].filter(Boolean);
 
       const symZones = [
-        { key: 'Boar House_SINGLE', title: 'Boar House', color: '#cfd8dc' },
-        { key: 'GDU_SINGLE', title: 'GDU', color: '#f3e5f5' },
-        { key: 'Gestation_A', title: 'Gestation A', color: '#e0f2f1' },
-        { key: 'Gestation_B', title: 'Gestation B', color: '#e0f2f1' },
-        { key: 'Farrowing_A', title: 'Farrowing A', color: '#ffebee' },
-        { key: 'Farrowing_B', title: 'Farrowing B', color: '#ffebee' },
-        { key: 'Nursery_A', title: 'Nursery A', color: '#fffde7' },
-        { key: 'Nursery_B', title: 'Nursery B', color: '#fffde7' },
-        { key: 'Porker_A', title: 'Porker A (1A-8B)', color: '#eceff1' },
-        { key: 'Porker_B', title: 'Porker B (1A-8B)', color: '#eceff1' }
+        { key: 'Boar House_SINGLE', title: 'Boar House', color: '#94a3b8' },
+        { key: 'GDU_SINGLE', title: 'GDU', color: '#d8b4fe' },
+        { key: 'Gestation_A', title: 'Gestation A', color: '#fca5a5' },
+        { key: 'Gestation_B', title: 'Gestation B', color: '#fca5a5' },
+        { key: 'Farrowing_A', title: 'Farrowing A', color: '#86efac' },
+        { key: 'Farrowing_B', title: 'Farrowing B', color: '#86efac' },
+        { key: 'Nursery_A', title: 'Nursery A', color: '#fde047' },
+        { key: 'Nursery_B', title: 'Nursery B', color: '#fde047' },
+        { key: 'Porker_A', title: 'Porker A (1A-8B)', color: '#e2e8f0' },
+        { key: 'Porker_B', title: 'Porker B (1A-8B)', color: '#e2e8f0' }
       ];
 
       state.lastDiarySummary = {
@@ -2837,7 +2870,7 @@
 
       const cellsHtml = symZones.map(z => {
         const isAct = z.key === activeKey;
-        const bg = isAct ? z.color : '#e2e8f0';
+        const bg = isAct ? z.color : '#f3f4f6';
         const bodyTxt = isAct ? activeSummaryLines.join('<br>') : '-';
         return `<div class="diary-cell ${isAct ? 'active-zone' : ''}" style="background:${bg};">
           <div class="diary-cell-title">${z.title}</div>
@@ -2852,7 +2885,7 @@
         <div class="diary-report-card">
           <div class="diary-top-dt">${displayDt}</div>
           <div class="diary-sym-grid">${cellsHtml}</div>
-          <div class="diary-cell ${exitActive ? 'active-zone' : ''}" style="margin-top:6px; background:${exitActive ? '#fff3e0' : '#e2e8f0'};">
+          <div class="diary-cell ${exitActive ? 'active-zone' : ''}" style="margin-top:6px; background:${exitActive ? '#fed7aa' : '#f3f4f6'};">
             <div class="diary-cell-title">Cull / Mortality & Exit / Sales</div>
             <div>${exitActive ? activeSummaryLines.join('<br>') : '-'}</div>
           </div>
@@ -2875,11 +2908,11 @@
 
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = '#0f172a';
+      ctx.strokeStyle = '#374151';
       ctx.lineWidth = 4;
       ctx.strokeRect(16, 16, 688, 888);
 
-      ctx.fillStyle = '#0f172a';
+      ctx.fillStyle = '#111827';
       ctx.font = 'bold 30px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(info.displayDt, 360, 62);
@@ -2892,14 +2925,14 @@
         const y = 88 + row * (rowH + gapY);
         const isAct = z.key === info.activeKey;
 
-        ctx.fillStyle = isAct ? z.color : '#e2e8f0';
+        ctx.fillStyle = isAct ? z.color : '#f3f4f6';
         ctx.fillRect(x, y, colW, rowH);
-        ctx.strokeStyle = isAct ? '#0f172a' : '#cbd5e1';
+        ctx.strokeStyle = isAct ? '#111827' : '#cbd5e1';
         ctx.lineWidth = isAct ? 3 : 1.5;
         ctx.strokeRect(x, y, colW, rowH);
 
         ctx.textAlign = 'left';
-        ctx.fillStyle = isAct ? '#0f172a' : '#64748b';
+        ctx.fillStyle = isAct ? '#111827' : '#6b7280';
         ctx.font = 'bold 18px sans-serif';
         ctx.fillText(z.title, x + 12, y + 28);
 
@@ -2912,12 +2945,12 @@
       });
 
       const exY = 88 + 5 * (rowH + gapY);
-      ctx.fillStyle = info.isExit ? '#fff3e0' : '#e2e8f0';
+      ctx.fillStyle = info.isExit ? '#fed7aa' : '#f3f4f6';
       ctx.fillRect(26, exY, 668, 86);
-      ctx.strokeStyle = info.isExit ? '#0f172a' : '#cbd5e1';
+      ctx.strokeStyle = info.isExit ? '#111827' : '#cbd5e1';
       ctx.strokeRect(26, exY, 668, 86);
       ctx.textAlign = 'left';
-      ctx.fillStyle = info.isExit ? '#0f172a' : '#64748b';
+      ctx.fillStyle = info.isExit ? '#111827' : '#6b7280';
       ctx.font = 'bold 18px sans-serif';
       ctx.fillText('Cull / Mortality & Exit / Sales', 38, exY + 28);
       if (info.isExit) {
@@ -2925,7 +2958,7 @@
         ctx.fillText(info.activeSummaryLines.join(' | '), 38, exY + 56);
       }
 
-      ctx.fillStyle = '#0f172a';
+      ctx.fillStyle = '#111827';
       ctx.font = 'bold 22px sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(info.workerName, 28, 882);
@@ -2985,7 +3018,7 @@
 
       state.lang = detectSystemLang();
       document.documentElement.lang = state.lang;
-      document.querySelectorAll('.metro-pill[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
+      document.querySelectorAll('.soft-pill[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
       applyTexts();
       updateClockAndForecastCurve();
       setInterval(updateClockAndForecastCurve, 1000);
