@@ -1,45 +1,35 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="ms">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#eef2f7" />
+  <meta name="theme-color" content="#e8eef6" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>GLA Mobile Hub</title>
+  <title>GLA Field Hub</title>
   <style>
-    /* === [START MODULE 3: PIXEL-LIKE SOFT ROUNDED LIVE TILES & NAVIGATION] === */
+    /* === [START MODULE 3: SOFT METRO TILES, COMPACT PIXEL WIDGET & RAIL NAV] === */
     :root {
-      --bg-canvas: #eef2f7;
-      --bg-card: #ffffff;
-      --text-primary: #1e293b;
+      --text-primary: #0f172a;
       --text-secondary: #475569;
 
-      /* 清淡柔和色系 */
       --tile-gp: #ede7f6;
-      --tile-gp-border: #b39ddb;
+      --tile-gp-b: #b39ddb;
       --tile-ps: #e8f5e9;
-      --tile-ps-border: #81c784;
-
+      --tile-ps-b: #81c784;
       --tile-gest: #e0f2f1;
-      --tile-gest-border: #80cbc4;
-
+      --tile-gest-b: #80cbc4;
       --tile-farr: #ffebee;
-      --tile-farr-border: #ef9a9a;
-
+      --tile-farr-b: #ef9a9a;
       --tile-nurs: #fffde7;
-      --tile-nurs-border: #fff176;
-
+      --tile-nurs-b: #fff176;
       --tile-pork: #eceff1;
-      --tile-pork-border: #b0bec5;
-
+      --tile-pork-b: #b0bec5;
       --tile-boar: #cfd8dc;
-      --tile-boar-border: #90a4ae;
-
+      --tile-boar-b: #90a4ae;
       --tile-gdu: #f3e5f5;
-      --tile-gdu-border: #ce93d8;
-
+      --tile-gdu-b: #ce93d8;
       --tile-maint: #fff3e0;
-      --tile-maint-border: #ffcc80;
+      --tile-maint-b: #ffcc80;
     }
 
     * {
@@ -49,7 +39,7 @@
 
     body {
       margin: 0;
-      padding: 0 18px 78px 18px;
+      padding: 0 16px 74px 16px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
       background: linear-gradient(180deg, #e8eef6 0%, #f7f9fc 100%);
       color: var(--text-primary);
@@ -62,56 +52,51 @@
     .edge-rail {
       position: fixed;
       top: 0;
-      bottom: 58px;
+      bottom: 56px;
       width: 14px;
       z-index: 60;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(15, 23, 42, 0.04);
+      background: rgba(15, 23, 42, 0.035);
       cursor: pointer;
-      transition: background 0.2s ease;
     }
-    .edge-rail:hover, .edge-rail:active {
-      background: rgba(2, 132, 199, 0.14);
-    }
+    .edge-rail:active { background: rgba(2, 132, 199, 0.16); }
     .edge-rail.left { left: 0; }
     .edge-rail.right { right: 0; }
 
-    .ghost-triangle {
+    .tri-ghost {
       width: 0;
       height: 0;
       opacity: 0.22;
-      transition: opacity 0.2s ease;
     }
-    .edge-rail:hover .ghost-triangle, .edge-rail:active .ghost-triangle {
-      opacity: 0.65;
-    }
-    .ghost-triangle.left-tri {
-      border-top: 9px solid transparent;
-      border-bottom: 9px solid transparent;
+    .edge-rail:active .tri-ghost { opacity: 0.65; }
+    .tri-left {
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
       border-right: 7px solid #334155;
     }
-    .ghost-triangle.right-tri {
-      border-top: 9px solid transparent;
-      border-bottom: 9px solid transparent;
+    .tri-right {
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
       border-left: 7px solid #334155;
     }
 
-    /* 頂部列與語系 */
+    /* 頂部控制列：BM -> EN -> 中 */
     .top-bar {
-      max-width: 980px;
-      margin: 12px auto 0 auto;
+      max-width: 960px;
+      margin: 10px auto 0 auto;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .lang-group {
+    .pill-group {
       display: flex;
       gap: 6px;
+      align-items: center;
     }
 
     .pill-btn {
@@ -119,7 +104,7 @@
       background: #ffffff;
       color: #1e293b;
       border-radius: 999px;
-      padding: 7px 13px;
+      padding: 6px 12px;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
@@ -130,146 +115,232 @@
       border-color: #0284c7;
     }
 
-    /* Google 手機風格：日期、跳動時鐘、地點、天氣與全天溫度曲線 */
-    .pixel-weather-card {
-      max-width: 980px;
-      margin: 10px auto 14px auto;
+    /* 緊湊型 Google 手機桌面時鐘、地點與溫度曲線框 */
+    .compact-widget {
+      max-width: 960px;
+      margin: 8px auto 12px auto;
       background: #ffffff;
-      border-radius: 24px;
-      padding: 18px 20px;
-      box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+      border-radius: 20px;
+      padding: 12px 15px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
       border: 1px solid #e2e8f0;
     }
 
-    .weather-top-row {
+    .widget-header {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .clock-big {
-      font-size: 36px;
+    .time-date-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .clock-text {
+      font-size: 26px;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      line-height: 1.05;
       color: #0f172a;
+      line-height: 1.1;
     }
 
-    .date-loc-line {
-      font-size: 15px;
+    .date-loc-text {
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-secondary);
-      margin-top: 5px;
     }
 
-    .weather-now-box {
-      text-align: right;
+    .rain-temp-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      padding: 5px 11px;
+      border-radius: 14px;
     }
 
-    .temp-now {
-      font-size: 28px;
+    .now-temp-badge {
+      font-size: 18px;
       font-weight: 800;
       color: #0369a1;
     }
 
-    .rain-status {
-      font-size: 14px;
+    .rain-badge {
+      font-size: 13px;
       font-weight: 700;
       color: #334155;
-      margin-top: 3px;
     }
 
-    .temp-curve-wrap {
-      margin-top: 12px;
+    .curve-box {
+      margin-top: 8px;
       background: #f8fafc;
-      border-radius: 16px;
-      padding: 10px 12px;
+      border-radius: 14px;
+      padding: 6px 10px 4px 10px;
       border: 1px solid #eef2f6;
     }
 
-    .temp-curve-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: #475569;
-      margin-bottom: 4px;
+    .curve-top-bar {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 2px;
     }
 
-    /* 登入框（零密碼暗示） */
-    .auth-box {
-      max-width: 440px;
-      margin: 28px auto;
+    .span-toggle {
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      border-radius: 8px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* 密碼驗證框（零密碼暗示） */
+    .auth-card {
+      max-width: 420px;
+      margin: 24px auto;
       background: #ffffff;
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 6px 22px rgba(15, 23, 42, 0.07);
       border: 1px solid #e2e8f0;
     }
 
     .field-label {
       display: block;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       margin-bottom: 6px;
       color: #1e293b;
     }
 
-    .input-box {
+    .input-box, .select-box {
       width: 100%;
-      padding: 13px 15px;
-      font-size: 17px;
+      padding: 12px 14px;
+      font-size: 16px;
       border-radius: 14px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       color: #0f172a;
     }
 
-    .action-btn {
+    .primary-btn {
       width: 100%;
-      margin-top: 14px;
-      padding: 14px;
-      font-size: 17px;
-      font-weight: 700;
+      margin-top: 12px;
+      padding: 13px;
+      font-size: 16px;
+      font-weight: 800;
       border: none;
-      border-radius: 16px;
+      border-radius: 15px;
       background: #0284c7;
       color: #ffffff;
       cursor: pointer;
     }
 
-    /* 柔和圓弧動態磚網格 */
+    /* 主工作區與房號批次提醒條 */
     .main-wrap {
-      max-width: 980px;
+      max-width: 960px;
       margin: 0 auto;
     }
 
-    .section-spacer {
-      height: 22px;
+    .context-banner {
+      background: #ffffff;
+      border: 1.5px solid #bae6fd;
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
     }
 
-    .section-heading {
+    .batch-pill {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* 三週次批次三個獨立框 */
+    .batch-trio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .batch-cell {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .batch-cell label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .batch-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .step-mini-btn {
+      width: 32px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
       font-size: 18px;
       font-weight: 800;
-      margin: 6px 0 10px 2px;
-      color: #1e293b;
+      cursor: pointer;
     }
 
+    .batch-num-input {
+      width: 54px;
+      height: 38px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 800;
+      border: 1px solid #94a3b8;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    /* 柔和圓弧動態磚 */
     .tile-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 11px;
     }
 
     @media (min-width: 680px) {
-      .tile-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .tile-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    @keyframes tileSoftFlip {
+    @keyframes metroFlipPulse {
       0% { transform: perspective(700px) rotateX(0deg) scale(1); }
       45% { transform: perspective(700px) rotateX(14deg) scale(0.985); }
       100% { transform: perspective(700px) rotateX(0deg) scale(1); }
@@ -277,74 +348,74 @@
 
     .live-tile {
       border-radius: 22px;
-      padding: 18px 16px;
-      min-height: 124px;
+      padding: 16px;
+      min-height: 114px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       border: 1.5px solid transparent;
       box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
-      transition: transform 0.14s ease, box-shadow 0.14s ease;
+      transition: transform 0.14s ease;
       user-select: none;
     }
 
-    .live-tile:active {
-      transform: scale(0.96);
-    }
-
-    .live-tile.anim-flip {
-      animation: tileSoftFlip 0.75s ease;
-    }
-
-    .live-tile.wide {
-      grid-column: span 2;
-    }
+    .live-tile:active { transform: scale(0.96); }
+    .live-tile.flipping { animation: metroFlipPulse 0.72s ease; }
 
     .tile-title {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       line-height: 1.25;
       color: #0f172a;
     }
 
     .tile-sub {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       color: #334155;
-      margin-top: 8px;
-      line-height: 1.3;
+      margin-top: 6px;
     }
 
-    .tile-tag {
+    .tile-badge {
       align-self: flex-end;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 3px 9px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.75);
       color: #1e293b;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
-    .t-gp { background: var(--tile-gp); border-color: var(--tile-gp-border); }
-    .t-ps { background: var(--tile-ps); border-color: var(--tile-ps-border); }
-    .t-gest { background: var(--tile-gest); border-color: var(--tile-gest-border); }
-    .t-farr { background: var(--tile-farr); border-color: var(--tile-farr-border); }
-    .t-nurs { background: var(--tile-nurs); border-color: var(--tile-nurs-border); }
-    .t-pork { background: var(--tile-pork); border-color: var(--tile-pork-border); }
-    .t-boar { background: var(--tile-boar); border-color: var(--tile-boar-border); }
-    .t-gdu { background: var(--tile-gdu); border-color: var(--tile-gdu-border); }
-    .t-maint { background: var(--tile-maint); border-color: var(--tile-maint-border); }
+    .t-gp { background: var(--tile-gp); border-color: var(--tile-gp-b); }
+    .t-ps { background: var(--tile-ps); border-color: var(--tile-ps-b); }
+    .t-gest { background: var(--tile-gest); border-color: var(--tile-gest-b); }
+    .t-farr { background: var(--tile-farr); border-color: var(--tile-farr-b); }
+    .t-nurs { background: var(--tile-nurs); border-color: var(--tile-nurs-b); }
+    .t-pork { background: var(--tile-pork); border-color: var(--tile-pork-b); }
+    .t-boar { background: var(--tile-boar); border-color: var(--tile-boar-b); }
+    .t-gdu { background: var(--tile-gdu); border-color: var(--tile-gdu-b); }
+    .t-maint { background: var(--tile-maint); border-color: var(--tile-maint-b); }
+
+    .section-spacer { height: 22px; }
+    .section-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 4px 0 8px 2px;
+      color: #1e293b;
+    }
 
     .panel-card {
       background: #ffffff;
       border-radius: 22px;
       padding: 18px;
-      margin-top: 14px;
+      margin-top: 12px;
       border: 1px solid #e2e8f0;
       box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
     }
+
+    .field-block { margin-bottom: 14px; }
 
     .chip-row {
       display: flex;
@@ -353,10 +424,10 @@
     }
 
     .chip-btn {
-      padding: 10px 14px;
+      padding: 10px 13px;
       font-size: 15px;
       font-weight: 700;
-      border-radius: 14px;
+      border-radius: 13px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       color: #1e293b;
@@ -367,10 +438,6 @@
       background: #0284c7;
       color: #ffffff;
       border-color: #0284c7;
-    }
-
-    .field-block {
-      margin-bottom: 14px;
     }
 
     .notice-box {
@@ -389,7 +456,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 58px;
+      height: 56px;
       background: rgba(255, 255, 255, 0.96);
       border-top: 1px solid #cbd5e1;
       display: flex;
@@ -400,104 +467,107 @@
       gap: 10px;
     }
 
-    .nav-step-btn {
+    .nav-btn {
       flex: 1;
-      height: 42px;
-      border-radius: 14px;
+      height: 40px;
+      border-radius: 13px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       color: #0f172a;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
     /* === [END MODULE 3] === */
   </style>
 </head>
 <body>
   <!-- 左右側邊細長條 + 半隱形三角形 -->
-  <div class="edge-rail left" onclick="goPrevStep()" title="Prev">
-    <div class="ghost-triangle left-tri"></div>
+  <div class="edge-rail left" onclick="goPrev()">
+    <div class="tri-ghost tri-left"></div>
   </div>
-  <div class="edge-rail right" onclick="goNextStep()" title="Next">
-    <div class="ghost-triangle right-tri"></div>
+  <div class="edge-rail right" onclick="goNext()">
+    <div class="tri-ghost tri-right"></div>
   </div>
 
-  <!-- 頂部語系與層級切換 -->
+  <!-- 頂部語系按鈕：BM -> EN -> 中 -->
   <div class="top-bar">
-    <div class="lang-group">
-      <button class="pill-btn" data-lang="zh-TW" onclick="setLang('zh-TW')">繁中</button>
-      <button class="pill-btn" data-lang="en" onclick="setLang('en')">EN</button>
-      <button class="pill-btn" data-lang="ms" onclick="setLang('ms')">BM</button>
+    <div class="pill-group">
+      <button type="button" class="pill-btn" data-lang="ms" onclick="setLang('ms')">BM</button>
+      <button type="button" class="pill-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      <button type="button" class="pill-btn" data-lang="zh-TW" onclick="setLang('zh-TW')">中</button>
     </div>
-    <div style="display:flex; gap:6px; align-items:center;">
-      <span id="tierPill" class="pill-btn" style="cursor:default;">-</span>
+    <div class="pill-group">
+      <span id="rolePill" class="pill-btn" style="cursor:default;">-</span>
       <span id="queuePill" class="pill-btn hidden" style="background:#f59e0b; color:#fff; border-color:#f59e0b;" onclick="syncOfflineQueue()">0</span>
-      <button class="pill-btn" id="btnSwitchPass" onclick="promptNewPassword()"></button>
-      <button class="pill-btn" id="btnClearMem" onclick="clearSavedMemory()"></button>
+      <button type="button" class="pill-btn" id="btnSwitchCode" onclick="promptSwitchCode()"></button>
+      <button type="button" class="pill-btn" id="btnResetMem" onclick="resetMemory()"></button>
     </div>
   </div>
 
-  <!-- Google 手機風格：時鐘、日期、地點、天氣與全天溫度變化曲線 -->
-  <section class="pixel-weather-card">
-    <div class="weather-top-row">
-      <div>
-        <div class="clock-big" id="liveClock">--:--:--</div>
-        <div class="date-loc-line" id="dateAndLoc">--</div>
+  <!-- 緊湊型時鐘、日期、地點、天氣雨情與溫度變化曲線（含現在時間指示針） -->
+  <section class="compact-widget">
+    <div class="widget-header">
+      <div class="time-date-wrap">
+        <div class="clock-text" id="clockNow">--:--:--</div>
+        <div class="date-loc-text" id="dateLocLine">--</div>
       </div>
-      <div class="weather-now-box">
-        <div class="temp-now" id="tempNow">--°C</div>
-        <div class="rain-status" id="rainForecast">--</div>
+      <div class="rain-temp-wrap">
+        <div class="now-temp-badge" id="tempNowBadge">--°C</div>
+        <div class="rain-badge" id="rainBadge">--</div>
       </div>
     </div>
-    <div class="temp-curve-wrap">
-      <div class="temp-curve-label">
-        <span id="curveTitle"></span>
-        <span id="curveRange"></span>
+    <div class="curve-box">
+      <div class="curve-top-bar">
+        <span id="curveHeading"></span>
+        <button type="button" class="span-toggle" id="btnToggleSpan" onclick="toggleCurveSpan()">6H / 12H</button>
       </div>
-      <svg id="tempCurveSvg" viewBox="0 0 360 76" width="100%" height="76" aria-label="Temperature Curve"></svg>
+      <svg id="hourlyCurveSvg" viewBox="0 0 360 68" width="100%" height="68"></svg>
     </div>
   </section>
 
-  <!-- 密碼輸入框（不放任何密碼暗示） -->
-  <section id="loginSection" class="auth-box">
-    <label class="field-label" id="loginPromptLabel" for="loginPassInput"></label>
-    <input type="password" id="loginPassInput" class="input-box" autocomplete="off" />
-    <button type="button" class="action-btn" id="btnEnterPass" onclick="handleLoginSubmit()"></button>
-    <div id="loginError" class="notice-box hidden" style="background:#fee2e2; color:#991b1b;"></div>
+  <!-- 密碼登入畫面（零密碼暗示，按 Enter 直接登入） -->
+  <section id="loginCard" class="auth-card">
+    <label class="field-label" id="lblPass" for="inpPass"></label>
+    <input type="password" id="inpPass" class="input-box" autocomplete="off" onkeydown="if(event.key==='Enter') submitLogin();" />
+    <button type="button" class="primary-btn" id="btnLogin" onclick="submitLogin()"></button>
+    <div id="errLogin" class="notice-box hidden" style="background:#fee2e2; color:#991b1b;"></div>
   </section>
 
-  <!-- 主畫面 -->
-  <main id="appMain" class="main-wrap hidden">
-    <div id="pathBar" class="section-heading"></div>
+  <!-- 主工作區 -->
+  <main id="workspaceMain" class="main-wrap hidden">
+    <!-- 目前所在房號與三週次批次提醒橫幅 -->
+    <div class="context-banner">
+      <span id="locBannerText">-</span>
+      <span id="batchBannerBtn" class="batch-pill hidden" onclick="reopenBatchGate()"></span>
+    </div>
 
-    <!-- 上方：部門或場域動態磚 -->
-    <div id="topTilesGrid" class="tile-grid"></div>
+    <!-- 上方動態磚網格 -->
+    <div id="topGrid" class="tile-grid"></div>
 
     <!-- 間隔 -->
-    <div id="midSpacer" class="section-spacer"></div>
+    <div class="section-spacer"></div>
 
-    <!-- 下方：進階/分析/查詢方塊（依密碼層級顯示，例如 gla9999 / 510067 / gp3333 / qwert） -->
-    <div id="bottomSubHeading" class="section-heading hidden"></div>
-    <div id="bottomTilesGrid" class="tile-grid"></div>
+    <!-- 下方分析與查詢方塊（依密碼層級顯示） -->
+    <div id="bottomTitle" class="section-title hidden"></div>
+    <div id="bottomGrid" class="tile-grid"></div>
 
-    <!-- 表單與查詢/報表/管理面板 -->
-    <div id="workPanel" class="panel-card hidden"></div>
+    <!-- 表單面板 -->
+    <div id="formPanel" class="panel-card hidden"></div>
+    <!-- 額外查詢/分析面板 -->
     <div id="extraPanel" class="panel-card hidden"></div>
   </main>
 
   <!-- 底部模擬手機上一頁／下一頁導航列 -->
   <nav class="bottom-nav">
-    <button type="button" class="nav-step-btn" id="btnBottomPrev" onclick="goPrevStep()">◀</button>
-    <button type="button" class="nav-step-btn" id="btnBottomNext" onclick="goNextStep()">▶</button>
+    <button type="button" class="nav-btn" id="btnNavPrev" onclick="goPrev()"></button>
+    <button type="button" class="nav-btn" id="btnNavNext" onclick="goNext()"></button>
   </nav>
 
   <script>
-    // === [START MODULE 4: CLOCK, WEATHER CURVE, COMPRESSION, OFFLINE & ROUTING] ===
+    // === [START MODULE 4: PURE SINGLE-LANG DICTIONARY, BATCH GATE, CURVE NEEDLE & TELEMETRY] ===
     const CONFIG = {
       GAS_URL: 'https://script.google.com/macros/s/AKfycbyEod8PcLLZYsglmyef9s3AHkzD4gpitKXQDew1YS6fqhlofZp43_iA9uw1SwQzzXiqRg/exec',
       API_TOKEN: 'GLA_FIELD_INTAKE_TOKEN_2026',
@@ -510,9 +580,10 @@
         admin: 'qwert'
       },
       KEYS: {
-        LANG: 'gla_m_lang',
-        PASS: 'gla_m_pass',
-        QUEUE: 'gla_m_queue'
+        LANG: 'gla_sys_lang_v3',
+        PASS: 'gla_sys_pass_v3',
+        QUEUE: 'gla_sys_queue_v3',
+        ROOM_BATCHES: 'gla_room_batches_v3'
       },
       LAT: 1.167,
       LON: 110.566,
@@ -520,125 +591,484 @@
       IMG_QUALITY: 0.65
     };
 
-    const TEXT = {
-      'zh-TW': {
-        passPrompt: '輸入密碼',
-        enterBtn: '確認',
-        switchPass: '切換密碼',
-        clearMem: '清除記憶',
-        wrongPass: '密碼無效',
-        prevPage: '上一頁',
-        nextPage: '下一頁',
-        locLabel: '古晉 / 西連一帶 (Serian · Kuching)',
-        curveTitle: '今日逐時溫度變化曲線',
-        rainYes: '今日有降雨機率',
-        rainNo: '今日降雨機率偏低',
-        deptsHeading: '部門與作業區',
-        extraHeading: '分析與查詢專區',
-        submitBtn: '送出資料',
-        savedOk: '已寫入，編號：',
-        savedQueue: '已暫存本機待補傳'
+    // 嚴格純單一語系字典（BM / EN / 中 絕不混雜）
+    const DICT = {
+      'ms': {
+        passLabel: 'Kod Akses',
+        enterBtn: 'Masuk',
+        switchCode: 'Tukar Kod',
+        resetMem: 'Set Semula',
+        badPass: 'Kod akses tidak sah',
+        prevBtn: 'Kembali',
+        nextBtn: 'Seterusnya',
+        locationName: 'Serian · Kuching, Sarawak',
+        curve6h: 'Suhu 6 Jam Terkini',
+        curve12h: 'Suhu 12 Jam Terkini',
+        nowTag: 'Sekarang',
+        rainLikely: 'Dijangka Hujan',
+        rainLow: 'Peluang Hujan Rendah',
+        extraHeading: 'Analisis & Carian',
+        batchGateTitle: 'Tetapkan Kumpulan 3 Minggu Dahulu',
+        batchRemind: 'Sila sahkan bilik & kumpulan 3 minggu sebelum meneruskan',
+        w1Label: 'Minggu Kahwin',
+        w2Label: 'Minggu Beranak',
+        w3Label: 'Minggu Cerai Susu',
+        confirmBatchBtn: 'Sahkan Bilik & Kumpulan',
+        tapToChangeBatch: 'Tukar Kumpulan',
+        deptGest: 'Kandang Bunting',
+        deptGestSub: 'Berahi · Kahwin · Air/Makanan',
+        deptFarr: 'Bilik Beranak',
+        deptFarrSub: 'Masuk Induk · Beranak · Cerai Susu',
+        deptNurs: 'Bilik Asuhan',
+        deptNursSub: 'Meter Air · Makanan · Rawatan/Mati',
+        deptPork: 'Bilik Pembesaran',
+        deptPorkSub: 'Meter Air · Makanan · Rawatan/Mati',
+        deptBoar: 'Kandang Pejantan',
+        deptBoarSub: 'Koleksi Mani · Kualiti Mani',
+        deptGdu: 'Kandang GDU',
+        deptGduSub: 'Pemilihan · Konformasi · Air/Makanan',
+        sideA: 'Bahagian A',
+        sideB: 'Bahagian B',
+        tileFW: 'Meter Air & Makanan',
+        tileFWSub: 'Meter Pagi/Petang · Beg Makanan (50kg)',
+        tileProd: 'Rekod Pengeluaran',
+        tileProdSub: 'Kahwin / Beranak / Mani / Pemilihan',
+        tileSowIn: 'Kemasukan Induk (Rabu)',
+        tileSowInSub: 'Rekod bilangan induk masuk bilik',
+        tileFarrRec: 'Rekod Beranak',
+        tileFarrRecSub: 'No. Induk · Lahir Hidup/Mati · Berat',
+        tileWeanHead: 'Cerai Susu: Bilangan (Khamis)',
+        tileWeanHeadSub: 'Bilangan anak & induk keluar bilik',
+        tileWeanWt: 'Cerai Susu: Butiran Berat',
+        tileWeanWtSub: 'Berat kumpulan cerai susu',
+        tileMal: 'Kecacatan Hidup & Klinikal',
+        tileMalSub: 'No. Induk + Tarikh Beranak + Bilangan + Foto',
+        tileTreat: 'Rawatan',
+        tileTreatSub: 'No. Telinga · Pilihan Ubat',
+        tileMort: 'Kematian',
+        tileMortSub: 'No. Telinga · Kumpulan 3 Minggu',
+        lblDate: 'Tarikh',
+        lblEarTag: 'No. Telinga',
+        lblSowTag: 'No. Telinga Induk',
+        lblBoarTag: 'No. Telinga Pejantan',
+        lblSex: 'Jantina',
+        optFemale: 'Betina',
+        optMale: 'Jantan',
+        lblBreed: 'Baka',
+        lblBirthDate: 'Tarikh Lahir',
+        lblTestDate: 'Tarikh Ujian',
+        lblTestWt: 'Berat Ujian (kg)',
+        lblLeftTeat: 'Puting Kiri',
+        lblRightTeat: 'Puting Kanan',
+        lblBlindTeat: 'Puting Rosak',
+        lblFrontLeg: 'Skor Kaki Depan (1-5)',
+        lblRearLeg: 'Skor Kaki Belakang (1-5)',
+        lblBodyLen: 'Panjang Badan (cm)',
+        lblShoulderW: 'Lebar Bahu (cm)',
+        lblChestW: 'Lebar Dada (cm)',
+        lblVulva: 'Keadaan Faraj',
+        optNormal: 'Normal',
+        optSmall: 'Kecil',
+        optUpturned: 'Menjongket',
+        optNA: 'Tidak Berkaitan',
+        lblTestis: 'Simetri Testis',
+        optSym: 'Simetri',
+        optAsym: 'Tidak Simetri',
+        lblHeatObs: 'Kesan Berahi',
+        optYes: 'Ya',
+        optNo: 'Tidak',
+        lblHeatDate: 'Tarikh Berahi',
+        lblBreedDate: 'Tarikh Kahwin',
+        lblServiceBoar: 'No. Pejantan Kahwin',
+        lblSowInCount: 'Bilangan Induk Masuk',
+        lblTNB: 'Jumlah Anak Lahir',
+        lblNBA: 'Anak Lahir Hidup',
+        lblStillborn: 'Anak Lahir Mati',
+        lblMummy: 'Anak Mumia',
+        lblBirthWt: 'Berat Lahir Sekumpulan (kg)',
+        lblWeanDate: 'Tarikh Cerai Susu',
+        lblWeanPigCount: 'Bilangan Anak Cerai Susu',
+        lblWeanSowCount: 'Bilangan Induk Keluar',
+        lblWeanWt: 'Berat Cerai Susu Sekumpulan (kg)',
+        lblLibido: 'Skor Libido (1-5)',
+        lblVol: 'Isipadu Mani (mL)',
+        lblConc: 'Kepekatan Sperma',
+        lblMot: 'Motiliti (%)',
+        lblProg: 'Pergerakan Progresif (%)',
+        lblAbn: 'Keabnormalan (%)',
+        lblHeadCount: 'Bilangan Ternakan Semasa',
+        lblWaterAM: 'Meter Air Pagi (Masuk Kerja)',
+        lblWaterPM: 'Meter Air Petang (Tamat Kerja)',
+        lblFeedCode: 'Kod Makanan',
+        optOther1: 'Lain-lain 1',
+        optOther2: 'Lain-lain 2',
+        optOther3: 'Lain-lain 3',
+        optOther4: 'Lain-lain 4',
+        lblFeedCustom: 'Nama Kod Makanan Lain (Jika dipilih)',
+        lblFeedBags: 'Bilangan Beg Makanan (1 Beg = 50kg)',
+        lblMedOpt: 'Pilihan Ubat (Dikhaskan)',
+        optMedReserved: 'Pilihan Ubat akan dikemas kini',
+        lblFarrowDate: 'Tarikh Beranak',
+        lblMalCount: 'Bilangan Anak Cacat',
+        lblMalSigns: 'Jenis Kecacatan / Tanda Klinikal',
+        signSkin: 'Kerosakan Kulit',
+        signLimb: 'Kecacatan Kaki',
+        signDowner: 'Tidak Boleh Berdiri',
+        signHead: 'Kecacatan Kepala',
+        signGenital: 'Faraj / Dubur',
+        signFever: 'Suhu Tinggi / Demam',
+        signPant: 'Termengah-mengah',
+        signRed: 'Bintik Merah',
+        signDiarrhea: 'Cirit-birit',
+        signOther: 'Lain-lain',
+        lblNote: 'Catatan Ringkas',
+        lblPhoto: 'Foto (Dimampatkan Automatik)',
+        submitBtn: 'Hantar Rekod',
+        savedOk: 'Rekod disimpan. No. Rujukan: ',
+        savedOffline: 'Disimpan sementara di peranti'
       },
       'en': {
-        passPrompt: 'Access Code',
+        passLabel: 'Access Code',
         enterBtn: 'Enter',
-        switchPass: 'Code',
-        clearMem: 'Clear',
-        wrongPass: 'Invalid code',
-        prevPage: 'Prev',
-        nextPage: 'Next',
-        locLabel: 'Serian · Kuching, Sarawak',
-        curveTitle: 'Today Hourly Temperature Curve',
-        rainRainy: 'Rain expected today',
-        rainDry: 'Low rain chance today',
-        deptsHeading: 'Departments',
+        switchCode: 'Switch Code',
+        resetMem: 'Reset',
+        badPass: 'Invalid access code',
+        prevBtn: 'Prev',
+        nextBtn: 'Next',
+        locationName: 'Serian · Kuching, Sarawak',
+        curve6h: 'Last 6 Hours Temperature',
+        curve12h: 'Last 12 Hours Temperature',
+        nowTag: 'Now',
+        rainLikely: 'Rain Expected',
+        rainLow: 'Low Rain Chance',
         extraHeading: 'Analytics & Lookup',
-        submitBtn: 'Submit',
-        savedOk: 'Saved. ID: ',
-        savedQueue: 'Saved offline'
+        batchGateTitle: 'Confirm Room & 3-Week Batch First',
+        batchRemind: 'Verify room number and 3-week batch before proceeding',
+        w1Label: 'Mating Week',
+        w2Label: 'Farrow Week',
+        w3Label: 'Wean Week',
+        confirmBatchBtn: 'Confirm Room & Batch',
+        tapToChangeBatch: 'Change Batch',
+        deptGest: 'Gestation',
+        deptGestSub: 'Heat · Breeding · Water & Feed',
+        deptFarr: 'Farrowing',
+        deptFarrSub: 'Sow Transfer · Farrow · Wean',
+        deptNurs: 'Nursery',
+        deptNursSub: 'Water Meter · Feed · Treat & Mortality',
+        deptPork: 'Porker',
+        deptPorkSub: 'Water Meter · Feed · Treat & Mortality',
+        deptBoar: 'Boar House',
+        deptBoarSub: 'Semen Collection · Quality',
+        deptGdu: 'GDU',
+        deptGduSub: 'Selection · Conformation · Water & Feed',
+        sideA: 'Side A',
+        sideB: 'Side B',
+        tileFW: 'Water Meter & Feed',
+        tileFWSub: 'AM/PM Water Meter · Feed Bags (50kg)',
+        tileProd: 'Production Records',
+        tileProdSub: 'Breeding / Farrow / Semen / Selection',
+        tileSowIn: 'Sow Transfer-In (Wed)',
+        tileSowInSub: 'Record sows moved into room',
+        tileFarrRec: 'Farrowing Record',
+        tileFarrRecSub: 'Sow Tag · Born Alive/Still · Birth Wt',
+        tileWeanHead: 'Weaning: Headcounts (Thu)',
+        tileWeanHeadSub: 'Weaned piglets & sows moved out',
+        tileWeanWt: 'Weaning: Weight Details',
+        tileWeanWtSub: 'Weaning litter weight',
+        tileMal: 'Live Malformation & Clinical',
+        tileMalSub: 'Sow Tag + Farrow Date + Count + Photo',
+        tileTreat: 'Treatment',
+        tileTreatSub: 'Ear Tag · Medication Options',
+        tileMort: 'Mortality',
+        tileMortSub: 'Ear Tag · 3-Week Batch',
+        lblDate: 'Date',
+        lblEarTag: 'Ear Tag',
+        lblSowTag: 'Sow Ear Tag',
+        lblBoarTag: 'Boar Ear Tag',
+        lblSex: 'Sex',
+        optFemale: 'Female',
+        optMale: 'Male',
+        lblBreed: 'Breed',
+        lblBirthDate: 'Birth Date',
+        lblTestDate: 'Test Date',
+        lblTestWt: 'Test Weight (kg)',
+        lblLeftTeat: 'Left Teats',
+        lblRightTeat: 'Right Teats',
+        lblBlindTeat: 'Blind Teats',
+        lblFrontLeg: 'Front Leg Score (1-5)',
+        lblRearLeg: 'Rear Leg Score (1-5)',
+        lblBodyLen: 'Body Length (cm)',
+        lblShoulderW: 'Shoulder Width (cm)',
+        lblChestW: 'Chest Width (cm)',
+        lblVulva: 'Vulva Status',
+        optNormal: 'Normal',
+        optSmall: 'Small',
+        optUpturned: 'Upturned',
+        optNA: 'N/A',
+        lblTestis: 'Testis Symmetry',
+        optSym: 'Symmetrical',
+        optAsym: 'Asymmetrical',
+        lblHeatObs: 'Heat Observed',
+        optYes: 'Yes',
+        optNo: 'No',
+        lblHeatDate: 'Heat Date',
+        lblBreedDate: 'Breeding Date',
+        lblServiceBoar: 'Service Boar Tag',
+        lblSowInCount: 'Transferred-In Sow Count',
+        lblTNB: 'Total Born',
+        lblNBA: 'Born Alive',
+        lblStillborn: 'Stillborn',
+        lblMummy: 'Mummified',
+        lblBirthWt: 'Birth Litter Weight (kg)',
+        lblWeanDate: 'Weaning Date',
+        lblWeanPigCount: 'Weaned Piglet Count',
+        lblWeanSowCount: 'Weaned Sow Out Count',
+        lblWeanWt: 'Wean Litter Weight (kg)',
+        lblLibido: 'Libido Score (1-5)',
+        lblVol: 'Semen Volume (mL)',
+        lblConc: 'Concentration',
+        lblMot: 'Motility (%)',
+        lblProg: 'Progressive (%)',
+        lblAbn: 'Abnormality (%)',
+        lblHeadCount: 'Current Head Count',
+        lblWaterAM: 'Morning Water Meter (Start Shift)',
+        lblWaterPM: 'Afternoon Water Meter (End Shift)',
+        lblFeedCode: 'Feed Code',
+        optOther1: 'Other 1',
+        optOther2: 'Other 2',
+        optOther3: 'Other 3',
+        optOther4: 'Other 4',
+        lblFeedCustom: 'Custom Feed Name (If Other selected)',
+        lblFeedBags: 'Feed Bags Used (1 Bag = 50kg)',
+        lblMedOpt: 'Medication Option (Reserved)',
+        optMedReserved: 'Medication list pending',
+        lblFarrowDate: 'Farrowing Date',
+        lblMalCount: 'Malformed Head Count',
+        lblMalSigns: 'Malformation / Clinical Signs',
+        signSkin: 'Skin Lesion',
+        signLimb: 'Limb Deformity',
+        signDowner: 'Unable to Stand',
+        signHead: 'Head Deformity',
+        signGenital: 'Vulva / Anal Anomaly',
+        signFever: 'High Temp / Fever',
+        signPant: 'Panting',
+        signRed: 'Red Spots',
+        signDiarrhea: 'Diarrhea',
+        signOther: 'Other',
+        lblNote: 'Brief Note',
+        lblPhoto: 'Photo (Auto-compressed)',
+        submitBtn: 'Submit Record',
+        savedOk: 'Saved successfully. ID: ',
+        savedOffline: 'Saved locally (offline queue)'
       },
-      'ms': {
-        passPrompt: 'Kod Akses',
-        enterBtn: 'Masuk',
-        switchPass: 'Kod',
-        clearMem: 'Padam',
-        wrongPass: 'Kod tidak sah',
-        prevPage: 'Kembali',
-        nextPage: 'Seterusnya',
-        locLabel: 'Serian · Kuching, Sarawak',
-        curveTitle: 'Keluk Suhu Mengikut Jam Hari Ini',
-        rainYes: 'Kebimbangan hujan hari ini',
-        rainNo: 'Peluang hujan rendah hari ini',
-        deptsHeading: 'Jabatan',
-        extraHeading: 'Analisis & Carian',
-        submitBtn: 'Hantar',
-        savedOk: 'Tersimpan. ID: ',
-        savedQueue: 'Disimpan luar talian'
+      'zh-TW': {
+        passLabel: '請輸入存取密碼',
+        enterBtn: '確認進入',
+        switchCode: '切換密碼',
+        resetMem: '清除記憶',
+        badPass: '密碼無效，請重新輸入',
+        prevBtn: '上一頁',
+        nextBtn: '下一頁',
+        locationName: '西連 · 古晉，砂拉越',
+        curve6h: '最近 6 小時溫度變化',
+        curve12h: '最近 12 小時溫度變化',
+        nowTag: '現在',
+        rainLikely: '今日有降雨機率',
+        rainLow: '今日降雨機率偏低',
+        extraHeading: '分析與查詢專區',
+        batchGateTitle: '請先確認房號與三週次批次',
+        batchRemind: '操作前請務必核對目前房號與三週次批次',
+        w1Label: '配種週次',
+        w2Label: '分娩週次',
+        w3Label: '離乳週次',
+        confirmBatchBtn: '確認房號與批次',
+        tapToChangeBatch: '修改批次',
+        deptGest: '配懷舍',
+        deptGestSub: '發情 · 配種 · 水錶飼料',
+        deptFarr: '產房',
+        deptFarrSub: '母豬轉入 · 分娩 · 離乳',
+        deptNurs: '保育舍',
+        deptNursSub: '上下午水錶 · 飼料包數 · 治療死亡',
+        deptPork: '肉豬舍',
+        deptPorkSub: '上下午水錶 · 飼料包數 · 治療死亡',
+        deptBoar: '公豬舍',
+        deptBoarSub: '公豬採精 · 精液品質',
+        deptGdu: '後備母豬舍',
+        deptGduSub: '選種體型 · 乳頭評分 · 水料',
+        sideA: 'A 區',
+        sideB: 'B 區',
+        tileFW: '獨立水錶與飼料用料',
+        tileFWSub: '上午/下午水錶度數 · 飼料包數 (50kg)',
+        tileProd: '生產與選育紀錄',
+        tileProdSub: '配種 / 分娩 / 採精 / 選種',
+        tileSowIn: '待產母豬轉入（週三）',
+        tileSowInSub: '登記轉入本間產房母豬頭數',
+        tileFarrRec: '分娩紀錄',
+        tileFarrRecSub: '母豬耳號 · 活仔/死胎/木乃伊 · 初生重',
+        tileWeanHead: '離乳與轉出頭數（週四）',
+        tileWeanHeadSub: '離乳仔豬頭數與離乳母豬出房頭數',
+        tileWeanWt: '離乳秤重明細',
+        tileWeanWtSub: '離乳窩重與重量紀錄',
+        tileMal: '活體畸形與臨床異常',
+        tileMalSub: '母豬耳號 + 分娩日 + 畸形頭數 + 照片',
+        tileTreat: '治療紀錄',
+        tileTreatSub: '個體耳號 · 用藥點選（預留）',
+        tileMort: '死亡紀錄',
+        tileMortSub: '個體耳號 · 三週次批次',
+        lblDate: '日期',
+        lblEarTag: '耳號',
+        lblSowTag: '母豬耳號',
+        lblBoarTag: '公豬耳號',
+        lblSex: '性別',
+        optFemale: '母豬',
+        optMale: '公豬',
+        lblBreed: '品種',
+        lblBirthDate: '出生日期',
+        lblTestDate: '測定日期',
+        lblTestWt: '測定體重 (kg)',
+        lblLeftTeat: '左邊乳頭數',
+        lblRightTeat: '右邊乳頭數',
+        lblBlindTeat: '無效乳頭數',
+        lblFrontLeg: '前肢評分 (1-5)',
+        lblRearLeg: '後肢評分 (1-5)',
+        lblBodyLen: '體長 (cm)',
+        lblShoulderW: '肩寬 (cm)',
+        lblChestW: '胸寬 (cm)',
+        lblVulva: '陰部發育',
+        optNormal: '正常',
+        optSmall: '過小',
+        optUpturned: '上翹',
+        optNA: '不適用',
+        lblTestis: '睪丸對稱性',
+        optSym: '對稱飽滿',
+        optAsym: '不對稱',
+        lblHeatObs: '發情觀察',
+        optYes: '有發情',
+        optNo: '無發情',
+        lblHeatDate: '發情日期',
+        lblBreedDate: '配種日期',
+        lblServiceBoar: '配種公豬耳號',
+        lblSowInCount: '轉入母豬頭數',
+        lblTNB: '總產頭數',
+        lblNBA: '活仔數',
+        lblStillborn: '死胎數',
+        lblMummy: '木乃伊數',
+        lblBirthWt: '初生窩重 (kg)',
+        lblWeanDate: '離乳日期',
+        lblWeanPigCount: '離乳仔豬頭數',
+        lblWeanSowCount: '離乳母豬轉出頭數',
+        lblWeanWt: '離乳窩重 (kg)',
+        lblLibido: '性慾調教評分 (1-5)',
+        lblVol: '精液量 (mL)',
+        lblConc: '精蟲濃度',
+        lblMot: '活力 (%)',
+        lblProg: '前進運動率 (%)',
+        lblAbn: '畸形率 (%)',
+        lblHeadCount: '當日存欄頭數',
+        lblWaterAM: '上午水錶度數（上班時）',
+        lblWaterPM: '下午水錶度數（下班時）',
+        lblFeedCode: '飼料料號',
+        optOther1: '其他 1',
+        optOther2: '其他 2',
+        optOther3: '其他 3',
+        optOther4: '其他 4',
+        lblFeedCustom: '其他飼料名稱（選填）',
+        lblFeedBags: '飼料使用包數（1 包 = 50 公斤）',
+        lblMedOpt: '用藥選項（預留待補）',
+        optMedReserved: '藥物清單待設定',
+        lblFarrowDate: '分娩日期',
+        lblMalCount: '畸形頭數',
+        lblMalSigns: '畸形與外觀徵狀點選',
+        signSkin: '皮膚破損',
+        signLimb: '腳部/肢體畸形',
+        signDowner: '無法站立',
+        signHead: '頭部畸形',
+        signGenital: '陰部/肛門異常',
+        signFever: '高溫發燒',
+        signPant: '喘/呼吸急促',
+        signRed: '皮膚紅點',
+        signDiarrhea: '下痢',
+        signOther: '其他異常',
+        lblNote: '簡短補充說明',
+        lblPhoto: '現場照片（自動縮小壓縮）',
+        submitBtn: '送出紀錄',
+        savedOk: '已成功寫入資料庫，單號：',
+        savedOffline: '目前離線，已暫存於本機待補傳'
       }
     };
 
     const state = {
-      lang: 'zh-TW',
-      savedPass: '',
-      profile: null, // { group: 'PS'|'GP', level: 'basic'|'query'|'report'|'admin' }
+      lang: 'ms',
+      profile: null,
       enteredAt: new Date().toISOString(),
       enteredMs: Date.now(),
       trajectory: [],
       history: [],
       redoStack: [],
+      curveSpan: 12, // 6 or 12 hours
+      hourly24: Array.from({ length: 24 }, (_, h) => Math.round(25 + 6 * Math.sin(((h - 6) / 24) * Math.PI * 2))),
+      rainProbMax: 40,
       view: {
-        stage: 'depts', // 'depts' | 'wing' | 'room' | 'form'
+        stage: 'depts', // 'depts' | 'wing' | 'room' | 'batch_gate' | 'room_tiles' | 'form'
         dept: '',
         wing: '',
         room: '',
-        module: ''
+        formType: ''
       },
-      chips: {},
-      hourlyTemps: [25, 25, 24, 24, 25, 27, 29, 31, 32, 32, 31, 28, 26]
+      currentBatch: { w1: '', w2: '', w3: '' },
+      chips: {}
     };
 
-    function detectLang() {
+    function detectSystemLang() {
       const saved = localStorage.getItem(CONFIG.KEYS.LANG);
-      if (saved && TEXT[saved]) return saved;
-      const list = (navigator.languages || [navigator.language || 'zh-TW']).join(',').toLowerCase();
-      if (list.includes('ms') || list.includes('my')) return 'ms';
-      if (list.includes('en')) return 'en';
-      return 'zh-TW';
+      if (saved && DICT[saved]) return saved;
+      const rawList = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'ms'];
+      for (const item of rawList) {
+        const low = String(item).toLowerCase();
+        if (low.startsWith('ms') || low.includes('may') || low.includes('my')) return 'ms';
+        if (low.startsWith('en')) return 'en';
+        if (low.startsWith('zh')) return 'zh-TW';
+      }
+      return 'ms';
     }
 
-    function setLang(l) {
-      if (!TEXT[l]) return;
-      state.lang = l;
-      localStorage.setItem(CONFIG.KEYS.LANG, l);
-      document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
-      logTraj('lang:' + l);
-      applyI18n();
-      renderWeatherAndClock();
-      if (state.profile) renderAllViews();
+    function setLang(langCode) {
+      if (!DICT[langCode]) return;
+      state.lang = langCode;
+      document.documentElement.lang = langCode;
+      localStorage.setItem(CONFIG.KEYS.LANG, langCode);
+      document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === langCode));
+      logTraj('lang:' + langCode);
+      applyStaticTranslations();
+      updateClockAndCurve();
+      if (state.profile) renderView();
     }
 
-    function applyI18n() {
-      const t = TEXT[state.lang];
-      document.getElementById('loginPromptLabel').textContent = t.passPrompt;
-      document.getElementById('btnEnterPass').textContent = t.enterBtn;
-      document.getElementById('btnSwitchPass').textContent = t.switchPass;
-      document.getElementById('btnClearMem').textContent = t.clearMem;
-      document.getElementById('btnBottomPrev').textContent = '◀ ' + t.prevPage;
-      document.getElementById('btnBottomNext').textContent = t.nextPage + ' ▶';
-      document.getElementById('curveTitle').textContent = t.curveTitle;
-      document.getElementById('deptsHeading')?.setAttribute('data-i', '1');
-      const dh = document.querySelector('#topTilesGrid').previousElementSibling;
-      if (dh && dh.classList.contains('section-heading')) dh.textContent = t.deptsHeading;
-      document.getElementById('bottomSubHeading').textContent = t.extraHeading;
+    function applyStaticTranslations() {
+      const t = DICT[state.lang];
+      document.getElementById('lblPass').textContent = t.passLabel;
+      document.getElementById('btnLogin').textContent = t.enterBtn;
+      document.getElementById('btnSwitchCode').textContent = t.switchCode;
+      document.getElementById('btnResetMem').textContent = t.resetMem;
+      document.getElementById('btnNavPrev').textContent = '◀ ' + t.prevBtn;
+      document.getElementById('btnNavNext').textContent = t.nextBtn + ' ▶';
+      document.getElementById('bottomTitle').textContent = t.extraHeading;
+      document.getElementById('curveHeading').textContent = state.curveSpan === 6 ? t.curve6h : t.curve12h;
     }
 
-    function logTraj(tag) {
-      const s = Math.round((Date.now() - state.enteredMs) / 1000);
-      state.trajectory.push(s + 's:' + tag);
+    function toggleCurveSpan() {
+      state.curveSpan = state.curveSpan === 12 ? 6 : 12;
+      applyStaticTranslations();
+      updateClockAndCurve();
+    }
+
+    function logTraj(step) {
+      const sec = Math.round((Date.now() - state.enteredMs) / 1000);
+      state.trajectory.push(sec + 's:' + step);
       if (state.trajectory.length > 50) state.trajectory.shift();
     }
 
-    function parsePassword(raw) {
+    function resolvePass(raw) {
       const p = String(raw || '').trim().toLowerCase();
       if (p === CONFIG.PASSWORDS.ps_basic) return { group: 'PS', level: 'basic', code: p };
       if (p === CONFIG.PASSWORDS.ps_query) return { group: 'PS', level: 'query', code: p };
@@ -649,187 +1079,215 @@
       return null;
     }
 
-    function handleLoginSubmit() {
-      const val = document.getElementById('loginPassInput').value;
-      const prof = parsePassword(val);
-      const errEl = document.getElementById('loginError');
+    function submitLogin() {
+      const raw = document.getElementById('inpPass').value;
+      const prof = resolvePass(raw);
+      const err = document.getElementById('errLogin');
       if (!prof) {
-        errEl.textContent = TEXT[state.lang].wrongPass;
-        errEl.classList.remove('hidden');
+        err.textContent = DICT[state.lang].badPass;
+        err.classList.remove('hidden');
         return;
       }
-      errEl.classList.add('hidden');
+      err.classList.add('hidden');
       state.profile = prof;
-      state.savedPass = prof.code;
       localStorage.setItem(CONFIG.KEYS.PASS, prof.code);
       logTraj('login:' + prof.group + ':' + prof.level);
-      enterWorkspace();
+      openWorkspace();
     }
 
-    function promptNewPassword() {
-      const p = prompt(TEXT[state.lang].passPrompt);
+    function promptSwitchCode() {
+      const p = prompt(DICT[state.lang].passLabel);
       if (p === null) return;
-      const prof = parsePassword(p);
+      const prof = resolvePass(p);
       if (!prof) {
-        alert(TEXT[state.lang].wrongPass);
+        alert(DICT[state.lang].badPass);
         return;
       }
       state.profile = prof;
-      state.savedPass = prof.code;
       localStorage.setItem(CONFIG.KEYS.PASS, prof.code);
-      state.view = { stage: 'depts', dept: '', wing: '', room: '', module: '' };
+      state.view = { stage: 'depts', dept: '', wing: '', room: '', formType: '' };
       state.history = [];
       state.redoStack = [];
-      logTraj('switch:' + prof.group + ':' + prof.level);
-      enterWorkspace();
+      openWorkspace();
     }
 
-    function clearSavedMemory() {
+    function resetMemory() {
       localStorage.removeItem(CONFIG.KEYS.PASS);
       state.profile = null;
-      state.savedPass = '';
-      document.getElementById('appMain').classList.add('hidden');
-      document.getElementById('loginSection').classList.remove('hidden');
-      document.getElementById('loginPassInput').value = '';
-      document.getElementById('tierPill').textContent = '-';
+      document.getElementById('workspaceMain').classList.add('hidden');
+      document.getElementById('loginCard').classList.remove('hidden');
+      document.getElementById('inpPass').value = '';
+      document.getElementById('rolePill').textContent = '-';
     }
 
-    function enterWorkspace() {
-      document.getElementById('loginSection').classList.add('hidden');
-      document.getElementById('appMain').classList.remove('hidden');
-      document.getElementById('tierPill').textContent = state.profile.group + ' · ' + state.profile.level;
-      renderAllViews();
+    function openWorkspace() {
+      document.getElementById('loginCard').classList.add('hidden');
+      document.getElementById('workspaceMain').classList.remove('hidden');
+      document.getElementById('rolePill').textContent = state.profile.group + ' · ' + state.profile.level.toUpperCase();
+      renderView();
     }
 
-    // 時鐘、日期、地點與溫度曲線
-    function renderWeatherAndClock() {
+    // 時鐘、日期與逐時溫度曲線（含現在時間點指示針）
+    function updateClockAndCurve() {
+      const t = DICT[state.lang];
       const now = new Date();
       const pad = n => String(n).padStart(2, '0');
-      document.getElementById('liveClock').textContent =
-        pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+      const curH = now.getHours();
+      const curM = now.getMinutes();
 
-      const y = now.getFullYear();
-      const m = pad(now.getMonth() + 1);
-      const d = pad(now.getDate());
-      const wk = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][now.getDay()];
-      document.getElementById('dateAndLoc').textContent = `${y}-${m}-${d} (${wk})  ·  ${TEXT[state.lang].locLabel}`;
+      document.getElementById('clockNow').textContent = `${pad(curH)}:${pad(curM)}:${pad(now.getSeconds())}`;
+      document.getElementById('dateLocLine').textContent =
+        `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} · ${t.locationName}`;
 
-      const idx = Math.min(state.hourlyTemps.length - 1, Math.floor(now.getHours() / 2));
-      const curT = state.hourlyTemps[idx];
-      document.getElementById('tempNow').textContent = curT + '°C';
-      drawTemperatureCurve(state.hourlyTemps);
-    }
+      const nowTemp = state.hourly24[curH] !== undefined ? state.hourly24[curH] : 29;
+      document.getElementById('tempNowBadge').textContent = nowTemp + '°C';
+      document.getElementById('rainBadge').textContent =
+        (state.rainProbMax >= 50 ? t.rainLikely : t.rainLow) + ` (${state.rainProbMax}%)`;
 
-    function drawTemperatureCurve(arr) {
-      const svg = document.getElementById('tempCurveSvg');
-      const minV = Math.min(...arr) - 1;
-      const maxV = Math.max(...arr) + 1;
-      document.getElementById('curveRange').textContent = `Min ${Math.min(...arr)}°C · Max ${Math.max(...arr)}°C`;
+      const span = state.curveSpan;
+      const startH = Math.max(0, curH - (span - 1));
+      const hoursList = [];
+      for (let h = startH; h <= curH; h++) {
+        hoursList.push({ hour: h, temp: state.hourly24[h] ?? nowTemp });
+      }
+      if (hoursList.length < 2) {
+        hoursList.unshift({ hour: Math.max(0, curH - 1), temp: nowTemp });
+      }
 
-      const pts = arr.map((v, i) => {
-        const x = 16 + (i / Math.max(1, arr.length - 1)) * 328;
-        const y = 62 - ((v - minV) / Math.max(1, maxV - minV)) * 46;
-        return [x, y];
+      const temps = hoursList.map(x => x.temp);
+      const minT = Math.min(...temps) - 1;
+      const maxT = Math.max(...temps) + 1;
+
+      const pts = hoursList.map((item, idx) => {
+        const x = 18 + (idx / (hoursList.length - 1)) * 316;
+        const y = 50 - ((item.temp - minT) / Math.max(1, maxT - minT)) * 34;
+        return { x, y, hour: item.hour, temp: item.temp };
       });
 
-      const lineD = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
-      const areaD = lineD + ` L${pts[pts.length-1][0].toFixed(1)},68 L${pts[0][0].toFixed(1)},68 Z`;
+      const lastPt = pts[pts.length - 1];
+      const dLine = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
+      const dArea = dLine + ` L${lastPt.x.toFixed(1)},56 L${pts[0].x.toFixed(1)},56 Z`;
 
+      const svg = document.getElementById('hourlyCurveSvg');
       svg.innerHTML = `
         <defs>
-          <linearGradient id="tempGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.32"/>
+          <linearGradient id="gTemp" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.28"/>
             <stop offset="100%" stop-color="#0284c7" stop-opacity="0.02"/>
           </linearGradient>
         </defs>
-        <path d="${areaD}" fill="url(#tempGrad)"></path>
-        <path d="${lineD}" fill="none" stroke="#0284c7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        ${pts.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.2" fill="#0369a1"></circle>`).join('')}
+        <path d="${dArea}" fill="url(#gTemp)"></path>
+        <path d="${dLine}" fill="none" stroke="#0284c7" stroke-width="2.6" stroke-linecap="round"></path>
+        ${pts.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.6" fill="#0369a1"></circle>`).join('')}
+        <!-- 現在時間指示針 -->
+        <line x1="${lastPt.x.toFixed(1)}" y1="8" x2="${lastPt.x.toFixed(1)}" y2="58" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"></line>
+        <circle cx="${lastPt.x.toFixed(1)}" cy="${lastPt.y.toFixed(1)}" r="5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"></circle>
+        <text x="${Math.min(285, lastPt.x - 18).toFixed(1)}" y="11" font-size="10" font-weight="800" fill="#dc2626">${t.nowTag} ${pad(curH)}:${pad(curM)} (${nowTemp}°)</text>
+        <text x="14" y="65" font-size="10" fill="#64748b">${pad(hoursList[0].hour)}:00</text>
+        <text x="${(lastPt.x - 14).toFixed(1)}" y="65" font-size="10" font-weight="700" fill="#0f172a">${pad(curH)}:00</text>
       `;
     }
 
-    async function fetchLiveWeather() {
-      const t = TEXT[state.lang];
+    async function loadHourlyWeather() {
       try {
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${CONFIG.LAT}&longitude=${CONFIG.LON}&hourly=temperature_2m,precipitation_probability&timezone=Asia%2FKuching&forecast_days=1`;
-        const r = await fetch(url);
-        const j = await r.json();
-        if (j && j.hourly && Array.isArray(j.hourly.temperature_2m)) {
-          const picked = [];
-          for (let h = 0; h < 24; h += 2) {
-            if (j.hourly.temperature_2m[h] !== undefined) picked.push(Math.round(j.hourly.temperature_2m[h]));
-          }
-          if (picked.length > 0) state.hourlyTemps = picked;
-          const probs = j.hourly.precipitation_probability || [];
-          const maxProb = probs.length ? Math.max(...probs) : 0;
-          document.getElementById('rainForecast').textContent =
-            (maxProb >= 50 ? t.rainYes : t.rainNo) + ` (${maxProb}%)`;
-          renderWeatherAndClock();
-          return;
+        const res = await fetch(url);
+        const json = await res.json();
+        if (json && json.hourly && Array.isArray(json.hourly.temperature_2m)) {
+          state.hourly24 = json.hourly.temperature_2m.slice(0, 24).map(v => Math.round(v));
+          const probs = json.hourly.precipitation_probability || [];
+          state.rainProbMax = probs.length ? Math.max(...probs.slice(0, 24)) : 0;
+          updateClockAndCurve();
         }
       } catch (e) {}
-      document.getElementById('rainForecast').textContent = t.rainYes;
     }
 
-    // 歷史前進／後退（支援側邊條與底部按鈕）
-    function snapshotView() {
-      return JSON.parse(JSON.stringify(state.view));
-    }
-
-    function pushHistory() {
-      state.history.push(snapshotView());
+    // 導航前進/後退
+    function pushNavHistory() {
+      state.history.push(JSON.parse(JSON.stringify(state.view)));
       state.redoStack = [];
     }
 
-    function goPrevStep() {
-      if (state.history.length === 0) return;
-      state.redoStack.push(snapshotView());
+    function goPrev() {
+      if (!state.history.length) return;
+      state.redoStack.push(JSON.parse(JSON.stringify(state.view)));
       state.view = state.history.pop();
-      logTraj('back');
-      renderAllViews();
+      logTraj('nav:prev');
+      renderView();
     }
 
-    function goNextStep() {
-      if (state.redoStack.length === 0) return;
-      state.history.push(snapshotView());
+    function goNext() {
+      if (!state.redoStack.length) return;
+      state.history.push(JSON.parse(JSON.stringify(state.view)));
       state.view = state.redoStack.pop();
-      logTraj('forward');
-      renderAllViews();
+      logTraj('nav:next');
+      renderView();
     }
 
-    // 渲染主畫布（上方部門磚 + 間隔 + 下方進階方塊）
-    function renderAllViews() {
-      const topGrid = document.getElementById('topTilesGrid');
-      const botGrid = document.getElementById('bottomTilesGrid');
-      const botHead = document.getElementById('bottomSubHeading');
-      const workPanel = document.getElementById('workPanel');
+    // 房號批次記憶
+    function getRoomKey() {
+      return [state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean).join('_');
+    }
+
+    function loadSavedRoomBatch() {
+      try {
+        const map = JSON.parse(localStorage.getItem(CONFIG.KEYS.ROOM_BATCHES) || '{}');
+        return map[getRoomKey()] || null;
+      } catch (e) { return null; }
+    }
+
+    function saveRoomBatch(bObj) {
+      try {
+        const map = JSON.parse(localStorage.getItem(CONFIG.KEYS.ROOM_BATCHES) || '{}');
+        map[getRoomKey()] = bObj;
+        localStorage.setItem(CONFIG.KEYS.ROOM_BATCHES, JSON.stringify(map));
+      } catch (e) {}
+    }
+
+    function reopenBatchGate() {
+      if (!state.view.dept) return;
+      pushNavHistory();
+      state.view.stage = 'batch_gate';
+      renderView();
+    }
+
+    function renderView() {
+      const t = DICT[state.lang];
+      const topGrid = document.getElementById('topGrid');
+      const botGrid = document.getElementById('bottomGrid');
+      const botTitle = document.getElementById('bottomTitle');
+      const formPanel = document.getElementById('formPanel');
       const extraPanel = document.getElementById('extraPanel');
 
       topGrid.innerHTML = '';
       botGrid.innerHTML = '';
-      workPanel.classList.add('hidden');
+      formPanel.classList.add('hidden');
       extraPanel.classList.add('hidden');
 
-      const pathParts = [state.profile.group, state.view.dept, state.view.wing, state.view.room, state.view.module].filter(Boolean);
-      document.getElementById('pathBar').textContent = pathParts.join(' › ');
+      const locParts = [state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean);
+      document.getElementById('locBannerText').textContent = locParts.join(' › ');
 
-      // 下方方塊（gla9999 / 510067 / gp3333 / qwert）
+      const batchPill = document.getElementById('batchBannerBtn');
+      if (state.view.room || (state.view.dept && state.view.stage !== 'depts' && state.view.stage !== 'wing' && state.view.stage !== 'room')) {
+        const bStr = [state.currentBatch.w1, state.currentBatch.w2, state.currentBatch.w3].filter(Boolean).join('/');
+        batchPill.textContent = (bStr ? `Batch: ${bStr} · ` : '') + t.tapToChangeBatch;
+        batchPill.classList.remove('hidden');
+      } else {
+        batchPill.classList.add('hidden');
+      }
+
+      // 下方分析與查詢方塊
       if (['query', 'report', 'admin'].includes(state.profile.level)) {
-        botHead.classList.remove('hidden');
-        botGrid.appendChild(makeTile('Farrowing Analysis', '產房分析（預留）', 'ANALYZE', 't-farr', false, () => {
-          openExtraBox('Farrowing Analysis (Reserved)');
+        botTitle.classList.remove('hidden');
+        botGrid.appendChild(createTile(t.deptFarr + ' Analysis', t.extraHeading, 'A1', 't-farr', () => {
+          showExtraNotice('Farrowing Analytics');
         }));
-        botGrid.appendChild(makeTile('Sow & Boar Lookup', '母豬/公豬/等級查詢', 'QUERY', 't-gp', false, () => {
-          openExtraBox('Sow & Boar Lookup (Reserved)');
+        botGrid.appendChild(createTile('Query Hub', t.extraHeading, 'Q1', 't-gp', () => {
+          showExtraNotice('Sow & Boar Query Hub');
         }));
-        if (state.profile.level === 'report' || state.profile.level === 'admin') {
-          botGrid.appendChild(makeTile('Shared Summary', '綜合分析報表', 'REPORT', 't-ps', false, () => {
-            openExtraBox('Shared Summary (Reserved)');
-          }));
-        }
         if (state.profile.level === 'admin') {
-          botGrid.appendChild(makeTile('Admin Telemetry', '最高權限稽核', 'QWERT', 't-boar', false, () => {
-            openExtraBox(JSON.stringify({
+          botGrid.appendChild(createTile('Admin Log', 'QWERT', 'SYS', 't-boar', () => {
+            showExtraNotice(JSON.stringify({
               enteredAt: state.enteredAt,
               dwellSec: Math.round((Date.now() - state.enteredMs) / 1000),
               ua: navigator.userAgent,
@@ -838,60 +1296,67 @@
           }));
         }
       } else {
-        botHead.classList.add('hidden');
+        botTitle.classList.add('hidden');
       }
 
+      // Stage 1: 六大部門
       if (state.view.stage === 'depts') {
         const depts = [
-          { id: 'Gestation', title: 'Gestation 配懷舍', sub: '發情 · 配種 · 水料', cls: 't-gest' },
-          { id: 'Farrowing', title: 'Farrowing 產房', sub: '分娩 · 離乳 · 畸形', cls: 't-farr' },
-          { id: 'Nursery', title: 'Nursery 保育舍', sub: '每日水料 · 異常', cls: 't-nurs' },
-          { id: 'Porker', title: 'Porker 肉豬舍', sub: '每日水料 · 異常', cls: 't-pork' },
-          { id: 'Boar House', title: 'Boar House 公豬舍', sub: '採精 · 精液 · 異常', cls: 't-boar' },
-          { id: 'GDU', title: 'GDU 後備舍', sub: '選種體型 · 乳頭 · 水料', cls: 't-gdu' }
+          { id: 'Gestation', title: t.deptGest, sub: t.deptGestSub, cls: 't-gest' },
+          { id: 'Farrowing', title: t.deptFarr, sub: t.deptFarrSub, cls: 't-farr' },
+          { id: 'Nursery', title: t.deptNurs, sub: t.deptNursSub, cls: 't-nurs' },
+          { id: 'Porker', title: t.deptPork, sub: t.deptPorkSub, cls: 't-pork' },
+          { id: 'Boar House', title: t.deptBoar, sub: t.deptBoarSub, cls: 't-boar' },
+          { id: 'GDU', title: t.deptGdu, sub: t.deptGduSub, cls: 't-gdu' }
         ];
         depts.forEach(d => {
-          topGrid.appendChild(makeTile(d.title, d.sub, state.profile.group, d.cls, false, () => {
-            pushHistory();
+          topGrid.appendChild(createTile(d.title, d.sub, state.profile.group, d.cls, () => {
+            pushNavHistory();
             state.view.dept = d.id;
             state.view.wing = '';
             state.view.room = '';
-            state.view.module = '';
             logTraj('dept:' + d.id);
-            if (state.profile.group === 'PS' && (d.id === 'Farrowing' || d.id === 'Nursery' || d.id === 'Gestation' || d.id === 'Porker')) {
+            if (state.profile.group === 'PS' && ['Gestation', 'Farrowing', 'Nursery', 'Porker'].includes(d.id)) {
               state.view.stage = 'wing';
             } else if (d.id === 'GDU') {
               state.view.stage = 'room';
             } else {
-              state.view.stage = 'form';
+              state.view.room = d.id;
+              enterBatchOrRoomTiles();
+              return;
             }
-            renderAllViews();
+            renderView();
           }));
         });
-        startLiveTileFlipCycle();
+        triggerTileFlips();
         return;
       }
 
+      // Stage 2: A Side / B Side
       if (state.view.stage === 'wing') {
-        const cls = deptColorClass(state.view.dept);
-        ['A Side', 'B Side'].forEach(side => {
-          topGrid.appendChild(makeTile(state.view.dept + ' · ' + side, 'Wing ' + side[0], side[0], cls, false, () => {
-            pushHistory();
-            state.view.wing = side;
-            logTraj('wing:' + side);
-            if (state.view.dept === 'Farrowing' || state.view.dept === 'Nursery' || state.view.dept === 'Porker') {
+        const cls = getDeptClass(state.view.dept);
+        [{ code: 'A', label: t.sideA }, { code: 'B', label: t.sideB }].forEach(w => {
+          topGrid.appendChild(createTile(w.label, state.view.dept, w.code, cls, () => {
+            pushNavHistory();
+            state.view.wing = w.code;
+            logTraj('wing:' + w.code);
+            if (['Farrowing', 'Nursery', 'Porker'].includes(state.view.dept)) {
               state.view.stage = 'room';
             } else {
-              state.view.stage = 'form';
+              state.view.room = 'Gestation ' + w.code;
+              enterBatchOrRoomTiles();
+              return;
             }
-            renderAllViews();
+            renderView();
           }));
         });
+        triggerTileFlips();
         return;
       }
 
+      // Stage 3: 房號點選
       if (state.view.stage === 'room') {
-        const cls = deptColorClass(state.view.dept);
+        const cls = getDeptClass(state.view.dept);
         let rooms = [];
         if (state.view.dept === 'GDU') {
           rooms = state.profile.group === 'GP'
@@ -905,85 +1370,277 @@
           for (let i = 1; i <= 8; i++) rooms.push(i + 'A', i + 'B');
         }
         rooms.forEach(r => {
-          topGrid.appendChild(makeTile(r, state.view.dept, r, cls, false, () => {
-            pushHistory();
+          topGrid.appendChild(createTile(r, state.view.dept, r, cls, () => {
+            pushNavHistory();
             state.view.room = r;
-            state.view.stage = 'form';
             logTraj('room:' + r);
-            renderAllViews();
+            enterBatchOrRoomTiles();
           }));
         });
+        triggerTileFlips();
         return;
       }
 
+      // Stage 4: 三週次批次閘門（進入房號後先鎖定三週次批次，切換房號必提醒）
+      if (state.view.stage === 'batch_gate') {
+        renderBatchGatePanel(formPanel);
+        return;
+      }
+
+      // Stage 5: 房號內層層作業方塊
+      if (state.view.stage === 'room_tiles') {
+        renderRoomActionTiles(topGrid);
+        triggerTileFlips();
+        return;
+      }
+
+      // Stage 6: 具體輸入表單
       if (state.view.stage === 'form') {
-        renderDepartmentForm(workPanel);
+        renderSpecificForm(formPanel);
       }
     }
 
-    function deptColorClass(dept) {
-      if (dept === 'Gestation') return 't-gest';
-      if (dept === 'Farrowing') return 't-farr';
-      if (dept === 'Nursery') return 't-nurs';
-      if (dept === 'Porker') return 't-pork';
-      if (dept === 'Boar House') return 't-boar';
-      if (dept === 'GDU') return 't-gdu';
-      return 't-ps';
+    function enterBatchOrRoomTiles() {
+      const savedB = loadSavedRoomBatch();
+      if (savedB && savedB.w1) {
+        state.currentBatch = savedB;
+      } else {
+        state.currentBatch = { w1: '', w2: '', w3: '' };
+      }
+      // 每次進入/切換房號先進入批次確認閘門提醒核對房號與三週次批次
+      state.view.stage = 'batch_gate';
+      renderView();
     }
 
-    function makeTile(title, sub, badge, cls, wide, fn) {
+    function renderBatchGatePanel(panel) {
+      const t = DICT[state.lang];
+      panel.classList.remove('hidden');
+      const curW = getIsoWeekNum(new Date());
+      const def1 = state.currentBatch.w1 || curW;
+      const def2 = state.currentBatch.w2 || wrap52(Number(def1) + 16);
+      const def3 = state.currentBatch.w3 || wrap52(Number(def1) + 19);
+
+      panel.innerHTML = `
+        <div class="section-title">${t.batchGateTitle}</div>
+        <div style="font-size:14px; font-weight:700; color:#0369a1; margin-bottom:8px;">
+          ${[state.profile.group, state.view.dept, state.view.wing, state.view.room].filter(Boolean).join(' › ')} — ${t.batchRemind}
+        </div>
+        <div class="batch-trio-grid">
+          <div class="batch-cell">
+            <label>${t.w1Label}</label>
+            <div class="batch-stepper">
+              <button type="button" class="step-mini-btn" onclick="stepBatch(1,-1)">-</button>
+              <input type="number" id="bw1" class="batch-num-input" min="1" max="52" value="${def1}" onchange="autoCalcW2W3()" />
+              <button type="button" class="step-mini-btn" onclick="stepBatch(1,1)">+</button>
+            </div>
+          </div>
+          <div class="batch-cell">
+            <label>${t.w2Label}</label>
+            <div class="batch-stepper">
+              <button type="button" class="step-mini-btn" onclick="stepBatch(2,-1)">-</button>
+              <input type="number" id="bw2" class="batch-num-input" min="1" max="52" value="${def2}" />
+              <button type="button" class="step-mini-btn" onclick="stepBatch(2,1)">+</button>
+            </div>
+          </div>
+          <div class="batch-cell">
+            <label>${t.w3Label}</label>
+            <div class="batch-stepper">
+              <button type="button" class="step-mini-btn" onclick="stepBatch(3,-1)">-</button>
+              <input type="number" id="bw3" class="batch-num-input" min="1" max="52" value="${def3}" />
+              <button type="button" class="step-mini-btn" onclick="stepBatch(3,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="primary-btn" onclick="confirmBatchGate()">${t.confirmBatchBtn}</button>
+      `;
+    }
+
+    function wrap52(n) {
+      let x = ((n - 1) % 52 + 52) % 52 + 1;
+      return x;
+    }
+
+    function getIsoWeekNum(d) {
+      const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const dayNum = date.getUTCDay() || 7;
+      date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+      return Math.min(52, Math.ceil((((date - yearStart) / 86400000) + 1) / 7));
+    }
+
+    function stepBatch(idx, delta) {
+      const el = document.getElementById('bw' + idx);
+      const next = wrap52((parseInt(el.value, 10) || 1) + delta);
+      el.value = next;
+      if (idx === 1) autoCalcW2W3();
+    }
+
+    function autoCalcW2W3() {
+      const w1 = parseInt(document.getElementById('bw1').value, 10) || 1;
+      document.getElementById('bw2').value = wrap52(w1 + 16);
+      document.getElementById('bw3').value = wrap52(w1 + 19);
+    }
+
+    function confirmBatchGate() {
+      const w1 = document.getElementById('bw1').value.trim();
+      const w2 = document.getElementById('bw2').value.trim();
+      const w3 = document.getElementById('bw3').value.trim();
+      state.currentBatch = { w1, w2, w3 };
+      saveRoomBatch(state.currentBatch);
+      pushNavHistory();
+      state.view.stage = 'room_tiles';
+      logTraj('batch:' + [w1, w2, w3].join('/'));
+      renderView();
+    }
+
+    // 房號內層層作業方塊
+    function renderRoomActionTiles(grid) {
+      const t = DICT[state.lang];
+      const dept = state.view.dept;
+      const cls = getDeptClass(dept);
+
+      // 1. 獨立水錶與飼料用料方塊（所有豬舍皆有獨立水錶與飼料）
+      grid.appendChild(createTile(t.tileFW, t.tileFWSub, 'H2O/FEED', cls, () => {
+        pushNavHistory();
+        state.view.formType = 'daily_fw';
+        state.view.stage = 'form';
+        renderView();
+      }));
+
+      // 2. 依部門展開專屬方塊
+      if (dept === 'Farrowing') {
+        grid.appendChild(createTile(t.tileSowIn, t.tileSowInSub, 'WED', cls, () => {
+          pushNavHistory();
+          state.view.formType = 'farr_sow_in';
+          state.view.stage = 'form';
+          renderView();
+        }));
+        grid.appendChild(createTile(t.tileFarrRec, t.tileFarrRecSub, 'BORN', cls, () => {
+          pushNavHistory();
+          state.view.formType = 'farr_birth';
+          state.view.stage = 'form';
+          renderView();
+        }));
+        grid.appendChild(createTile(t.tileWeanHead, t.tileWeanHeadSub, 'THU-1', cls, () => {
+          pushNavHistory();
+          state.view.formType = 'farr_wean_head';
+          state.view.stage = 'form';
+          renderView();
+        }));
+        grid.appendChild(createTile(t.tileWeanWt, t.tileWeanWtSub, 'THU-2', cls, () => {
+          pushNavHistory();
+          state.view.formType = 'farr_wean_wt';
+          state.view.stage = 'form';
+          renderView();
+        }));
+        grid.appendChild(createTile(t.tileMal, t.tileMalSub, 'MAL', cls, () => {
+          pushNavHistory();
+          state.view.formType = 'malformation';
+          state.view.stage = 'form';
+          renderView();
+        }));
+      } else if (dept === 'Gestation') {
+        grid.appendChild(createTile(t.tileProd, t.tileProdSub, 'AI', cls, () => {
+          pushNavHistory();
+          state.view.formType = 'gestation';
+          state.view.stage = 'form';
+          renderView();
+        }));
+      } else if (dept === 'Boar House') {
+        grid.appendChild(createTile(t.tileProd, t.tileProdSub, 'SEMEN', cls, () => {
+          pushNavHistory();
+          state.view.formType = 'boar_semen';
+          state.view.stage = 'form';
+          renderView();
+        }));
+      } else if (dept === 'GDU') {
+        grid.appendChild(createTile(t.tileProd, t.tileProdSub, 'SELECT', cls, () => {
+          pushNavHistory();
+          state.view.formType = 'conformation';
+          state.view.stage = 'form';
+          renderView();
+        }));
+      }
+
+      // 3. 治療與死亡分開方塊（先治療、後死亡）
+      grid.appendChild(createTile(t.tileTreat, t.tileTreatSub, 'RX', cls, () => {
+        pushNavHistory();
+        state.view.formType = 'treatment';
+        state.view.stage = 'form';
+        renderView();
+      }));
+      grid.appendChild(createTile(t.tileMort, t.tileMortSub, 'MORT', cls, () => {
+        pushNavHistory();
+        state.view.formType = 'mortality';
+        state.view.stage = 'form';
+        renderView();
+      }));
+    }
+
+    function getDeptClass(d) {
+      return {
+        'Gestation': 't-gest',
+        'Farrowing': 't-farr',
+        'Nursery': 't-nurs',
+        'Porker': 't-pork',
+        'Boar House': 't-boar',
+        'GDU': 't-gdu'
+      }[d] || 't-ps';
+    }
+
+    function createTile(title, sub, badge, cls, fn) {
       const div = document.createElement('div');
-      div.className = 'live-tile ' + cls + (wide ? ' wide' : '');
+      div.className = 'live-tile ' + cls;
       div.innerHTML = `
         <div>
           <div class="tile-title">${title}</div>
           <div class="tile-sub">${sub}</div>
         </div>
-        <div class="tile-tag">${badge}</div>
+        <div class="tile-badge">${badge}</div>
       `;
       div.addEventListener('click', fn);
       return div;
     }
 
-    function startLiveTileFlipCycle() {
-      const tiles = document.querySelectorAll('#topTilesGrid .live-tile');
-      tiles.forEach((t, idx) => {
+    function triggerTileFlips() {
+      const list = document.querySelectorAll('#topGrid .live-tile');
+      list.forEach((el, i) => {
         setTimeout(() => {
           setInterval(() => {
-            t.classList.add('anim-flip');
-            setTimeout(() => t.classList.remove('anim-flip'), 780);
-          }, 4200 + idx * 450);
-        }, idx * 300);
+            el.classList.add('flipping');
+            setTimeout(() => el.classList.remove('flipping'), 740);
+          }, 4000 + i * 420);
+        }, i * 280);
       });
     }
 
-    function openExtraBox(contentStr) {
+    function showExtraNotice(msg) {
       const p = document.getElementById('extraPanel');
       p.classList.remove('hidden');
-      p.innerHTML = `<div class="notice-box">${contentStr}</div>`;
+      p.innerHTML = `<div class="notice-box">${msg}</div>`;
     }
 
-    function renderChips(id, items, multi) {
-      state.chips[id] = multi ? [] : '';
-      let h = `<div class="chip-row">`;
-      items.forEach(it => {
-        const v = typeof it === 'object' ? it.v : it;
-        const l = typeof it === 'object' ? it.l : it;
-        h += `<button type="button" class="chip-btn" data-g="${id}" data-v="${v}" data-m="${multi ? '1' : '0'}" onclick="pickChip(this)">${l}</button>`;
+    function buildChips(groupKey, options, multi) {
+      state.chips[groupKey] = multi ? [] : '';
+      let html = '<div class="chip-row">';
+      options.forEach(o => {
+        const v = typeof o === 'object' ? o.v : o;
+        const l = typeof o === 'object' ? o.l : o;
+        html += `<button type="button" class="chip-btn" data-g="${groupKey}" data-v="${v}" data-m="${multi ? '1' : '0'}" onclick="handleChip(this)">${l}</button>`;
       });
-      h += `</div>`;
-      return h;
+      html += '</div>';
+      return html;
     }
 
-    function pickChip(btn) {
+    function handleChip(btn) {
       const g = btn.dataset.g;
       const v = btn.dataset.v;
       const m = btn.dataset.m === '1';
       if (m) {
         btn.classList.toggle('selected');
         const arr = state.chips[g] || [];
-        const i = arr.indexOf(v);
-        if (i >= 0) arr.splice(i, 1);
+        const idx = arr.indexOf(v);
+        if (idx >= 0) arr.splice(idx, 1);
         else arr.push(v);
         state.chips[g] = arr;
       } else {
@@ -993,165 +1650,211 @@
       }
     }
 
-    function renderDepartmentForm(panel) {
-      panel.classList.remove('hidden');
-      const dept = state.view.dept;
+    function renderSpecificForm(panel) {
+      const t = DICT[state.lang];
+      const ft = state.view.formType;
       const today = new Date().toISOString().slice(0, 10);
+      panel.classList.remove('hidden');
 
       let html = `
         <div class="field-block">
-          <label class="field-label">Date / 日期</label>
+          <label class="field-label">${t.lblDate}</label>
           <input type="date" id="f_record_date" class="input-box" value="${today}" />
         </div>
       `;
 
-      if (dept === 'GDU') {
+      if (ft === 'daily_fw') {
         html += `
-          <div class="field-block"><label class="field-label">Ear Tag / 耳號</label><input type="text" id="f_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Sex / 性別</label>${renderChips('sex', [{v:'female',l:'母豬 Female'},{v:'male',l:'公豬 Male'}], false)}</div>
-          <div class="field-block"><label class="field-label">Breed / 品種</label>${renderChips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
-          <div class="field-block"><label class="field-label">Birth Date / 生日</label><input type="date" id="f_birth_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Test Date / 測定日期</label><input type="date" id="f_test_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Test Weight (kg) / 測定體重</label><input type="number" step="0.1" id="f_test_weight_kg" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Left Teats / 左邊乳頭數</label>${renderChips('left_teats', ['6','7','8','9','10'], false)}</div>
-          <div class="field-block"><label class="field-label">Right Teats / 右邊乳頭數</label>${renderChips('right_teats', ['6','7','8','9','10'], false)}</div>
-          <div class="field-block"><label class="field-label">Blind Teats / 無效乳頭數</label>${renderChips('blind_teats', ['0','1','2','3','4'], false)}</div>
-          <div class="field-block"><label class="field-label">Front Leg / 前肢評分</label>${renderChips('front_leg_score', ['1','2','3','4','5'], false)}</div>
-          <div class="field-block"><label class="field-label">Rear Leg / 後肢評分</label>${renderChips('rear_leg_score', ['1','2','3','4','5'], false)}</div>
-          <div class="field-block"><label class="field-label">Body Length (cm) / 體長</label><input type="number" step="0.5" id="f_body_length_cm" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Shoulder Width (cm) / 肩寬</label><input type="number" step="0.5" id="f_shoulder_width_cm" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Chest Width (cm) / 胸寬</label><input type="number" step="0.5" id="f_chest_width_cm" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Vulva / 陰部發育</label>${renderChips('vulva_status', ['Normal','Small','Upturned','N/A'], false)}</div>
-          <div class="field-block"><label class="field-label">Testis Symmetry / 睪丸對稱性</label>${renderChips('testis_status', ['Symmetrical','Asymmetrical','Small','N/A'], false)}</div>
-          <div class="field-block"><label class="field-label">Feed Used (kg) / 飼料量</label><input type="number" step="0.1" id="f_feed_used_kg" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Water Meter / 水錶</label><input type="number" step="0.01" id="f_water_meter_reading" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblHeadCount}</label><input type="number" id="f_head_count" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWaterAM}</label><input type="number" step="0.01" id="f_water_meter_am" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWaterPM}</label><input type="number" step="0.01" id="f_water_meter_pm" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblFeedCode}</label>${buildChips('feed_code', [
+            '300','301','302','303','304','305','306','307','308',
+            {v:'Other_1',l:t.optOther1},{v:'Other_2',l:t.optOther2},{v:'Other_3',l:t.optOther3},{v:'Other_4',l:t.optOther4}
+          ], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblFeedCustom}</label><input type="text" id="f_feed_custom_name" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblFeedBags}</label><input type="number" step="0.5" id="f_feed_bags" class="input-box" /></div>
         `;
-      } else if (dept === 'Gestation') {
+      } else if (ft === 'farr_sow_in') {
         html += `
-          <div class="field-block"><label class="field-label">Ear Tag / 耳號</label><input type="text" id="f_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Sex / 性別</label>${renderChips('sex', [{v:'female',l:'母豬 Female'},{v:'male',l:'公豬 Male'}], false)}</div>
-          <div class="field-block"><label class="field-label">Breed / 品種</label>${renderChips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
-          <div class="field-block"><label class="field-label">Heat Observed / 發情點選</label>${renderChips('heat_observed', [{v:'yes',l:'有發情 Yes'},{v:'no',l:'無 No'}], false)}</div>
-          <div class="field-block"><label class="field-label">Heat Date / 發情日</label><input type="date" id="f_heat_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Breeding Date / 配種日期</label><input type="date" id="f_breeding_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Service Boar Ear Tag / 配種公豬耳號</label><input type="text" id="f_service_boar_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSowInCount}</label><input type="number" id="f_transfer_in_sow_count" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
         `;
-      } else if (dept === 'Farrowing') {
+      } else if (ft === 'farr_birth') {
         html += `
-          <div class="field-block"><label class="field-label">Sow Ear Tag / 母豬耳號</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Total Born (TNB) / 生產頭數</label><input type="number" id="f_total_born" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Born Alive (NBA) / 活仔數</label><input type="number" id="f_born_alive" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Stillborn / 死胎數</label><input type="number" id="f_stillborn" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Mummified / 木乃伊數</label><input type="number" id="f_mummified" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Birth Litter Wt (kg) / 初生窩重</label><input type="number" step="0.1" id="f_birth_litter_wt_kg" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Wean Date / 離乳日</label><input type="date" id="f_wean_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Weaned Count / 離乳頭數</label><input type="number" id="f_weaned_count" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Wean Litter Wt (kg) / 離乳窩重</label><input type="number" step="0.1" id="f_wean_litter_wt_kg" class="input-box" /></div>
-          <hr style="margin:18px 0; border:0; border-top:1px solid #e2e8f0;" />
-          <div class="field-block"><label class="field-label">Farrowing Date (Malformation) / 分娩日期</label><input type="date" id="f_farrow_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Malformation Count / 畸形頭數</label><input type="number" id="f_affected_count" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Malformation / Signs / 畸形與外觀點選</label>${renderChips('selected_items', [
-            '皮膚破損 Skin','肢體畸形 Limb','無法站立 Downer','頭部畸形 Head',
-            '陰部/肛門 Genital/Anal','高溫 Fever','喘 Panting','紅點 Red Spot','其他 Other'
+          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblTNB}</label><input type="number" id="f_total_born" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblNBA}</label><input type="number" id="f_born_alive" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblStillborn}</label><input type="number" id="f_stillborn" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblMummy}</label><input type="number" id="f_mummified" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblBirthWt}</label><input type="number" step="0.1" id="f_birth_litter_wt_kg" class="input-box" /></div>
+        `;
+      } else if (ft === 'farr_wean_head') {
+        html += `
+          <div class="field-block"><label class="field-label">${t.lblWeanDate}</label><input type="date" id="f_wean_date" class="input-box" value="${today}" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWeanPigCount}</label><input type="number" id="f_weaned_count" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWeanSowCount}</label><input type="number" id="f_weaned_sow_count" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
+        `;
+      } else if (ft === 'farr_wean_wt') {
+        html += `
+          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWeanDate}</label><input type="date" id="f_wean_date" class="input-box" value="${today}" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWeanPigCount}</label><input type="number" id="f_weaned_count" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblWeanWt}</label><input type="number" step="0.1" id="f_wean_litter_wt_kg" class="input-box" /></div>
+        `;
+      } else if (ft === 'malformation') {
+        html += `
+          <div class="field-block"><label class="field-label">${t.lblSowTag}</label><input type="text" id="f_sow_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblFarrowDate}</label><input type="date" id="f_farrow_date" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblMalCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
+          <div class="field-block"><label class="field-label">${t.lblMalSigns}</label>${buildChips('selected_items', [
+            {v:'skin',l:t.signSkin},{v:'limb',l:t.signLimb},{v:'downer',l:t.signDowner},{v:'head',l:t.signHead},
+            {v:'genital',l:t.signGenital},{v:'fever',l:t.signFever},{v:'pant',l:t.signPant},{v:'red',l:t.signRed},
+            {v:'diarrhea',l:t.signDiarrhea},{v:'other',l:t.signOther}
           ], true)}</div>
-          <div class="field-block"><label class="field-label">Brief Note / 簡短補充</label><input type="text" id="f_brief_note" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Photo (Auto-compressed) / 照片（自動壓縮）</label><input type="file" id="f_photo_file" accept="image/*" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblPhoto}</label><input type="file" id="f_photo_file" accept="image/*" class="input-box" /></div>
         `;
-      } else if (dept === 'Boar House') {
+      } else if (ft === 'gestation') {
         html += `
-          <div class="field-block"><label class="field-label">Boar Ear Tag / 公豬耳號</label><input type="text" id="f_boar_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Collection Date / 採精日期</label><input type="date" id="f_collection_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Libido (1-5) / 性慾調教</label>${renderChips('libido_score', ['1','2','3','4','5'], false)}</div>
-          <div class="field-block"><label class="field-label">Volume (mL) / 精液量</label><input type="number" step="1" id="f_volume_ml" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Concentration / 精蟲濃度</label><input type="number" step="0.01" id="f_concentration_100m_ml" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Motility (%) / 活力</label><input type="number" step="1" id="f_motility_pct" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Progressive (%) / 前進運動率</label><input type="number" step="1" id="f_progressive_pct" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Abnormality (%) / 畸形率</label><input type="number" step="1" id="f_abnormality_pct" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSex}</label>${buildChips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblBreed}</label>${buildChips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblHeatObs}</label>${buildChips('heat_observed', [{v:'yes',l:t.optYes},{v:'no',l:t.optNo}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblHeatDate}</label><input type="date" id="f_heat_date" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblBreedDate}</label><input type="date" id="f_breeding_date" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblServiceBoar}</label><input type="text" id="f_service_boar_tag" class="input-box" /></div>
         `;
-      } else {
-        // Nursery / Porker
+      } else if (ft === 'boar_semen') {
         html += `
-          <div class="field-block"><label class="field-label">Ear Tag / 耳號（選填）</label><input type="text" id="f_ear_tag" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Head Count / 存欄頭數</label><input type="number" id="f_head_count" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Water Meter / 水錶</label><input type="number" step="0.01" id="f_water_meter_reading" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Feed Used (kg) / 飼料量</label><input type="number" step="0.1" id="f_feed_used_kg" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">Signs / 異常點選</label>${renderChips('selected_items', ['高溫 Fever','喘 Panting','紅點 Red Spot','下痢 Diarrhea','跛腳 Lame','其他 Other'], true)}</div>
-          <div class="field-block"><label class="field-label">Brief Note / 簡短補充</label><input type="text" id="f_brief_note" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblBoarTag}</label><input type="text" id="f_boar_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblDate}</label><input type="date" id="f_collection_date" class="input-box" value="${today}" /></div>
+          <div class="field-block"><label class="field-label">${t.lblLibido}</label>${buildChips('libido_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblVol}</label><input type="number" step="1" id="f_volume_ml" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblConc}</label><input type="number" step="0.01" id="f_concentration_100m_ml" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblMot}</label><input type="number" step="1" id="f_motility_pct" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblProg}</label><input type="number" step="1" id="f_progressive_pct" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblAbn}</label><input type="number" step="1" id="f_abnormality_pct" class="input-box" /></div>
+        `;
+      } else if (ft === 'conformation') {
+        html += `
+          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblSex}</label>${buildChips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblBreed}</label>${buildChips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblBirthDate}</label><input type="date" id="f_birth_date" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblTestDate}</label><input type="date" id="f_test_date" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblTestWt}</label><input type="number" step="0.1" id="f_test_weight_kg" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblLeftTeat}</label>${buildChips('left_teats', ['6','7','8','9','10'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblRightTeat}</label>${buildChips('right_teats', ['6','7','8','9','10'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblBlindTeat}</label>${buildChips('blind_teats', ['0','1','2','3','4'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblFrontLeg}</label>${buildChips('front_leg_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblRearLeg}</label>${buildChips('rear_leg_score', ['1','2','3','4','5'], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblBodyLen}</label><input type="number" step="0.5" id="f_body_length_cm" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblShoulderW}</label><input type="number" step="0.5" id="f_shoulder_width_cm" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblChestW}</label><input type="number" step="0.5" id="f_chest_width_cm" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblVulva}</label>${buildChips('vulva_status', [{v:'Normal',l:t.optNormal},{v:'Small',l:t.optSmall},{v:'Upturned',l:t.optUpturned},{v:'NA',l:t.optNA}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblTestis}</label>${buildChips('testis_status', [{v:'Symmetrical',l:t.optSym},{v:'Asymmetrical',l:t.optAsym},{v:'Small',l:t.optSmall},{v:'NA',l:t.optNA}], false)}</div>
+        `;
+      } else if (ft === 'treatment') {
+        html += `
+          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblMedOpt}</label>${buildChips('medication_option', [{v:'Reserved_1',l:t.optMedReserved}], false)}</div>
+          <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
+        `;
+      } else if (ft === 'mortality') {
+        html += `
+          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" /></div>
+          <div class="field-block"><label class="field-label">${t.lblNote}</label><input type="text" id="f_brief_note" class="input-box" /></div>
         `;
       }
 
       html += `
-        <button type="button" class="action-btn" id="btnSubmitData" onclick="submitEntry()">${TEXT[state.lang].submitBtn}</button>
-        <div id="submitResultBox" class="notice-box hidden"></div>
+        <button type="button" class="primary-btn" id="btnSendForm" onclick="submitCurrentForm()">${t.submitBtn}</button>
+        <div id="submitMsgBox" class="notice-box hidden"></div>
       `;
       panel.innerHTML = html;
     }
 
     function compressPhoto(file) {
-      return new Promise((res, rej) => {
-        if (!file) return res(null);
-        const fr = new FileReader();
-        fr.onload = e => {
+      return new Promise((resolve, reject) => {
+        if (!file) return resolve(null);
+        const reader = new FileReader();
+        reader.onload = e => {
           const img = new Image();
           img.onload = () => {
             let w = img.width, h = img.height;
-            const maxP = CONFIG.MAX_IMG_PX;
-            if (w > maxP || h > maxP) {
-              if (w >= h) { h = Math.round(h * maxP / w); w = maxP; }
-              else { w = Math.round(w * maxP / h); h = maxP; }
+            const maxDim = CONFIG.MAX_IMG_PX;
+            if (w > maxDim || h > maxDim) {
+              if (w >= h) { h = Math.round(h * maxDim / w); w = maxDim; }
+              else { w = Math.round(w * maxDim / h); h = maxDim; }
             }
             const c = document.createElement('canvas');
             c.width = w; c.height = h;
             c.getContext('2d').drawImage(img, 0, 0, w, h);
-            res({ mimeType: 'image/jpeg', base64: c.toDataURL('image/jpeg', CONFIG.IMG_QUALITY) });
+            resolve({ mimeType: 'image/jpeg', base64: c.toDataURL('image/jpeg', CONFIG.IMG_QUALITY) });
           };
-          img.onerror = rej;
+          img.onerror = reject;
           img.src = e.target.result;
         };
-        fr.onerror = rej;
-        fr.readAsDataURL(file);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
     }
 
-    async function submitEntry() {
-      const btn = document.getElementById('btnSubmitData');
-      const box = document.getElementById('submitResultBox');
+    async function submitCurrentForm() {
+      const t = DICT[state.lang];
+      const btn = document.getElementById('btnSendForm');
+      const box = document.getElementById('submitMsgBox');
       btn.disabled = true;
       box.classList.remove('hidden');
       box.textContent = '...';
 
       const data = {};
-      document.querySelectorAll('#workPanel [id^="f_"]').forEach(el => {
+      document.querySelectorAll('#formPanel [id^="f_"]').forEach(el => {
         if (el.type === 'file') return;
         data[el.id.replace(/^f_/, '')] = el.value;
       });
       Object.keys(state.chips).forEach(k => { data[k] = state.chips[k]; });
 
-      let photo = null;
-      const fInput = document.getElementById('f_photo_file');
-      if (fInput && fInput.files && fInput.files[0]) {
-        photo = await compressPhoto(fInput.files[0]);
+      const ft = state.view.formType;
+      let backendModule = 'daily_fw';
+      if (ft === 'daily_fw') backendModule = 'daily_fw';
+      else if (ft === 'conformation') backendModule = 'conformation';
+      else if (ft === 'gestation') {
+        backendModule = 'gestation';
+        // 表面只選日期，送回後端自動附帶精確時間戳記
+        const nowTime = new Date().toTimeString().slice(0, 8);
+        if (data.breeding_date) data.breeding_datetime_hidden = `${data.breeding_date} ${nowTime}`;
+      } else if (ft.startsWith('farr_')) {
+        backendModule = 'farrowing';
+        data.sub_action = ft;
+      } else if (ft === 'boar_semen') backendModule = 'boar_semen';
+      else if (ft === 'malformation') backendModule = 'malformation_disease';
+      else if (ft === 'treatment' || ft === 'mortality') {
+        backendModule = 'treatment_mortality';
+        data.event_type = ft;
       }
 
-      const modMap = {
-        'GDU': 'conformation',
-        'Gestation': 'gestation',
-        'Farrowing': data.affected_count ? 'malformation_disease' : 'farrowing',
-        'Boar House': 'boar_semen',
-        'Nursery': 'daily_fw',
-        'Porker': 'daily_fw'
-      };
-      const mod = modMap[state.view.dept] || 'daily_fw';
-      logTraj('submit:' + mod);
+      let photo = null;
+      const photoInput = document.getElementById('f_photo_file');
+      if (photoInput && photoInput.files && photoInput.files[0]) {
+        photo = await compressPhoto(photoInput.files[0]);
+      }
+
+      logTraj('submit:' + backendModule);
 
       const payload = {
         token: CONFIG.API_TOKEN,
-        module: mod,
+        module: backendModule,
         common: {
           farm_mode: state.profile.group,
           wing: state.view.wing,
+          room: state.view.room,
           location: [state.view.dept, state.view.wing, state.view.room].filter(Boolean).join(' / '),
-          module: mod
+          batch: state.currentBatch,
+          module: backendModule
         },
         data: data,
         photo: photo,
@@ -1169,7 +1872,6 @@
         }
       };
 
-      const t = TEXT[state.lang];
       try {
         const res = await fetch(CONFIG.GAS_URL, {
           method: 'POST',
@@ -1184,33 +1886,33 @@
         }
       } catch (e) {
         payload.meta.offline_queued = true;
-        const q = loadQueue();
+        const q = getQueue();
         q.push(payload);
         localStorage.setItem(CONFIG.KEYS.QUEUE, JSON.stringify(q));
-        refreshQueueBadge();
-        box.textContent = t.savedQueue;
+        refreshQueuePill();
+        box.textContent = t.savedOffline;
       }
       btn.disabled = false;
     }
 
-    function loadQueue() {
+    function getQueue() {
       try { return JSON.parse(localStorage.getItem(CONFIG.KEYS.QUEUE) || '[]'); }
       catch (e) { return []; }
     }
 
-    function refreshQueueBadge() {
-      const q = loadQueue();
-      const pill = document.getElementById('queuePill');
+    function refreshQueuePill() {
+      const q = getQueue();
+      const el = document.getElementById('queuePill');
       if (q.length > 0) {
-        pill.textContent = q.length;
-        pill.classList.remove('hidden');
+        el.textContent = q.length;
+        el.classList.remove('hidden');
       } else {
-        pill.classList.add('hidden');
+        el.classList.add('hidden');
       }
     }
 
     async function syncOfflineQueue() {
-      const q = loadQueue();
+      const q = getQueue();
       if (!q.length) return;
       const keep = [];
       for (const item of q) {
@@ -1227,28 +1929,28 @@
         }
       }
       localStorage.setItem(CONFIG.KEYS.QUEUE, JSON.stringify(keep));
-      refreshQueueBadge();
+      refreshQueuePill();
     }
 
     window.addEventListener('online', syncOfflineQueue);
 
-    (function boot() {
-      state.lang = detectLang();
+    (function init() {
+      state.lang = detectSystemLang();
+      document.documentElement.lang = state.lang;
       document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.dataset.lang === state.lang));
-      applyI18n();
-      renderWeatherAndClock();
-      setInterval(renderWeatherAndClock, 1000);
-      fetchLiveWeather();
-      refreshQueueBadge();
-      logTraj('boot');
+      applyStaticTranslations();
+      updateClockAndCurve();
+      setInterval(updateClockAndCurve, 1000);
+      loadHourlyWeather();
+      refreshQueuePill();
+      logTraj('init');
 
-      const saved = localStorage.getItem(CONFIG.KEYS.PASS);
-      if (saved) {
-        const prof = parsePassword(saved);
+      const savedPass = localStorage.getItem(CONFIG.KEYS.PASS);
+      if (savedPass) {
+        const prof = resolvePass(savedPass);
         if (prof) {
           state.profile = prof;
-          state.savedPass = prof.code;
-          enterWorkspace();
+          openWorkspace();
         }
       }
     })();
