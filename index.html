@@ -537,11 +537,32 @@
       font-weight: 600;
     }
 
-    /* 正規查詢表格樣式 */
-    .lookup-table-wrap {
+    /* 拆解後的多組精簡小表 */
+    .sub-table-block {
       margin-top: 10px;
+    }
+
+    .sub-table-caption {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .grade-tag-badge {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #ede9fe;
+      border: 1px solid #c4b5fd;
+      color: #4c1d95;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .lookup-table-wrap {
       overflow-x: auto;
-      border-radius: 11px;
+      border-radius: 10px;
       border: 1px solid #cbd5e1;
       background: #ffffff;
     }
@@ -549,7 +570,7 @@
     .lookup-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12.5px;
+      font-size: 12px;
       color: #1f2937;
     }
 
@@ -557,7 +578,7 @@
       background: #fef9c3;
       font-weight: 600;
       color: #111827;
-      padding: 7px 9px;
+      padding: 6px 8px;
       border-bottom: 1px solid #cbd5e1;
       border-right: 1px solid #e5e7eb;
       text-align: left;
@@ -565,12 +586,12 @@
     }
 
     .lookup-table tbody td {
-      padding: 7px 9px;
+      padding: 6px 8px;
       border-bottom: 1px solid #e5e7eb;
       border-right: 1px solid #f1f5f9;
       text-align: left;
       vertical-align: top;
-      line-height: 1.35;
+      line-height: 1.3;
     }
 
     .cart-list-box {
@@ -823,12 +844,12 @@
         admin: 'qwert'
       },
       KEYS: {
-        LANG: 'gla_sys_lang_v14',
-        PASS: 'gla_sys_pass_v14',
-        WORKER: 'gla_worker_name_v14',
-        QUEUE: 'gla_sys_queue_v14',
-        ROOM_BATCHES: 'gla_room_batches_v14',
-        SOUND: 'gla_sound_on_v14'
+        LANG: 'gla_sys_lang_v15',
+        PASS: 'gla_sys_pass_v15',
+        WORKER: 'gla_worker_name_v15',
+        QUEUE: 'gla_sys_queue_v15',
+        ROOM_BATCHES: 'gla_room_batches_v15',
+        SOUND: 'gla_sound_on_v15'
       },
       LAT: 1.167,
       LON: 110.566,
@@ -860,9 +881,20 @@
         rainLikely: 'Dijangka Hujan',
         rainLow: 'Peluang Hujan Rendah',
         extraHeading: 'Carian & Analisis',
-        queryEarPlaceholder: 'Carian kabur No. Telinga (cth: L1123 atau 1123)',
+        queryEarPlaceholder: 'Carian kabur No. Telinga (cth: L1123, Y1314, D1400)',
         searchBtn: 'Cari',
+        tblSelfTitle: '1. Profil Utama & Gred (Grade)',
+        tblRelatedSowTitle: '2. Induk Berkaitan & Prestasi',
+        tblProdFinTitle: '3. Acara, Pengeluaran, Kewangan & Jualan',
+        tblDefectTitle: '4. Kecacatan Genetik & Status / Keluar',
+        colDate: 'Tarikh Rekod',
         colEarTag: 'No. Telinga',
+        colSex: 'Jantina',
+        colLine: 'Gred / Baka',
+        colStatus: 'Status',
+        colFamily: 'Keturunan',
+        colEvent: 'Acara / Pengeluaran / Kewangan / Jualan',
+        colDefect: 'Kecacatan Genetik',
         batchGateTitle: 'Sahkan Bilik & Kumpulan 3 Minggu',
         batchRemind: 'Perhatian: Bilik berbeza mempunyai sumber data berasingan.',
         gduAutoWeekNote: 'Menggunakan minggu semasa secara automatik',
@@ -914,10 +946,10 @@
         errCommaDot: 'Wajib gunakan koma (,) atau titik (.) untuk memisahkan beberapa No. Telinga!',
         errNoName: 'Sila masukkan nama anda sebelum masuk.',
         lblDate: 'Tarikh',
-        lblEarTag: 'No. Telinga Lengkap (cth: L1123, Y1301)',
+        lblEarTag: 'No. Telinga Lengkap (cth: L1123, Y1314, D1400)',
         lblMultiEarHint: 'Gunakan format penuh (cth: L1123) dan pisahkan berbilang dengan koma (,) atau titik (.)',
-        lblSowTag: 'No. Telinga Induk (cth: L1123)',
-        lblBoarTag: 'No. Telinga Pejantan (cth: D1402)',
+        lblSowTag: 'No. Telinga Induk (cth: L1123, Y1314)',
+        lblBoarTag: 'No. Telinga Pejantan (cth: D1400)',
         lblSex: 'Jantina',
         optFemale: 'Betina',
         optMale: 'Jantan',
@@ -1043,9 +1075,20 @@
         rainLikely: 'Rain Expected',
         rainLow: 'Low Rain Chance',
         extraHeading: 'Lookup & Analysis',
-        queryEarPlaceholder: 'Fuzzy Ear Tag search (e.g. L1123 or 1123)',
+        queryEarPlaceholder: 'Fuzzy Ear Tag search (e.g. L1123, Y1314, D1400)',
         searchBtn: 'Search',
+        tblSelfTitle: '1. Core Profile & Grade',
+        tblRelatedSowTitle: '2. Mated / Linked Sows & Performance',
+        tblProdFinTitle: '3. Events, Production, Finance & Sales',
+        tblDefectTitle: '4. Genetic Defects & Status / Exit',
+        colDate: 'Record Date',
         colEarTag: 'Ear Tag',
+        colSex: 'Sex',
+        colLine: 'Grade / Line',
+        colStatus: 'Status',
+        colFamily: 'Family Line',
+        colEvent: 'Event / Prod / Finance / Sales',
+        colDefect: 'Genetic Defect',
         batchGateTitle: 'Confirm Room & 3-Week Batch',
         batchRemind: 'Note: Switching rooms switches data source.',
         gduAutoWeekNote: 'Logged under current week automatically',
@@ -1097,10 +1140,10 @@
         errCommaDot: 'Multiple Ear Tags MUST be separated by a comma (,) or period (.)!',
         errNoName: 'Please enter your name before entering.',
         lblDate: 'Date',
-        lblEarTag: 'Full Ear Tag (e.g. L1123, Y1301)',
+        lblEarTag: 'Full Ear Tag (e.g. L1123, Y1314, D1400)',
         lblMultiEarHint: 'Use full tag (e.g. L1123) and separate multiple tags with comma (,) or period (.)',
-        lblSowTag: 'Sow Ear Tag (e.g. L1123)',
-        lblBoarTag: 'Boar Ear Tag (e.g. D1402)',
+        lblSowTag: 'Sow Ear Tag (e.g. L1123, Y1314)',
+        lblBoarTag: 'Boar Ear Tag (e.g. D1400)',
         lblSex: 'Sex',
         optFemale: 'Female',
         optMale: 'Male',
@@ -1226,9 +1269,20 @@
         rainLikely: '今日有降雨機率',
         rainLow: '今日降雨機率偏低',
         extraHeading: '查詢與分析',
-        queryEarPlaceholder: '輸入耳號模糊查詢（例如 L1123 或只打 1123）',
+        queryEarPlaceholder: '輸入耳號模糊查詢（例如 L1123、Y1314、D1400）',
         searchBtn: '查詢',
+        tblSelfTitle: '1. 本體主檔與等級（Grade）',
+        tblRelatedSowTitle: '2. 配過／關聯母豬與生產狀況',
+        tblProdFinTitle: '3. 事件、生產、財經與銷售明細',
+        tblDefectTitle: '4. 遺傳缺陷與狀態／離場明細',
+        colDate: '記錄日期',
         colEarTag: '耳號',
+        colSex: '性別',
+        colLine: '等級 / 品系',
+        colStatus: '狀態',
+        colFamily: '家族源',
+        colEvent: '事件 / 生產 / 財經 / 銷售',
+        colDefect: '遺傳缺陷',
         batchGateTitle: '請先確認房號與三週次批次',
         batchRemind: '提醒：切換不同間房屬於不同資料來源，請核對目前房號與批次',
         gduAutoWeekNote: '以當週週次為基準自動記錄',
@@ -1280,10 +1334,10 @@
         errCommaDot: '輸入多隻耳號時，強制規定必須使用逗號（,）或句點（.）分隔！不可只用空格。',
         errNoName: '請先在登入畫面輸入您的姓名。',
         lblDate: '日期',
-        lblEarTag: '完整耳號（例如 L1123、Y1301）',
+        lblEarTag: '完整耳號（例如 L1123、Y1314、D1400）',
         lblMultiEarHint: '請填寫完整耳號（如 L1123），多隻請用逗號（,）或句點（.）分隔',
-        lblSowTag: '母豬完整耳號（例如 L1123）',
-        lblBoarTag: '公豬完整耳號（例如 D1402）',
+        lblSowTag: '母豬完整耳號（例如 L1123、Y1314）',
+        lblBoarTag: '公豬完整耳號（例如 D1400）',
         lblSex: '性別',
         optFemale: '母豬',
         optMale: '公豬',
@@ -1420,11 +1474,13 @@
       { cn: '用藥接口預留', en: 'Med Reserved', ms: 'Ubat Dikhaskan' },
       { cn: '家族源', en: 'Family Line', ms: 'Keturunan' },
       { cn: '母豬', en: 'Sow', ms: 'Induk' },
-      { cn: '公豬', en: 'Boar', ms: 'Pejantan' }
+      { cn: '公豬', en: 'Boar', ms: 'Pejantan' },
+      { cn: '公', en: 'M', ms: 'J' },
+      { cn: '母', en: 'F', ms: 'B' }
     ];
 
-    function translateQueryText(rawText) {
-      let s = String(rawText || '');
+    function sanitizeAndTranslate(rawText) {
+      let s = String(rawText || '').trim();
       if (!s) return '';
       if (s.indexOf('GMT') !== -1 || s.indexOf('新加坡') !== -1) {
         const d = new Date(s);
@@ -1479,7 +1535,6 @@
       } catch (e) {}
     }
 
-    // 方塊敲擊／微變鈴聲 + 傳送音效
     function playTone(type) {
       if (!state.soundOn) return;
       unlockAudioContext();
@@ -1493,7 +1548,6 @@
         gain.connect(ctx.destination);
 
         if (type === 'tap') {
-          // 每次點方塊微變清脆敲擊鈴聲
           const notes = [523.25, 554.37, 587.33, 622.25, 659.25];
           const f = notes[state.tapStep % notes.length];
           state.tapStep++;
@@ -1505,7 +1559,6 @@
           osc.start(now);
           osc.stop(now + 0.15);
         } else if (type === 'send') {
-          // 傳送完成雙音鈴聲
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(587.33, now);
           osc.frequency.setValueAtTime(880.0, now + 0.11);
@@ -1798,7 +1851,6 @@
       return [];
     }
 
-    // 統一以本地／古晉時間顯示（絕不出現新加坡時間）
     function updateClockAndForecastCurve() {
       const t = DICT[state.lang];
       const now = new Date();
@@ -1958,12 +2010,12 @@
       botTitle.classList.remove('hidden');
       botGrid.appendChild(makeMetroFlipTile(
         t.extraHeading,
-        [t.queryEarPlaceholder, 'Ear Tag · Parity · Index', 'Tap to Search'],
+        [t.queryEarPlaceholder, 'Grade · Mated · Events', 'Split Tables'],
         'QUERY',
         'm-query',
         () => {
           playTone('tap');
-          sendTelemetryBeacon('OPEN_QUERY_TILE', 'Seed_Yellow_Lookup');
+          sendTelemetryBeacon('OPEN_QUERY_TILE', 'Seed_Split_Lookup');
           renderQueryBox();
         }
       ));
@@ -1981,7 +2033,7 @@
 
       if (state.view.stage === 'depts') {
         const depts = [
-          { id: 'Boar House', title: t.deptBoar, sub: [t.deptBoarSub, 'Libido 0-5 Score', 'Semen & Mortality'], badge: 'BH', cls: 'm-boar' },
+          { id: 'Boar House', title: t.deptBoar, sub: [t.deptBoarSub, 'Grade & Libido 0-5', 'Semen & Mortality'], badge: 'BH', cls: 'm-boar' },
           { id: 'GDU', title: t.deptGdu, sub: [t.deptGduSub, 'Teats & Blind Teats', 'Water & Feed'], badge: 'GDU', cls: 'm-gdu' },
           { id: 'Gestation', title: t.deptGest, sub: [t.deptGestSub, 'Heat & Mating Time', 'Sow & Boar Tag'], badge: 'GEST', cls: 'm-gest' },
           { id: 'Farrowing', title: t.deptFarr, sub: [t.deptFarrSub, 'F1-F6 · Transfer & Wean', 'TNB / NBA / Birth Wt'], badge: 'FARR', cls: 'm-farr' },
@@ -2358,7 +2410,6 @@
       scenes.forEach(sc => scheduleOne(sc));
     }
 
-    // 查詢方塊：依序呈現耳號等相關數據之正規表格
     function renderQueryBox() {
       const t = DICT[state.lang];
       const p = document.getElementById('extraPanel');
@@ -2366,19 +2417,56 @@
       p.innerHTML = `
         <div class="sec-title">${t.extraHeading}</div>
         <div class="field-hint">${t.queryEarPlaceholder}</div>
-        <input type="text" id="qEarInp" class="input-box" placeholder="L1123 / 1123" onkeydown="if(event.key==='Enter') execQuery();" />
+        <input type="text" id="qEarInp" class="input-box" placeholder="L1123 / Y1314 / D1400" onkeydown="if(event.key==='Enter') execQuery();" />
         <button type="button" class="primary-btn" onclick="playTone('tap'); execQuery()">${t.searchBtn}</button>
-        <div id="qTableResult"></div>
+        <div id="qSplitTables"></div>
         <div id="qOutBox" class="notice-box hidden"></div>
+      `;
+    }
+
+    function extractGradeFromRowText(txt) {
+      const m = String(txt || '').match(/(?:Grade|等級|G)[:\s-]*([A-Za-z0-9.+-]+)/i);
+      return m ? m[1] : '-';
+    }
+
+    function extractSexFromRowText(ear, txt) {
+      const e = String(ear || '').toUpperCase();
+      if (e.startsWith('D') || e.startsWith('B') || txt.includes('公豬') || txt.includes('Boar') || txt.includes('Pejantan')) {
+        return sanitizeAndTranslate('公');
+      }
+      return sanitizeAndTranslate('母');
+    }
+
+    function extractStatusFromRowText(txt) {
+      if (txt.includes('死亡') || txt.includes('Mortality') || txt.includes('Mati')) return sanitizeAndTranslate('原因:死亡');
+      if (txt.includes('淘汰') || txt.includes('Cull') || txt.includes('Takai')) return sanitizeAndTranslate('原因:淘汰');
+      if (txt.includes('離場') || txt.includes('Exit') || txt.includes('Keluar')) return sanitizeAndTranslate('離場');
+      return '-';
+    }
+
+    function buildMiniHtmlTable(caption, headers, rows) {
+      if (!rows || !rows.length) return '';
+      const ths = headers.map(h => `<th>${h}</th>`).join('');
+      const trs = rows.map(r => `<tr>${r.map(v => `<td>${v || '-'}</td>`).join('')}</tr>`).join('');
+      return `
+        <div class="sub-table-block">
+          <div class="sub-table-caption">${caption}</div>
+          <div class="lookup-table-wrap">
+            <table class="lookup-table">
+              <thead><tr>${ths}</tr></thead>
+              <tbody>${trs}</tbody>
+            </table>
+          </div>
+        </div>
       `;
     }
 
     async function execQuery() {
       const t = DICT[state.lang];
       const ear = document.getElementById('qEarInp').value.trim();
-      const tblWrap = document.getElementById('qTableResult');
+      const tblContainer = document.getElementById('qSplitTables');
       const outBox = document.getElementById('qOutBox');
-      tblWrap.innerHTML = '';
+      tblContainer.innerHTML = '';
       outBox.classList.remove('hidden');
       outBox.textContent = '...';
 
@@ -2397,42 +2485,89 @@
         }
         outBox.classList.add('hidden');
 
-        // 收集所有黃色欄位標題，建立依序排列的正規表格
-        const colHeaders = [];
+        const selfRows = [];
+        const relatedSowRows = [];
+        const prodFinRows = [];
+        const defectRows = [];
+
         cards.forEach(c => {
-          (c.fields || []).forEach(f => {
-            const hLabel = translateQueryText(f.header);
-            if (!colHeaders.includes(hLabel)) colHeaders.push(hLabel);
+          const earClean = sanitizeAndTranslate(c.earTag);
+          const fields = c.fields || [];
+          let dateVal = '-';
+          let familyVal = '-';
+          const eventParts = [];
+          const defectParts = [];
+
+          fields.forEach(f => {
+            const hRaw = String(f.header || '');
+            const vRaw = sanitizeAndTranslate(f.value);
+            if (!vRaw) return;
+            if (hRaw.includes('日期') || hRaw.toLowerCase().includes('date')) {
+              dateVal = vRaw;
+            } else if (hRaw.includes('家族') || hRaw.toLowerCase().includes('family')) {
+              familyVal = vRaw;
+            } else if (hRaw.includes('缺陷') || hRaw.includes('遺傳') || hRaw.toLowerCase().includes('defect') || hRaw.includes('死亡') || hRaw.includes('淘汰') || hRaw.toLowerCase().includes('exit')) {
+              defectParts.push(`${sanitizeAndTranslate(hRaw)}: ${vRaw}`);
+            } else {
+              eventParts.push(`${sanitizeAndTranslate(hRaw)}: ${vRaw}`);
+            }
           });
+
+          const allText = `${earClean} ${familyVal} ${eventParts.join(' ')} ${defectParts.join(' ')}`;
+          const gradeVal = extractGradeFromRowText(allText);
+          const sexVal = extractSexFromRowText(earClean, allText);
+          const statusVal = extractStatusFromRowText(allText);
+
+          selfRows.push([
+            dateVal,
+            `<strong>${earClean}</strong>`,
+            sexVal,
+            `<span class="grade-tag-badge">${gradeVal}</span>`,
+            statusVal,
+            familyVal
+          ]);
+
+          const sowMatches = allText.match(/\b[LYly]\d{2,}\b/g) || [];
+          const uniqueSows = [...new Set(sowMatches.map(x => x.toUpperCase()))].filter(x => x !== earClean.toUpperCase());
+          if (uniqueSows.length > 0 || allText.includes('胎次') || allText.includes('均活仔') || allText.includes('Parity')) {
+            const perfSnippets = eventParts.filter(p =>
+              p.includes('胎次') || p.includes('均活仔') || p.includes('均離乳') || p.includes('Parity') || p.includes('NBA') || p.includes('Weaned')
+            );
+            relatedSowRows.push([
+              uniqueSows.join(', ') || earClean,
+              gradeVal,
+              perfSnippets.join(' | ') || eventParts.join(' | ')
+            ]);
+          }
+
+          if (eventParts.length > 0) {
+            prodFinRows.push([
+              dateVal,
+              `<strong>${earClean}</strong>`,
+              eventParts.join(' / ')
+            ]);
+          }
+
+          if (defectParts.length > 0 || statusVal !== '-') {
+            defectRows.push([
+              dateVal,
+              `<strong>${earClean}</strong>`,
+              statusVal,
+              defectParts.join(' / ') || '-'
+            ]);
+          }
         });
 
-        const thCells = [`<th>${t.colEarTag}</th>`, ...colHeaders.map(h => `<th>${h}</th>`)].join('');
-        const bodyRows = cards.map(c => {
-          const mapVal = {};
-          (c.fields || []).forEach(f => {
-            mapVal[translateQueryText(f.header)] = translateQueryText(f.value);
-          });
-          const tdCells = [
-            `<td><strong>${translateQueryText(c.earTag)}</strong></td>`,
-            ...colHeaders.map(h => `<td>${mapVal[h] || '-'}</td>`)
-          ].join('');
-          return `<tr>${tdCells}</tr>`;
-        }).join('');
-
-        tblWrap.innerHTML = `
-          <div class="lookup-table-wrap">
-            <table class="lookup-table">
-              <thead><tr>${thCells}</tr></thead>
-              <tbody>${bodyRows}</tbody>
-            </table>
-          </div>
-        `;
+        tblContainer.innerHTML =
+          buildMiniHtmlTable(t.tblSelfTitle, [t.colDate, t.colEarTag, t.colSex, t.colLine, t.colStatus, t.colFamily], selfRows) +
+          buildMiniHtmlTable(t.tblRelatedSowTitle, [t.colEarTag, t.colLine, t.colEvent], relatedSowRows) +
+          buildMiniHtmlTable(t.tblProdFinTitle, [t.colDate, t.colEarTag, t.colEvent], prodFinRows) +
+          buildMiniHtmlTable(t.tblDefectTitle, [t.colDate, t.colEarTag, t.colStatus, t.colDefect], defectRows);
       } catch (e) {
         outBox.textContent = String(e);
       }
     }
 
-    // 分析報表改為正規表格呈現
     async function renderAnalysisBox() {
       const p = document.getElementById('extraPanel');
       p.classList.remove('hidden');
@@ -2451,9 +2586,9 @@
           p.innerHTML = `<div class="notice-box">-</div>`;
           return;
         }
-        const ths = headers.map(h => `<th>${translateQueryText(h)}</th>`).join('');
+        const ths = headers.map(h => `<th>${sanitizeAndTranslate(h)}</th>`).join('');
         const trs = rows.map(row =>
-          `<tr>${row.map(v => `<td>${translateQueryText(v)}</td>`).join('')}</tr>`
+          `<tr>${row.map(v => `<td>${sanitizeAndTranslate(v)}</td>`).join('')}</tr>`
         ).join('');
         p.innerHTML = `
           <div class="lookup-table-wrap">
@@ -2582,7 +2717,7 @@
           <div class="field-block">
             <label class="field-label">${t.lblEarTag}</label>
             <div class="field-hint">${t.lblMultiEarHint}</div>
-            <input type="text" id="f_ear_tags_list" class="input-box" placeholder="Y1301, Y1302" />
+            <input type="text" id="f_ear_tags_list" class="input-box" placeholder="Y1314, Y1315" />
           </div>
           <div class="field-block"><label class="field-label">${t.lblAffCount}</label><input type="number" id="f_affected_count" class="input-box" value="1" /></div>
           <div class="field-block"><label class="field-label">${t.lblMalSigns}</label>${chips('selected_items', symptomOpts, true)}</div>
@@ -2597,11 +2732,11 @@
           <div class="field-block"><label class="field-label">${t.lblHeatObs}</label>${chips('heat_observed', [{v:'yes',l:t.optYes},{v:'no',l:t.optNo}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblHeatDate}</label><input type="date" id="f_heat_date" class="input-box" /></div>
           <div class="field-block"><label class="field-label">${t.lblBreedDate}</label><input type="date" id="f_breeding_date" class="input-box" /></div>
-          <div class="field-block"><label class="field-label">${t.lblServiceBoar}</label><input type="text" id="f_service_boar_tag" class="input-box" placeholder="D1402" /></div>
+          <div class="field-block"><label class="field-label">${t.lblServiceBoar}</label><input type="text" id="f_service_boar_tag" class="input-box" placeholder="D1400" /></div>
         `;
       } else if (ft === 'boar_semen') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblBoarTag}</label><input type="text" id="f_boar_ear_tag" class="input-box" placeholder="D1402" /></div>
+          <div class="field-block"><label class="field-label">${t.lblBoarTag}</label><input type="text" id="f_boar_ear_tag" class="input-box" placeholder="D1400" /></div>
           <div class="field-block"><label class="field-label">${t.lblDate}</label><input type="date" id="f_collection_date" class="input-box" value="${today}" /></div>
           <div class="field-block">
             <label class="field-label">${t.lblLibido}</label>
@@ -2616,7 +2751,7 @@
         `;
       } else if (ft === 'conformation') {
         html += `
-          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" placeholder="L1123 / Y1301" /></div>
+          <div class="field-block"><label class="field-label">${t.lblEarTag}</label><input type="text" id="f_ear_tag" class="input-box" placeholder="L1123 / Y1314" /></div>
           <div class="field-block"><label class="field-label">${t.lblSex}</label>${chips('sex', [{v:'female',l:t.optFemale},{v:'male',l:t.optMale}], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBreed}</label>${chips('breed', ['L','Y','D','LL','YY','DD','LY'], false)}</div>
           <div class="field-block"><label class="field-label">${t.lblBirthDate}</label><input type="date" id="f_birth_date" class="input-box" /></div>
